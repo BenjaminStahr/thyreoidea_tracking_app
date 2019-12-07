@@ -63,10 +63,18 @@ public class ThyroidFragment extends Fragment
                 new DataPoint(3, 2),
                 new DataPoint(4, 6)
         });
+        LineGraphSeries<DataPoint> series3 = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
         ArrayList<LineGraphSeries> values = new ArrayList<>();
         values.add(series);
         values.add(series1);
         values.add(series2);
+        values.add(series3);
         PlotAdapter adapter = new PlotAdapter(context, values);
         if (thyroidListView != null)
         {
