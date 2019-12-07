@@ -3,11 +3,13 @@ package com.example.hashimoto_app.ui.main;
 import android.content.Context;
 import android.view.LayoutInflater;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.hashimoto_app.R;
 
@@ -32,15 +34,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined  as a static inner class below).
         if(position == 0) {
-            return new ThyroidFragment();//PlaceholderFragment.newInstance(position + 1);
+
+            return new ThyroidFragment(mContext);//PlaceholderFragment.newInstance(position + 1);
         }
         else if(position == 1)
         {
-            return new SymptomFragment();
+            return new SymptomFragment(mContext);
         }
         else
         {
-            return new IntakeFragment();
+            return new IntakeFragment(mContext);
         }
     }
 
