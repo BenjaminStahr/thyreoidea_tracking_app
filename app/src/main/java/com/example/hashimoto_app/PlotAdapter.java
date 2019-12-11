@@ -15,6 +15,10 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 
+
+/*
+This is a Customadapter for showing one Graph in the thyroid list view
+ */
 public class PlotAdapter extends ArrayAdapter<String> {
 
     ArrayList<LineGraphSeries> data;

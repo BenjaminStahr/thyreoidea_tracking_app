@@ -3,4 +3,9 @@
     <string name="tab_text_1">Schilddrüse</string>
     <string name="tab_text_2">Symptome</string>
     <string name="tab_text_3">Nahrung</string>
+    <string-array name="period">
+        <item>Woche</item>
+        <item>Monat</item>
+        <item>Jahr</item>
+    </string-array>
 </resources>
