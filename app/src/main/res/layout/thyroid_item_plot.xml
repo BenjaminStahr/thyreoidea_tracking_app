@@ -4,14 +4,14 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/substanceLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="TSH" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/unitLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"

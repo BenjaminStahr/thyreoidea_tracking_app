@@ -26,10 +26,12 @@ import com.google.gson.Gson;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
 {
+    private static DataHolder dataHolder;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -56,21 +58,31 @@ public class MainActivity extends AppCompatActivity
 
 
         // add some sample data to the holder
-        //SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2019, 11, 5);
+        Date date = calendar.getTime();
+        calendar.set(2019, 11, 12);
+        Date date2 = calendar.getTime();
+        calendar.set(2019, 11, 7);
+        Date date3 = calendar.getTime();
         ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 2, 1 ,3);
-        ThyroidMeasurement thyroidMeasurement2 = new ThyroidMeasurement(date, 5, 1 ,3);
+        ThyroidMeasurement thyroidMeasurement5 = new ThyroidMeasurement(date3, 1, 1 ,3);
+        ThyroidMeasurement thyroidMeasurement2 = new ThyroidMeasurement(date2, 5, 1 ,3);
         ArrayList<ThyroidMeasurement> thyroidMeasurements1 = new ArrayList<>();
         thyroidMeasurements1.add(thyroidMeasurement1);
+        thyroidMeasurements1.add(thyroidMeasurement5);
         thyroidMeasurements1.add(thyroidMeasurement2);
         ArrayList<ThyroidMeasurement> thyroidMeasurements2 = new ArrayList<>();
-        thyroidMeasurements2.add(thyroidMeasurement1);
-        thyroidMeasurements2.add(thyroidMeasurement2);
-        holder.getThyroidData().add(new ThyroidElement("tsh", "g/mol", thyroidMeasurements1));
-        holder.getThyroidData().add(new ThyroidElement("t3", "g/ml", thyroidMeasurements2));
+        ThyroidMeasurement thyroidMeasurement3 = new ThyroidMeasurement(date, 8, 1 ,3);
+        ThyroidMeasurement thyroidMeasurement4 = new ThyroidMeasurement(date2, 5, 1 ,3);
+        thyroidMeasurements2.add(thyroidMeasurement3);
+        thyroidMeasurements2.add(thyroidMeasurement4);
+        holder.getThyroidData().add(new ThyroidElement("TSH", "g/mol", thyroidMeasurements1));
+        holder.getThyroidData().add(new ThyroidElement("T3", "g/ml", thyroidMeasurements2));
+        holder.getThyroidData().add(new ThyroidElement("T4", "g/ml", thyroidMeasurements1));
 
         Measurement symptomMeasurement1 = new Measurement(date, 2);
-        Measurement symptomMeasurement2 = new Measurement(date, 3);
+        Measurement symptomMeasurement2 = new Measurement(date2, 3);
         ArrayList<Measurement> symptomMeasurements1 = new ArrayList<>();
         symptomMeasurements1.add(symptomMeasurement1);
         symptomMeasurements1.add(symptomMeasurement2);
@@ -81,7 +93,7 @@ public class MainActivity extends AppCompatActivity
         holder.getSymptomData().add(new SymptomElement("Zittern", symptomMeasurements2));
 
         Measurement intakeMeasurement1 = new Measurement(date, 6);
-        Measurement intakeMeasurement2 = new Measurement(date, 3);
+        Measurement intakeMeasurement2 = new Measurement(date2, 3);
         ArrayList<Measurement> intakeMeasurements1 = new ArrayList<>();
         intakeMeasurements1.add(intakeMeasurement1);
         intakeMeasurements1.add(intakeMeasurement2);
@@ -95,6 +107,11 @@ public class MainActivity extends AppCompatActivity
         FileManager.saveFile("test", json, getApplicationContext());
         String testString = FileManager.getFileAsString("test", getApplicationContext());
 
-        //DataHolder holder2 = new Gson().fromJson(testString, DataHolder.class);
+        dataHolder = new Gson().fromJson(testString, DataHolder.class);
+    }
+
+    public static DataHolder getDataHolder()
+    {
+        return dataHolder;
     }
 }

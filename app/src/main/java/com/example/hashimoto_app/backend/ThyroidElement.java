@@ -4,14 +4,26 @@ import java.util.ArrayList;
 
 public class ThyroidElement
 {
-    String name;
-    String unit;
-    ArrayList<ThyroidMeasurement> measurements;
+    private String nameOfSubstance;
+    private String unit;
+    private ArrayList<ThyroidMeasurement> measurements;
 
-    public ThyroidElement(String name, String unit, ArrayList<ThyroidMeasurement> measurements)
+    public ThyroidElement(String nameOfSubstance, String unit, ArrayList<ThyroidMeasurement> measurements)
     {
-        this.name = name;
+        this.nameOfSubstance = nameOfSubstance;
         this.unit = unit;
         this.measurements = measurements;
+    }
+
+    public String getNameOfSubstance() {
+        return nameOfSubstance;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public ArrayList<ThyroidMeasurement> getMeasurements() {
+        return measurements;
     }
 }

@@ -6,10 +6,10 @@ import java.util.Date;
 
 public class ThyroidMeasurement
 {
-    Date date;
-    float amount;
-    float upperBound;
-    float lowerBound;
+    private Date date;
+    private float amount;
+    private float upperBound;
+    private float lowerBound;
 
     public ThyroidMeasurement(Date date, int amount, float lowerBound, float upperBound)
     {
@@ -17,5 +17,25 @@ public class ThyroidMeasurement
         this.amount = amount;
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
+    }
+
+    public Date getDate()
+    {
+        return date;
+    }
+
+    public float getAmount()
+    {
+        return amount;
+    }
+
+    public float getUpperBound()
+    {
+        return upperBound;
+    }
+
+    public float getLowerBound()
+    {
+        return lowerBound;
     }
 }
