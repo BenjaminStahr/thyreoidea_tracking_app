@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 
 public class FileManager
 {
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void saveFile(String path, String content ,Context context)
     {
         try (FileOutputStream fos = context.openFileOutput(path, Context.MODE_PRIVATE))
@@ -32,7 +31,6 @@ public class FileManager
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getFileAsString(String path, Context context)
     {
         FileInputStream fis = null;

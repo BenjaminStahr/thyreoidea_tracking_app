@@ -4,12 +4,21 @@ import java.util.ArrayList;
 
 public class SymptomElement
 {
-    String name;
-    ArrayList<Measurement> measurements;
+    private String symptomName;
+    private ArrayList<Measurement> measurements;
 
-    public SymptomElement(String name, ArrayList<Measurement> measurements)
+    public SymptomElement(String symptomName, ArrayList<Measurement> measurements)
     {
-        this.name = name;
+        this.symptomName = symptomName;
         this.measurements = measurements;
+    }
+
+    public String getSymptomName()
+    {
+        return symptomName;
+    }
+    public ArrayList<Measurement> getMeasurements()
+    {
+        return measurements;
     }
 }

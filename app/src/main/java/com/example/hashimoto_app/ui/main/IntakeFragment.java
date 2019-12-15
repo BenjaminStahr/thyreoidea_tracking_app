@@ -11,9 +11,14 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.hashimoto_app.MainActivity;
+import com.example.hashimoto_app.PlotAdapter;
 import com.example.hashimoto_app.R;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class IntakeFragment extends Fragment
 {
@@ -37,14 +42,30 @@ public class IntakeFragment extends Fragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         ListView intakeListView = (ListView)getView().findViewById(R.id.intakeListView);
-        ArrayList<String> values = new ArrayList<>();
-        values.add("Selen");
-        values.add("Eisen");
-        values.add("Magnesium");
-        ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, values);
+        ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
+        String[] units = new String[MainActivity.getDataHolder().getIntakeData().size()];
+        String[] namesOfSubstances = new String[MainActivity.getDataHolder().getIntakeData().size()];
+
+        for(int i = 0; i < MainActivity.getDataHolder().getIntakeData().size(); i++)
+        {
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+            units[i] = MainActivity.getDataHolder().getIntakeData().get(i).getUnit();
+            namesOfSubstances[i] = MainActivity.getDataHolder().getIntakeData().get(i).getNameOfSubstance();
+            for(int j = 0; j < MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(); j++)
+            {
+                Date date = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getDate();
+                float amount = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getAmount();
+                DataPoint point = new DataPoint(date,(double) amount);
+                series.appendData(point, false, MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(),
+                        false);
+            }
+            differentViews.add(series);
+        }
+        PlotAdapter adapter = new PlotAdapter(context, differentViews, units, namesOfSubstances);
         if (intakeListView != null)
         {
-             intakeListView.setAdapter(adapter);
+            intakeListView.setAdapter(adapter);
         }
+
     }
 }
