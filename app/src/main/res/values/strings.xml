@@ -3,6 +3,9 @@
     <string name="tab_text_1">Schilddrüse</string>
     <string name="tab_text_2">Symptome</string>
     <string name="tab_text_3">Nahrung</string>
+    <string name="period_week">Woche</string>
+    <string name="period_month">Monat</string>
+    <string name="period_year">Jahr</string>
     <string-array name="period">
         <item>Woche</item>
         <item>Monat</item>

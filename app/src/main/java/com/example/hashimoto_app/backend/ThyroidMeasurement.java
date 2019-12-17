@@ -11,7 +11,7 @@ public class ThyroidMeasurement
     private float upperBound;
     private float lowerBound;
 
-    public ThyroidMeasurement(Date date, int amount, float lowerBound, float upperBound)
+    public ThyroidMeasurement(Date date, float amount, float lowerBound, float upperBound)
     {
         this.date = date;
         this.amount = amount;

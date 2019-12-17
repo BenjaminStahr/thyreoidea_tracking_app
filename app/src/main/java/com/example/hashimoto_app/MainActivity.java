@@ -26,12 +26,13 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity
 {
     private static DataHolder dataHolder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        final SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
@@ -47,45 +48,32 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-        Spinner periodSpinner = findViewById(R.id.period_spinner);
-        periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
 
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
-            }
-        });
         DataHolder holder = new DataHolder();
         // add some sample data to the holder
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2019, 11, 5);
+        calendar.set(2019, 10, 19, 0, 0, 0);
         Date date = calendar.getTime();
-        calendar.set(2019, 11, 7);
+        calendar.set(2019, 11, 1, 0, 0, 0);
         Date date2 = calendar.getTime();
-        calendar.set(2019, 11, 12);
+        calendar.set(2019, 11, 14, 0, 0, 0);
         Date date3 = calendar.getTime();
         // sample data for thyroid measurements
-        ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 2, 1 ,3);
-        ThyroidMeasurement thyroidMeasurement2 = new ThyroidMeasurement(date2, 5, 1 ,3);
-        ThyroidMeasurement thyroidMeasurement5 = new ThyroidMeasurement(date3, 1, 1 ,3);
+        ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 3, 1 ,3);
+        ThyroidMeasurement thyroidMeasurement2 = new ThyroidMeasurement(date2, 4, 1 ,3);
+        ThyroidMeasurement thyroidMeasurement5 = new ThyroidMeasurement(date3, 2, 1 ,3);
         ArrayList<ThyroidMeasurement> thyroidMeasurements1 = new ArrayList<>();
         thyroidMeasurements1.add(thyroidMeasurement1);
         thyroidMeasurements1.add(thyroidMeasurement2);
         thyroidMeasurements1.add(thyroidMeasurement5);
         ArrayList<ThyroidMeasurement> thyroidMeasurements2 = new ArrayList<>();
-        ThyroidMeasurement thyroidMeasurement3 = new ThyroidMeasurement(date, 8, 1 ,3);
-        ThyroidMeasurement thyroidMeasurement4 = new ThyroidMeasurement(date2, 5, 1 ,3);
+        ThyroidMeasurement thyroidMeasurement3 = new ThyroidMeasurement(date,1.6f, 1 ,3);
+        ThyroidMeasurement thyroidMeasurement4 = new ThyroidMeasurement(date2, 1.4f, 1 ,3);
         thyroidMeasurements2.add(thyroidMeasurement3);
         thyroidMeasurements2.add(thyroidMeasurement4);
-        holder.getThyroidData().add(new ThyroidElement("TSH", "g/mol", thyroidMeasurements1));
-        holder.getThyroidData().add(new ThyroidElement("T3", "g/ml", thyroidMeasurements2));
-        holder.getThyroidData().add(new ThyroidElement("T4", "g/ml", thyroidMeasurements1));
+        holder.getThyroidData().add(new ThyroidElement("TSH", "µU/ml", thyroidMeasurements1));
+        holder.getThyroidData().add(new ThyroidElement("fT3", "pg/ml", thyroidMeasurements2));
+        holder.getThyroidData().add(new ThyroidElement("fT4", "ng/dl", thyroidMeasurements1));
 
         // sample data for symptoms
         Measurement symptomMeasurement1 = new Measurement(date, 2);
@@ -130,6 +118,29 @@ public class MainActivity extends AppCompatActivity
         String testString = FileManager.getFileAsString("test", getApplicationContext());
 
         dataHolder = new Gson().fromJson(testString, DataHolder.class);
+
+        Spinner periodSpinner = findViewById(R.id.period_spinner);
+        periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                if(position == 0)
+                {
+                    sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_week));
+                }
+                else if (position == 1)
+                {
+                    sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_month));
+                }
+                else
+                {
+                    sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
     }
 
     public static DataHolder getDataHolder()

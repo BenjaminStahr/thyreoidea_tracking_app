@@ -1,10 +1,12 @@
 package com.example.hashimoto_app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,27 +17,29 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
 /*
 This is a Customadapter for showing one Graph in the thyroid list view
  */
-public class PlotAdapter extends ArrayAdapter<String> {
-
+public class PlotAdapter extends ArrayAdapter<String>
+{
     private ArrayList<LineGraphSeries> data;
     private String[] unit;
     private String[] nameOfSubstance;
     private Context context;
+    private String period;
 
-
-    public PlotAdapter(Context context, ArrayList<LineGraphSeries> data, String[] unit, String[] nameOfSubstance)
+    public PlotAdapter(Context context, ArrayList<LineGraphSeries> data, String[] unit, String[] nameOfSubstance, String period)
     {
         super(context, R.layout.graph_item_plot);
         this.data = data;
         this.context = context;
         this.unit = unit;
         this.nameOfSubstance = nameOfSubstance;
+        this.period = period;
     }
 
     @Override
@@ -65,8 +69,22 @@ public class PlotAdapter extends ArrayAdapter<String> {
                 {
                     if(isValueX)
                     {
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM");
-                        return sdf.format(new Date((long) value));
+                        if(period.equals(context.getString(R.string.period_week)))
+                        {
+                            SimpleDateFormat sdf = new SimpleDateFormat("EEE");
+                            return sdf.format(new Date((long) value));
+                        }
+                        else if (period.equals(context.getString(R.string.period_month)))
+                        {
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM");
+                            return sdf.format(new Date((long) value));
+                        }
+                        else
+                        {
+                            SimpleDateFormat sdf = new SimpleDateFormat("MMM");
+                            return sdf.format(new Date((long) value));
+                        }
+
                     }
                     else
                     {
@@ -76,6 +94,27 @@ public class PlotAdapter extends ArrayAdapter<String> {
             }));
             // for making float values completely visible in the y-axis
             viewHolder.graphView.getGridLabelRenderer().setPadding(40);
+            viewHolder.graphView.getGridLabelRenderer().setHumanRounding(false, true);
+            viewHolder.graphView.getViewport().setXAxisBoundsManual(true);
+            viewHolder.graphView.getViewport().setMaxX(new Date().getTime());
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            if(period.equals(context.getString(R.string.period_week)))
+            {
+                cal.add(Calendar.DATE, -7);
+
+            }
+            else if(period.equals(context.getString(R.string.period_month)))
+            {
+                cal.add(Calendar.DATE, -30);
+            }
+            else
+            {
+                cal.add(Calendar.DATE, -365);
+            }
+            viewHolder.graphView.getViewport().setMinX(cal.getTime().getTime());
+            //viewHolder.graphView.getViewport().setMinX(data.get(position).getLowestValueX());
             convertView.setTag(viewHolder);
         }
         else
@@ -87,7 +126,14 @@ public class PlotAdapter extends ArrayAdapter<String> {
         viewHolder.unitView.setText(unit[position]);
         return convertView;
     }
-
+    /*public void updateGraphs(ArrayList<LineGraphSeries> data)
+    {
+        setData(data);
+    }
+    public void setData(ArrayList<LineGraphSeries> data)
+    {
+        this.data = data;
+    }*/
     static class ViewHolder
     {
         GraphView graphView;

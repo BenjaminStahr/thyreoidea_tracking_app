@@ -10,21 +10,18 @@ public class DataHolder
 
     public DataHolder()
     {
-        thyroidData = new ArrayList<ThyroidElement>();
-        symptomData = new ArrayList<SymptomElement>();
-        intakeData = new ArrayList<IntakeElement>();
+        thyroidData = new ArrayList<>();
+        symptomData = new ArrayList<>();
+        intakeData = new ArrayList<>();
     }
-
     public ArrayList<ThyroidElement> getThyroidData()
     {
         return thyroidData;
     }
-
     public ArrayList<SymptomElement> getSymptomData()
     {
         return symptomData;
     }
-
     public ArrayList<IntakeElement> getIntakeData()
     {
         return intakeData;
