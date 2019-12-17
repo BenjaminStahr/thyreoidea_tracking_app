@@ -1,7 +1,4 @@
 package com.example.hashimoto_app.backend;
-
-
-import java.time.LocalDate;
 import java.util.Date;
 
 public class ThyroidMeasurement

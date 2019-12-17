@@ -36,17 +36,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         if(position == 0) {
 
             return  thyroidFragment;
-            //return new ThyroidFragment(mContext);//PlaceholderFragment.newInstance(position + 1);
         }
         else if(position == 1)
         {
             return symptomFragment;
-            //return new SymptomFragment(mContext);
         }
         else
         {
             return intakeFragment;
-            //return new IntakeFragment(mContext);
         }
     }
 
@@ -69,6 +66,4 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         symptomFragment.setAdapterData(period);
         intakeFragment.setAdapterData(period);
     }
-
-
 }

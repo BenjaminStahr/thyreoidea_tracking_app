@@ -1,10 +1,6 @@
 package com.example.hashimoto_app.backend;
 
 import android.content.Context;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

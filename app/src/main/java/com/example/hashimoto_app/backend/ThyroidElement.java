@@ -15,15 +15,18 @@ public class ThyroidElement
         this.measurements = measurements;
     }
 
-    public String getNameOfSubstance() {
+    public String getNameOfSubstance()
+    {
         return nameOfSubstance;
     }
 
-    public String getUnit() {
+    public String getUnit()
+    {
         return unit;
     }
 
-    public ArrayList<ThyroidMeasurement> getMeasurements() {
+    public ArrayList<ThyroidMeasurement> getMeasurements()
+    {
         return measurements;
     }
 }

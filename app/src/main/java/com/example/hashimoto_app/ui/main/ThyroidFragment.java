@@ -31,10 +31,12 @@ public class ThyroidFragment extends Fragment
 {
     private final Context context;
     //private PlotAdapter adapter;
+    String period;
 
     public ThyroidFragment(Context context)
     {
         this.context = context;
+        period = context.getString(R.string.period_week);
     }
 
     @Override
@@ -49,37 +51,13 @@ public class ThyroidFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        /*ListView thyroidListView = (ListView)getView().findViewById(R.id.thyroidListView);
-        ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
-        String[] units = new String[MainActivity.getDataHolder().getThyroidData().size()];
-        String[] namesOfSubstances = new String[MainActivity.getDataHolder().getThyroidData().size()];
-
-        for(int i = 0; i < MainActivity.getDataHolder().getThyroidData().size(); i++)
-        {
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-            units[i] = MainActivity.getDataHolder().getThyroidData().get(i).getUnit();
-            namesOfSubstances[i] = MainActivity.getDataHolder().getThyroidData().get(i).getNameOfSubstance();
-            for(int j = 0; j < MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(); j++)
-            {
-                Date date = MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().get(j).getDate();
-                float amount = MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().get(j).getAmount();
-                DataPoint point = new DataPoint(date,(double) amount);
-                series.appendData(point, false, MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(),
-                        false);
-            }
-            differentViews.add(series);
-        }
-        adapter = new PlotAdapter(context, differentViews, units, namesOfSubstances);
-        if (thyroidListView != null)
-        {
-            thyroidListView.setAdapter(adapter);
-        }*/
-        setAdapterData(getString(R.string.period_week));
-
+        //period = getString(R.string.period_week);
+        setAdapterData(period);
     }
 
     public void setAdapterData(String period)
     {
+        this.period = period;
         if (getView() != null)
         {
             ListView thyroidListView = (ListView) getView().findViewById(R.id.thyroidListView);
@@ -98,9 +76,7 @@ public class ThyroidFragment extends Fragment
                     Date date = MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().get(j).getDate();
                     float amount = MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().get(j).getAmount();
                     DataPoint point = new DataPoint(date.getTime(), (double) amount);
-                    //Date dateToday = new Date();
                     Calendar calendar = Calendar.getInstance();
-                    //calendar.set(calendar.YEAR, calendar.MONTH, calendar.DATE, 0, 0, 0);
                     Date dateToday = calendar.getTime();
                     long diff = dateToday.getTime() - date.getTime();
                     long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);

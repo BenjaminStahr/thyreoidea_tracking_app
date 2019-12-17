@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -25,10 +24,12 @@ import java.util.concurrent.TimeUnit;
 public class IntakeFragment extends Fragment
 {
     Context context;
+    String period;
 
     public IntakeFragment(Context context)
     {
         this.context = context;
+        period = context.getString(R.string.period_week);
     }
 
     @Override
@@ -43,38 +44,13 @@ public class IntakeFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        /*ListView intakeListView = (ListView)getView().findViewById(R.id.intakeListView);
-        ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
-        String[] units = new String[MainActivity.getDataHolder().getIntakeData().size()];
-        String[] namesOfSubstances = new String[MainActivity.getDataHolder().getIntakeData().size()];
-
-        for(int i = 0; i < MainActivity.getDataHolder().getIntakeData().size(); i++)
-        {
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-            units[i] = MainActivity.getDataHolder().getIntakeData().get(i).getUnit();
-            namesOfSubstances[i] = MainActivity.getDataHolder().getIntakeData().get(i).getNameOfSubstance();
-            for(int j = 0; j < MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(); j++)
-            {
-                Date date = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getDate();
-                float amount = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getAmount();
-                DataPoint point = new DataPoint(date,(double) amount);
-                series.appendData(point, false, MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(),
-                        false);
-            }
-            differentViews.add(series);
-        }
-        PlotAdapter adapter = new PlotAdapter(context, differentViews, units, namesOfSubstances, "TODO");
-        if (intakeListView != null)
-        {
-            intakeListView.setAdapter(adapter);
-        }*/
-        setAdapterData(getString(R.string.period_week));
+        setAdapterData(period);
     }
     public void setAdapterData(String period)
     {
+        this.period = period;
         if(getView() != null)
         {
-            //ListView intakeListView = (ListView)getView().findViewById(R.id.intakeListView);
             ListView intakeListView = (ListView) getView().findViewById(R.id.intakeListView);
             ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
             String[] units = new String[MainActivity.getDataHolder().getIntakeData().size()];
