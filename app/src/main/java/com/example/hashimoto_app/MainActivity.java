@@ -8,6 +8,7 @@ import com.example.hashimoto_app.backend.Measurement;
 import com.example.hashimoto_app.backend.SymptomElement;
 import com.example.hashimoto_app.backend.ThyroidElement;
 import com.example.hashimoto_app.backend.ThyroidMeasurement;
+import com.example.hashimoto_app.ui.main.ThyroidDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -33,21 +34,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        final ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
-
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DataHolder holder = new DataHolder();
         // add some sample data to the holder
@@ -141,6 +132,40 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(viewPager.getCurrentItem() == 0)
+                {
+                    openThyroidDialog();
+                }
+                else if(viewPager.getCurrentItem() == 1)
+                {
+                    openSymptomDialog();
+                }
+                else
+                {
+                    openIntakeDialog();
+                }
+            }
+        });
+    }
+    public void openThyroidDialog()
+    {
+        ThyroidDialog thyroidDialog = new ThyroidDialog();
+        thyroidDialog.show(getSupportFragmentManager(), "thyroid dialog");
+    }
+
+    public void openSymptomDialog()
+    {
+
+    }
+
+    public void openIntakeDialog()
+    {
+
     }
 
     public static DataHolder getDataHolder()

@@ -11,4 +11,12 @@
         <item>Monat</item>
         <item>Jahr</item>
     </string-array>
+    <string-array name="thyroidValues">
+        <item>TSH</item>
+        <item>T3</item>
+        <item>T4</item>
+        <item>fT3</item>
+        <item>fT4</item>
+    </string-array>
+
 </resources>
