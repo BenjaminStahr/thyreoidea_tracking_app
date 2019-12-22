@@ -72,18 +72,19 @@ public class ThyroidFragment extends Fragment
         if (getView() != null)
         {
             getView().findViewById(R.id.thyroidListView).invalidate();
-            //ListView thyroidListView = (ListView) getView().findViewById(R.id.thyroidListView);
+            adapter.clear();
+            ListView thyroidListView = (ListView) getView().findViewById(R.id.thyroidListView);
             Object[] data = generateAdapterData();
-            adapter.setData((ArrayList<LineGraphSeries>)data[0]);
-            adapter.setUnit((String[]) data[1]);
-            adapter.setNameOfSubstance((String[]) data[2]);
-            adapter.setPeriod(period);
-            adapter.notifyDataSetChanged();
-            /*adapter = new PlotAdapter(context, differentViews, units, namesOfSubstances, period);
+            //adapter.setData((ArrayList<LineGraphSeries>)data[0]);
+            //adapter.setUnit((String[]) data[1]);
+            //adapter.setNameOfSubstance((String[]) data[2]);
+            //adapter.setPeriod(period);
+            adapter = new PlotAdapter(context, (ArrayList<LineGraphSeries>)data[0], (String[]) data[1], (String[]) data[2], period);
             if (thyroidListView != null)
             {
                 thyroidListView.setAdapter(adapter);
-            }*/
+            }
+            adapter.notifyDataSetChanged();
         }
     }
 

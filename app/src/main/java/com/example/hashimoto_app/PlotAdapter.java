@@ -51,11 +51,12 @@ public class PlotAdapter extends ArrayAdapter<String>
 
     @NonNull
     @Override
-    // Here we use the view holder pattern
+    //TODO Here we use the view holder pattern
+    // actually we don't use it because the use produces errors when adding data
     public View getView(int position, View convertView, ViewGroup parent)
     {
         ViewHolder viewHolder = new ViewHolder();
-        if (convertView == null)
+        //if (convertView == null)
         {
             LayoutInflater inflater = (LayoutInflater) context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -98,30 +99,30 @@ public class PlotAdapter extends ArrayAdapter<String>
             viewHolder.graphView.getGridLabelRenderer().setHumanRounding(false, true);
             viewHolder.graphView.getViewport().setXAxisBoundsManual(true);
             viewHolder.graphView.getViewport().setMaxX(new Date().getTime());
-            //viewHolder.graphView.getViewport().setMinX(data.get(position).getLowestValueX());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            if(period.equals(context.getString(R.string.period_week)))
+            {
+                cal.add(Calendar.DATE, -7);
+
+            }
+            else if(period.equals(context.getString(R.string.period_month)))
+            {
+                cal.add(Calendar.DATE, -30);
+            }
+            else
+            {
+                cal.add(Calendar.DATE, -365);
+            }
+            viewHolder.graphView.getViewport().setMinX(cal.getTime().getTime());
             convertView.setTag(viewHolder);
         }
-        else
+        //else
         {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        if(period.equals(context.getString(R.string.period_week)))
-        {
-            cal.add(Calendar.DATE, -7);
 
-        }
-        else if(period.equals(context.getString(R.string.period_month)))
-        {
-            cal.add(Calendar.DATE, -30);
-        }
-        else
-        {
-            cal.add(Calendar.DATE, -365);
-        }
-        viewHolder.graphView.getViewport().setMinX(cal.getTime().getTime());
         viewHolder.graphView.addSeries(data.get(position));
         viewHolder.nameOfSubstanceView.setText(nameOfSubstance[position]);
         viewHolder.unitView.setText(unit[position]);
