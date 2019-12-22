@@ -29,7 +29,7 @@
             android:inputType="numberDecimal|numberSigned" />
 
         <TextView
-            android:id="@+id/unit"
+            android:id="@+id/unit_thyroid_dialog"
             android:layout_width="match_parent"
             android:layout_height="31dp"
             android:gravity="top"

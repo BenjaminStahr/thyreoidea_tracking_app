@@ -27,6 +27,7 @@ This is a Customadapter for showing one Graph in the thyroid list view
 public class PlotAdapter extends ArrayAdapter<String>
 {
     private ArrayList<LineGraphSeries> data;
+
     private String[] unit;
     private String[] nameOfSubstance;
     private Context context;
@@ -97,23 +98,6 @@ public class PlotAdapter extends ArrayAdapter<String>
             viewHolder.graphView.getGridLabelRenderer().setHumanRounding(false, true);
             viewHolder.graphView.getViewport().setXAxisBoundsManual(true);
             viewHolder.graphView.getViewport().setMaxX(new Date().getTime());
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-            if(period.equals(context.getString(R.string.period_week)))
-            {
-                cal.add(Calendar.DATE, -7);
-
-            }
-            else if(period.equals(context.getString(R.string.period_month)))
-            {
-                cal.add(Calendar.DATE, -30);
-            }
-            else
-            {
-                cal.add(Calendar.DATE, -365);
-            }
-            viewHolder.graphView.getViewport().setMinX(cal.getTime().getTime());
             //viewHolder.graphView.getViewport().setMinX(data.get(position).getLowestValueX());
             convertView.setTag(viewHolder);
         }
@@ -121,19 +105,44 @@ public class PlotAdapter extends ArrayAdapter<String>
         {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        if(period.equals(context.getString(R.string.period_week)))
+        {
+            cal.add(Calendar.DATE, -7);
+
+        }
+        else if(period.equals(context.getString(R.string.period_month)))
+        {
+            cal.add(Calendar.DATE, -30);
+        }
+        else
+        {
+            cal.add(Calendar.DATE, -365);
+        }
+        viewHolder.graphView.getViewport().setMinX(cal.getTime().getTime());
         viewHolder.graphView.addSeries(data.get(position));
         viewHolder.nameOfSubstanceView.setText(nameOfSubstance[position]);
         viewHolder.unitView.setText(unit[position]);
         return convertView;
     }
-    /*public void updateGraphs(ArrayList<LineGraphSeries> data)
-    {
-        setData(data);
-    }
     public void setData(ArrayList<LineGraphSeries> data)
     {
         this.data = data;
-    }*/
+    }
+    public void setUnit(String[] unit)
+    {
+        this.unit = unit;
+    }
+    public void setNameOfSubstance(String[] nameOfSubstance)
+    {
+        this.nameOfSubstance = nameOfSubstance;
+    }
+    public void setPeriod(String period)
+    {
+        this.period = period;
+    }
     static class ViewHolder
     {
         GraphView graphView;

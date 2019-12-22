@@ -24,16 +24,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener
 {
     private static DataHolder dataHolder;
+    SectionsPagerAdapter sectionsPagerAdapter;
+    private Spinner periodSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-        final SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         final ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         Date date = calendar.getTime();
         calendar.set(2019, 11, 1, 0, 0, 0);
         Date date2 = calendar.getTime();
-        calendar.set(2019, 11, 14, 0, 0, 0);
+        calendar.set(2019, 11, 20, 0, 0, 0);
         Date date3 = calendar.getTime();
         // sample data for thyroid measurements
         ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 3, 1 ,3);
@@ -110,24 +113,13 @@ public class MainActivity extends AppCompatActivity
 
         dataHolder = new Gson().fromJson(testString, DataHolder.class);
 
-        Spinner periodSpinner = findViewById(R.id.period_spinner);
+        periodSpinner = findViewById(R.id.period_spinner);
         periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                if(position == 0)
-                {
-                    sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_week));
-                }
-                else if (position == 1)
-                {
-                    sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_month));
-                }
-                else
-                {
-                    sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
-                }
+                updateDataAccordingToSpinnerPosition();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
@@ -171,5 +163,48 @@ public class MainActivity extends AppCompatActivity
     public static DataHolder getDataHolder()
     {
         return dataHolder;
+    }
+
+    public void updateDataAccordingToSpinnerPosition()
+    {
+        if(periodSpinner.getSelectedItemPosition() == 0)
+        {
+            sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_week));
+        }
+        else if (periodSpinner.getSelectedItemPosition() == 1)
+        {
+            sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_month));
+        }
+        else
+        {
+            sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
+        }
+    }
+
+    @Override
+    public void applyTexts(String registeredValue, String substance, String unit)
+    {
+        boolean alreadyRegistered = false;
+        for(int i = 0; i < dataHolder.getThyroidData().size(); i++)
+        {
+            if(dataHolder.getThyroidData().get(i).getNameOfSubstance().equals(substance))
+            {
+                alreadyRegistered = true;
+                // bounds are irrelevant at the moment
+                ThyroidMeasurement thyroidMeasurement = new ThyroidMeasurement(new Date(), Float.valueOf(registeredValue), 0 ,0);
+                dataHolder.getThyroidData().get(i).getMeasurements().add(thyroidMeasurement);
+            }
+        }
+        if(!alreadyRegistered)
+        {
+            ThyroidMeasurement thyroidMeasurement = new ThyroidMeasurement(new Date(), Float.valueOf(registeredValue), 0 ,0);
+            ArrayList<ThyroidMeasurement> thyroidMeasurements = new ArrayList<>();
+            thyroidMeasurements.add(thyroidMeasurement);
+            ThyroidElement thyroidElement = new ThyroidElement(substance, unit, thyroidMeasurements);
+            dataHolder.getThyroidData().add(thyroidElement);
+        }
+        updateDataAccordingToSpinnerPosition();
+        String json = new Gson().toJson(dataHolder);
+        FileManager.saveFile("test", json, getApplicationContext());
     }
 }

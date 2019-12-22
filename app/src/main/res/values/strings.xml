@@ -19,4 +19,11 @@
         <item>fT4</item>
     </string-array>
 
+    <string-array name="thyroidUnits">
+        <item name="tshUnit">µU/ml</item>
+        <item name="t3Unit">ng/dl</item>
+        <item name="t4Unit">µg/dl</item>
+        <item name="fT3Unit">pg/ml</item>
+        <item name="fT4Unit">ng/dl</item>
+    </string-array>
 </resources>
