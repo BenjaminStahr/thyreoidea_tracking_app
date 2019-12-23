@@ -128,7 +128,7 @@ public class PlotAdapter extends ArrayAdapter<String>
         viewHolder.unitView.setText(unit[position]);
         return convertView;
     }
-    public void setData(ArrayList<LineGraphSeries> data)
+    /*public void setData(ArrayList<LineGraphSeries> data)
     {
         this.data = data;
     }
@@ -143,7 +143,7 @@ public class PlotAdapter extends ArrayAdapter<String>
     public void setPeriod(String period)
     {
         this.period = period;
-    }
+    }*/
     static class ViewHolder
     {
         GraphView graphView;

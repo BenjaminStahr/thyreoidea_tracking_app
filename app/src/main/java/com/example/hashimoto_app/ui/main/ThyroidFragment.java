@@ -71,8 +71,8 @@ public class ThyroidFragment extends Fragment
         this.period = period;
         if (getView() != null)
         {
-            getView().findViewById(R.id.thyroidListView).invalidate();
-            adapter.clear();
+            //adapter.clear();
+            //adapter.notifyDataSetChanged();
             ListView thyroidListView = (ListView) getView().findViewById(R.id.thyroidListView);
             Object[] data = generateAdapterData();
             //adapter.setData((ArrayList<LineGraphSeries>)data[0]);

@@ -28,8 +28,6 @@ public class ThyroidDialog extends AppCompatDialogFragment
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
     {
-
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view  = inflater.inflate(R.layout.thyroid_dialog, null);
@@ -43,15 +41,18 @@ public class ThyroidDialog extends AppCompatDialogFragment
 
                 }
             })
-            .setPositiveButton("Okay", new DialogInterface.OnClickListener()
+            .setPositiveButton("eintragen", new DialogInterface.OnClickListener()
             {
                 @Override
                 public void onClick(DialogInterface dialog, int which)
                 {
-                    String registeredValue = registeredValueEditText.getText().toString();
-                    String substance = dialogSpinner.getSelectedItem().toString();
-                    String unit = unitTextView.getText().toString();
-                    listener.applyTexts(registeredValue, substance, unit);
+                    if(!registeredValueEditText.getText().toString().equals(""))
+                    {
+                        String registeredValue = registeredValueEditText.getText().toString();
+                        String substance = dialogSpinner.getSelectedItem().toString();
+                        String unit = unitTextView.getText().toString();
+                        listener.applyThyroidTexts(registeredValue, substance, unit);
+                    }
                 }
             });
         unitTextView = view.findViewById(R.id.unit_thyroid_dialog);
@@ -89,6 +90,6 @@ public class ThyroidDialog extends AppCompatDialogFragment
 
     public interface ThyroidDialogListener
     {
-        void applyTexts(String registeredValue, String substance, String unit);
+        void applyThyroidTexts(String registeredValue, String substance, String unit);
     }
 }

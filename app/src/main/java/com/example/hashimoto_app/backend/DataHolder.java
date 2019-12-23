@@ -14,6 +14,16 @@ public class DataHolder
         symptomData = new ArrayList<>();
         intakeData = new ArrayList<>();
     }
+    public ArrayList<String> getSymptoms()
+    {
+        ArrayList<String> symptoms = new ArrayList<>();
+        for(int i = 0; i < symptomData.size(); i++)
+        {
+            symptoms.add(symptomData.get(i).getSymptomName());
+        }
+        return symptoms;
+    }
+
     public ArrayList<ThyroidElement> getThyroidData()
     {
         return thyroidData;
