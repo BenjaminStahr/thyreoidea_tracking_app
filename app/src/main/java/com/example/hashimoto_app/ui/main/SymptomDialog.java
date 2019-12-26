@@ -10,8 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+
+import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,13 +20,15 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
+import com.shawnlin.numberpicker.NumberPicker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SymptomDialog extends AppCompatDialogFragment
 {
     private Spinner dialogSpinner;
+    private NumberPicker numberPicker;
+    private String[] numberPickerData = {"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"};
     private EditText registeredValueEditText;
     private SymptomDialogListener listener;
     private MainActivity mainActivity;
@@ -54,15 +57,17 @@ public class SymptomDialog extends AppCompatDialogFragment
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        if(!registeredValueEditText.getText().toString().equals(""))
-                        {
-                            String registeredValue = registeredValueEditText.getText().toString();
-                            String symptom = dialogSpinner.getSelectedItem().toString();
-                            listener.applySymptomTexts(registeredValue, symptom);
-                        }
+                        int registeredValue = Integer.valueOf(numberPickerData[numberPicker.getValue()-1]);
+                        System.out.println(registeredValue);
+                        String symptom = dialogSpinner.getSelectedItem().toString();
+                        listener.applySymptomTexts(registeredValue, symptom);
                     }
                 });
-        registeredValueEditText = view.findViewById(R.id.registeredValue);
+        numberPicker = view.findViewById(R.id.numberPicker);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(numberPickerData.length);
+        numberPicker.setDisplayedValues(numberPickerData);
+        numberPicker.setValue(10);
         dialogSpinner = view.findViewById(R.id.symptom_spinner);
         final List<String> list = MainActivity.getDataHolder().getSymptoms();
         ArrayAdapter<String> adp1 = new ArrayAdapter<>(mainActivity.getApplicationContext(),
@@ -78,6 +83,15 @@ public class SymptomDialog extends AppCompatDialogFragment
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
+        });
+        ImageView addSymptomImageView = view.findViewById(R.id.add_symptom_image);
+        addSymptomImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                openAddSymptomDialog();
+            }
         });
 
         return builder.create();
@@ -96,8 +110,14 @@ public class SymptomDialog extends AppCompatDialogFragment
         }
 
     }
+    public void openAddSymptomDialog()
+    {
+        AddSymptomDialog addSymptomDialog = new AddSymptomDialog();
+        addSymptomDialog.show(mainActivity.getSupportFragmentManager(), "add symptom dialog");
+    }
+
     public interface SymptomDialogListener
     {
-        void applySymptomTexts(String registeredValue, String symptom);
+        void applySymptomTexts(int registeredValue, String symptom);
     }
 }

@@ -208,10 +208,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     }
 
     @Override
-    public void applySymptomTexts(String registeredValue, String symptom)
+    public void applySymptomTexts(int registeredValue, String symptom)
     {
         boolean alreadyRegistered = false;
-        Measurement measurement = new Measurement(new Date(), Float.valueOf(registeredValue));
+        Measurement measurement = new Measurement(new Date(), registeredValue);
         for(int i = 0; i < dataHolder.getSymptomData().size(); i++)
         {
             if(dataHolder.getSymptomData().get(i).getSymptomName().equals(symptom))

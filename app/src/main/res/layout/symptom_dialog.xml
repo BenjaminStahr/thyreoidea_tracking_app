@@ -1,34 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:padding="16dp">
-    <Spinner
-        android:id="@+id/symptom_spinner"
-        android:layout_width="262dp"
-        android:layout_height="wrap_content"
-        android:entries="@array/thyroidValues"
-        android:gravity="center_horizontal|center_vertical"
-        android:textAlignment="gravity"
-        android:theme="@style/Spinner" />
     <LinearLayout
+        android:id="@+id/upperLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <EditText
+
+        <Spinner
+            android:id="@+id/symptom_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAlignment="viewStart"
+            android:theme="@style/Spinner" />
+        <ImageView
+            android:id="@+id/add_symptom_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_input_add" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lowerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!--EditText
             android:id="@+id/registeredValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="numberDecimal|numberSigned" />
+            android:inputType="numberDecimal|numberSigned" /-->
+
+        <!--NumberPicker
+            android:id="@+id/numberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" /-->
         <TextView
             android:id="@+id/intensityLabelSymptom"
             android:layout_width="match_parent"
-            android:layout_height="31dp"
-            android:gravity="top"
-            android:text="Intensität" />
+            android:layout_height="wrap_content"
+            android:text="Intensität :" />
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/numberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:np_fadingEdgeEnabled="false"
+            app:np_max="10"
+            app:np_min="0"
+            app:np_order="descending"
+            app:np_orientation="horizontal"
+            app:np_wrapSelectorWheel="true" />
     </LinearLayout>
 </LinearLayout>
