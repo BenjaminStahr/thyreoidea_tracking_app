@@ -8,6 +8,7 @@ import com.example.hashimoto_app.backend.Measurement;
 import com.example.hashimoto_app.backend.SymptomElement;
 import com.example.hashimoto_app.backend.ThyroidElement;
 import com.example.hashimoto_app.backend.ThyroidMeasurement;
+import com.example.hashimoto_app.ui.main.AddSymptomDialog;
 import com.example.hashimoto_app.ui.main.SymptomDialog;
 import com.example.hashimoto_app.ui.main.ThyroidDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,11 +24,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener, SymptomDialog.SymptomDialogListener
+public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
+        SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener
 {
     private static DataHolder dataHolder;
     SectionsPagerAdapter sectionsPagerAdapter;
     private Spinner periodSpinner;
+    SymptomDialog symptomDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -135,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 else if(viewPager.getCurrentItem() == 1)
                 {
                     openSymptomDialog();
+                    //openAddSymptomDialog();
                 }
                 else
                 {
@@ -151,13 +155,18 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
 
     public void openSymptomDialog()
     {
-        SymptomDialog symptomDialog = new SymptomDialog(this);
+        symptomDialog = new SymptomDialog(this);
         symptomDialog.show(getSupportFragmentManager(), "symptom dialog");
     }
 
     public void openIntakeDialog()
     {
 
+    }
+    public void openAddSymptomDialog()
+    {
+        AddSymptomDialog addSymptomDialog = new AddSymptomDialog();
+        addSymptomDialog.show(getSupportFragmentManager(), "add symptom dialog");
     }
 
     public static DataHolder getDataHolder()
@@ -229,5 +238,11 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         }
         updateDataAccordingToSpinnerPosition();
         FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
+    }
+
+    @Override
+    public void refreshSymptomList()
+    {
+        symptomDialog.setSpinnerItems();
     }
 }

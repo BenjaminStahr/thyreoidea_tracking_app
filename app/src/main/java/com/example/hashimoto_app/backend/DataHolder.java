@@ -23,6 +23,11 @@ public class DataHolder
         }
         return symptoms;
     }
+    public void addSymptom(String symptomName)
+    {
+        SymptomElement element = new SymptomElement(symptomName, new ArrayList<Measurement>());
+        symptomData.add(element);
+    }
 
     public ArrayList<ThyroidElement> getThyroidData()
     {

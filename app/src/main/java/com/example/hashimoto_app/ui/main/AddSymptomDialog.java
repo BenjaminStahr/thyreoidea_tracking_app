@@ -7,22 +7,17 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-
+import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
-
-import java.util.List;
-
 public class AddSymptomDialog extends AppCompatDialogFragment
 {
     private AddSymptomDialogListener listener;
+    private EditText symptomEditText;
 
     @NonNull
     @Override
@@ -30,9 +25,9 @@ public class AddSymptomDialog extends AppCompatDialogFragment
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view  = inflater.inflate(R.layout.add_symptom_dialog, null);
+        View view  = inflater.inflate(R.layout.additional_symptom_dialog, null);
         builder.setView(view)
-                .setTitle("Neuer Eintrag")
+                .setTitle("Symptom hinzufügen")
                 .setNegativeButton("abbrechen", new DialogInterface.OnClickListener()
                 {
                     @Override
@@ -43,13 +38,14 @@ public class AddSymptomDialog extends AppCompatDialogFragment
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        /*int registeredValue = Integer.valueOf(numberPickerData[numberPicker.getValue()-1]);
-                        System.out.println(registeredValue);
-                        String symptom = dialogSpinner.getSelectedItem().toString();
-                        listener.applySymptomTexts(registeredValue, symptom);*/
+                        if(!symptomEditText.getText().toString().equals(""))
+                        {
+                            MainActivity.getDataHolder().addSymptom(symptomEditText.getText().toString());
+                            listener.refreshSymptomList();
+                        }
                     }
                 });
-
+        symptomEditText = view.findViewById(R.id.symptom_name_edit_text);
         return builder.create();
     }
     @Override
@@ -58,16 +54,15 @@ public class AddSymptomDialog extends AppCompatDialogFragment
         super.onAttach(context);
         try
         {
-            listener = (AddSymptomDialog.AddSymptomDialogListener) context;
+            listener = (AddSymptomDialogListener) context;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
     }
     public interface AddSymptomDialogListener
     {
-        void applySymptomTexts(String symptom);
+        void refreshSymptomList();
     }
 }

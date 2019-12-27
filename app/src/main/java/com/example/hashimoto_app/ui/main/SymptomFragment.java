@@ -65,36 +65,39 @@ public class SymptomFragment extends Fragment
                 series.setDrawDataPoints(true);
                 //units[i] = MainActivity.getDataHolder().getSymptomData().get(i).getUnit();
                 namesOfSymptoms[i] = MainActivity.getDataHolder().getSymptomData().get(i).getSymptomName();
-                for (int j = 0; j < MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(); j++)
+                if(MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements() != null)
                 {
-                    Date date = MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().get(j).getDate();
-                    float amount = MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().get(j).getAmount();
-                    DataPoint point = new DataPoint(date.getTime(), (double) amount);
-                    //Date dateToday = new Date();
-                    Calendar calendar = Calendar.getInstance();
-                    //calendar.set(calendar.YEAR, calendar.MONTH, calendar.DATE, 0, 0, 0);
-                    Date dateToday = calendar.getTime();
-                    long diff = dateToday.getTime() - date.getTime();
-                    long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                    if (period.equals(getString(R.string.period_week)))
+                    for (int j = 0; j < MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(); j++)
                     {
-                        if (period.equals(getString(R.string.period_week)) && days <= 7)
+                        Date date = MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().get(j).getDate();
+                        float amount = MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().get(j).getAmount();
+                        DataPoint point = new DataPoint(date.getTime(), (double) amount);
+                        //Date dateToday = new Date();
+                        Calendar calendar = Calendar.getInstance();
+                        //calendar.set(calendar.YEAR, calendar.MONTH, calendar.DATE, 0, 0, 0);
+                        Date dateToday = calendar.getTime();
+                        long diff = dateToday.getTime() - date.getTime();
+                        long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                        if (period.equals(getString(R.string.period_week)))
                         {
-                            series.appendData(point, true, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
-                                    false);
+                            if (period.equals(getString(R.string.period_week)) && days <= 7)
+                            {
+                                series.appendData(point, true, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
+                                        false);
+                            }
                         }
-                    }
-                    else if (period.equals(getString(R.string.period_month)) && days <= 30)
-                    {
-                        series.appendData(point, false, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
-                                false);
-                    }
-                    else
-                    {
-                        if (period.equals(getString(R.string.period_year)) && days <= 365)
+                        else if (period.equals(getString(R.string.period_month)) && days <= 30)
                         {
                             series.appendData(point, false, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
                                     false);
+                        }
+                        else
+                        {
+                            if (period.equals(getString(R.string.period_year)) && days <= 365)
+                            {
+                                series.appendData(point, false, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
+                                        false);
+                            }
                         }
                     }
                 }

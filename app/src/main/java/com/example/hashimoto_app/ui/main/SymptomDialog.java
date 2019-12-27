@@ -69,11 +69,12 @@ public class SymptomDialog extends AppCompatDialogFragment
         numberPicker.setDisplayedValues(numberPickerData);
         numberPicker.setValue(10);
         dialogSpinner = view.findViewById(R.id.symptom_spinner);
-        final List<String> list = MainActivity.getDataHolder().getSymptoms();
+        setSpinnerItems();
+        /*final List<String> list = MainActivity.getDataHolder().getSymptoms();
         ArrayAdapter<String> adp1 = new ArrayAdapter<>(mainActivity.getApplicationContext(),
                 android.R.layout.simple_list_item_1, list);
         adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dialogSpinner.setAdapter(adp1);
+        dialogSpinner.setAdapter(adp1);*/
         dialogSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -90,7 +91,7 @@ public class SymptomDialog extends AppCompatDialogFragment
             @Override
             public void onClick(View v)
             {
-                openAddSymptomDialog();
+                mainActivity.openAddSymptomDialog();
             }
         });
 
@@ -108,14 +109,16 @@ public class SymptomDialog extends AppCompatDialogFragment
         {
             e.printStackTrace();
         }
-
     }
-    public void openAddSymptomDialog()
+
+    public void setSpinnerItems()
     {
-        AddSymptomDialog addSymptomDialog = new AddSymptomDialog();
-        addSymptomDialog.show(mainActivity.getSupportFragmentManager(), "add symptom dialog");
+        final List<String> list = MainActivity.getDataHolder().getSymptoms();
+        ArrayAdapter<String> adp1 = new ArrayAdapter<>(mainActivity.getApplicationContext(),
+                android.R.layout.simple_list_item_1, list);
+        adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dialogSpinner.setAdapter(adp1);
     }
-
     public interface SymptomDialogListener
     {
         void applySymptomTexts(int registeredValue, String symptom);
