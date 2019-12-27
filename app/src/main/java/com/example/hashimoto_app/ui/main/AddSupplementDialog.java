@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -19,6 +21,7 @@ public class AddSupplementDialog extends AppCompatDialogFragment
 {
     private AddSupplementDialogListener listener;
     private EditText supplementEditText;
+    private Spinner supplementUnitSpinner;
 
     @NonNull
     @Override
@@ -41,12 +44,13 @@ public class AddSupplementDialog extends AppCompatDialogFragment
                     {
                         if(!supplementEditText.getText().toString().equals(""))
                         {
-                            MainActivity.getDataHolder().addSupplement(supplementEditText.getText().toString(), "mg");
+                            MainActivity.getDataHolder().addSupplement(supplementEditText.getText().toString(), supplementUnitSpinner.getSelectedItem().toString());
                             listener.refreshSupplementList();
                         }
                     }
                 });
         supplementEditText = view.findViewById(R.id.supplement_name_edit_text);
+        supplementUnitSpinner = view.findViewById(R.id.supplement_unit_spinner);
         return builder.create();
     }
     @Override

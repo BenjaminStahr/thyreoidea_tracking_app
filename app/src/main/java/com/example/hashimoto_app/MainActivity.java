@@ -27,7 +27,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
-        SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener
+        SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
+        AddSupplementDialog.AddSupplementDialogListener
 {
     private static DataHolder dataHolder;
     SectionsPagerAdapter sectionsPagerAdapter;
@@ -141,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 else if(viewPager.getCurrentItem() == 1)
                 {
                     openSymptomDialog();
-                    //openAddSymptomDialog();
                 }
                 else
                 {
@@ -220,8 +220,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             dataHolder.getThyroidData().add(thyroidElement);
         }
         updateDataAccordingToSelectedTimePeriod();
-        String json = new Gson().toJson(dataHolder);
-        FileManager.saveFile("test", json, getApplicationContext());
+        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
     }
     @Override
     public void applySymptomTexts(int registeredValue, String symptom)
@@ -241,6 +240,15 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     public void refreshSymptomList()
     {
         symptomDialog.setSpinnerItems();
+        updateDataAccordingToSelectedTimePeriod();
+        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
+    }
+    @Override
+    public void refreshSupplementList()
+    {
+        intakeDialog.setSpinnerItems();
+        updateDataAccordingToSelectedTimePeriod();
+        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
     }
     @Override
     public void applyRegisteredIntake(String registeredValue, String substance)
@@ -256,4 +264,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         updateDataAccordingToSelectedTimePeriod();
         FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
     }
+
+
 }

@@ -32,6 +32,17 @@ public class DataHolder
         }
         return supplements;
     }
+    public String getUnitOfSupplement(String substance)
+    {
+        for (int i = 0; i < intakeData.size(); i++)
+        {
+            if(intakeData.get(i).getNameOfSubstance().equals(substance))
+            {
+                return intakeData.get(i).getUnit();
+            }
+        }
+        return "mg";
+    }
     public void addSymptom(String symptomName)
     {
         SymptomElement element = new SymptomElement(symptomName, new ArrayList<Measurement>());
@@ -42,6 +53,7 @@ public class DataHolder
         IntakeElement element = new IntakeElement(supplementName, unit, new ArrayList<Measurement>());
         intakeData.add(element);
     }
+
 
     public ArrayList<ThyroidElement> getThyroidData()
     {

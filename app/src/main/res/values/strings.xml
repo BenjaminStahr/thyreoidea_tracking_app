@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hashimoto_App</string>
+    <string name="app_name">Thyreoidea Tracker</string>
     <string name="tab_text_1">Schilddrüse</string>
     <string name="tab_text_2">Symptome</string>
     <string name="tab_text_3">Nahrung</string>
@@ -17,6 +17,12 @@
         <item>T4</item>
         <item>fT3</item>
         <item>fT4</item>
+    </string-array>
+    <string-array name="supplementUnits">
+        <item>g</item>
+        <item>mg</item>
+        <item>µg</item>
+        <item>ng</item>
     </string-array>
 
     <string-array name="thyroidUnits">

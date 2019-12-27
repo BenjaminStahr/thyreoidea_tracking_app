@@ -76,8 +76,7 @@ public class IntakeDialog extends AppCompatDialogFragment
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                // works because spinner array and unit array have the same order
-                //unitTextView.setText(getResources().getStringArray(R.array.thyroidUnits)[position]);
+                unitTextView.setText(MainActivity.getDataHolder().getUnitOfSupplement(dialogSpinner.getSelectedItem().toString()));
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }

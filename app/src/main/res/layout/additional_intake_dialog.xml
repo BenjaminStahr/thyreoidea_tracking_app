@@ -18,4 +18,17 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textPersonName" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Supplement wird dosiert in :" />
+
+    <Spinner
+        android:id="@+id/supplement_unit_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:entries="@array/supplementUnits" />
 </LinearLayout>
