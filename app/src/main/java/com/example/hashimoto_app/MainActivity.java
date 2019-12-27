@@ -9,6 +9,7 @@ import com.example.hashimoto_app.backend.SymptomElement;
 import com.example.hashimoto_app.backend.ThyroidElement;
 import com.example.hashimoto_app.backend.ThyroidMeasurement;
 import com.example.hashimoto_app.ui.main.AddSymptomDialog;
+import com.example.hashimoto_app.ui.main.IntakeDialog;
 import com.example.hashimoto_app.ui.main.SymptomDialog;
 import com.example.hashimoto_app.ui.main.ThyroidDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     SectionsPagerAdapter sectionsPagerAdapter;
     private Spinner periodSpinner;
     SymptomDialog symptomDialog;
+    IntakeDialog intakeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,9 +52,9 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         Calendar calendar = Calendar.getInstance();
         calendar.set(2019, 10, 19, 0, 0, 0);
         Date date = calendar.getTime();
-        calendar.set(2019, 11, 1, 0, 0, 0);
+        calendar.set(2019, 11, 26, 5, 0, 0);
         Date date2 = calendar.getTime();
-        calendar.set(2019, 11, 20, 0, 0, 0);
+        calendar.set(2019, 11, 26, 6, 0, 0);
         Date date3 = calendar.getTime();
         // sample data for thyroid measurements
         ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 3, 1 ,3);
@@ -161,7 +163,8 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
 
     public void openIntakeDialog()
     {
-
+        intakeDialog = new IntakeDialog();
+        intakeDialog.show(getSupportFragmentManager(), "intake dialog");
     }
     public void openAddSymptomDialog()
     {

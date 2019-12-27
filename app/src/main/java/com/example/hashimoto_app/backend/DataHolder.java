@@ -23,12 +23,20 @@ public class DataHolder
         }
         return symptoms;
     }
+    public ArrayList<String> getSupplements()
+    {
+        ArrayList<String> supplements = new ArrayList<>();
+        for(int i = 0; i < intakeData.size(); i++)
+        {
+            supplements.add(intakeData.get(i).getNameOfSubstance());
+        }
+        return supplements;
+    }
     public void addSymptom(String symptomName)
     {
         SymptomElement element = new SymptomElement(symptomName, new ArrayList<Measurement>());
         symptomData.add(element);
     }
-
     public ArrayList<ThyroidElement> getThyroidData()
     {
         return thyroidData;
