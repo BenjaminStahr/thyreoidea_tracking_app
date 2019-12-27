@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,6 +29,12 @@ public class IntakeDialog extends AppCompatDialogFragment
     private TextView unitTextView;
     private EditText registeredValueEditText;
     private IntakeDialogListener listener;
+    private  MainActivity mainActivity;
+
+    public IntakeDialog(MainActivity mainActivity)
+    {
+        this.mainActivity = mainActivity;
+    }
 
     @NonNull
     @Override
@@ -75,7 +82,15 @@ public class IntakeDialog extends AppCompatDialogFragment
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
-
+        ImageView addSupplementImageView = view.findViewById(R.id.add_intake_image);
+        addSupplementImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mainActivity.openAddSupplementDialog();
+            }
+        });
         return builder.create();
     }
 
@@ -102,7 +117,6 @@ public class IntakeDialog extends AppCompatDialogFragment
         adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dialogSpinner.setAdapter(adp1);
     }
-
     public interface IntakeDialogListener
     {
         void applyRegisteredIntake(String registeredValue, String substance);

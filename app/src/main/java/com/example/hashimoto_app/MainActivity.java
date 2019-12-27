@@ -8,6 +8,7 @@ import com.example.hashimoto_app.backend.Measurement;
 import com.example.hashimoto_app.backend.SymptomElement;
 import com.example.hashimoto_app.backend.ThyroidElement;
 import com.example.hashimoto_app.backend.ThyroidMeasurement;
+import com.example.hashimoto_app.ui.main.AddSupplementDialog;
 import com.example.hashimoto_app.ui.main.AddSymptomDialog;
 import com.example.hashimoto_app.ui.main.IntakeDialog;
 import com.example.hashimoto_app.ui.main.SymptomDialog;
@@ -26,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
-        SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener
+        SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener
 {
     private static DataHolder dataHolder;
     SectionsPagerAdapter sectionsPagerAdapter;
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                updateDataAccordingToSpinnerPosition();
+                updateDataAccordingToSelectedTimePeriod();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
 
     public void openIntakeDialog()
     {
-        intakeDialog = new IntakeDialog();
+        intakeDialog = new IntakeDialog(this);
         intakeDialog.show(getSupportFragmentManager(), "intake dialog");
     }
     public void openAddSymptomDialog()
@@ -171,13 +172,18 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         AddSymptomDialog addSymptomDialog = new AddSymptomDialog();
         addSymptomDialog.show(getSupportFragmentManager(), "add symptom dialog");
     }
+    public void openAddSupplementDialog()
+    {
+        AddSupplementDialog addSupplementDialog = new AddSupplementDialog();
+        addSupplementDialog.show(getSupportFragmentManager(), "add supplement dialog");
+    }
 
     public static DataHolder getDataHolder()
     {
         return dataHolder;
     }
 
-    public void updateDataAccordingToSpinnerPosition()
+    public void updateDataAccordingToSelectedTimePeriod()
     {
         if(periodSpinner.getSelectedItemPosition() == 0)
         {
@@ -192,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
         }
     }
-
     @Override
     public void applyThyroidTexts(String registeredValue, String substance, String unit)
     {
@@ -214,38 +219,41 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             ThyroidElement thyroidElement = new ThyroidElement(substance, unit, thyroidMeasurements);
             dataHolder.getThyroidData().add(thyroidElement);
         }
-        updateDataAccordingToSpinnerPosition();
+        updateDataAccordingToSelectedTimePeriod();
         String json = new Gson().toJson(dataHolder);
         FileManager.saveFile("test", json, getApplicationContext());
     }
-
     @Override
     public void applySymptomTexts(int registeredValue, String symptom)
     {
-        boolean alreadyRegistered = false;
         Measurement measurement = new Measurement(new Date(), registeredValue);
         for(int i = 0; i < dataHolder.getSymptomData().size(); i++)
         {
             if(dataHolder.getSymptomData().get(i).getSymptomName().equals(symptom))
             {
-                alreadyRegistered = true;
                 dataHolder.getSymptomData().get(i).getMeasurements().add(measurement);
             }
         }
-        if(!alreadyRegistered)
-        {
-            ArrayList<Measurement> measurements = new ArrayList<>();
-            measurements.add(measurement);
-            SymptomElement symptomElement = new SymptomElement(symptom, measurements);
-            dataHolder.getSymptomData().add(symptomElement);
-        }
-        updateDataAccordingToSpinnerPosition();
+        updateDataAccordingToSelectedTimePeriod();
         FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
     }
-
     @Override
     public void refreshSymptomList()
     {
         symptomDialog.setSpinnerItems();
+    }
+    @Override
+    public void applyRegisteredIntake(String registeredValue, String substance)
+    {
+        Measurement measurement = new Measurement(new Date(), Float.valueOf(registeredValue));
+        for(int i = 0; i < dataHolder.getIntakeData().size(); i++)
+        {
+            if(dataHolder.getIntakeData().get(i).getNameOfSubstance().equals(substance))
+            {
+                dataHolder.getIntakeData().get(i).getMeasurements().add(measurement);
+            }
+        }
+        updateDataAccordingToSelectedTimePeriod();
+        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
     }
 }

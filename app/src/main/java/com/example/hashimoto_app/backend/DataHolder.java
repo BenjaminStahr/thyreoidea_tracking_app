@@ -37,6 +37,12 @@ public class DataHolder
         SymptomElement element = new SymptomElement(symptomName, new ArrayList<Measurement>());
         symptomData.add(element);
     }
+    public void addSupplement(String supplementName, String unit)
+    {
+        IntakeElement element = new IntakeElement(supplementName, unit, new ArrayList<Measurement>());
+        intakeData.add(element);
+    }
+
     public ArrayList<ThyroidElement> getThyroidData()
     {
         return thyroidData;
