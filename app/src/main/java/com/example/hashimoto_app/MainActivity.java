@@ -1,8 +1,13 @@
 package com.example.hashimoto_app;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import com.example.hashimoto_app.backend.DataHolder;
@@ -47,17 +52,15 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     // dialogs of which the main activity needs the reference, because they can init some action
     SymptomDialog symptomDialog;
     IntakeDialog intakeDialog;
-    // the channel id of the notification channel
-    public static final String CHANNEL_ID = "pushChannelID";
-    private NotificationManagerCompat notificationManagerCompat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        createNotificationChannel();
-        notificationManagerCompat = NotificationManagerCompat.from(this);
-
+        /*Intent notificationService = new Intent(getApplicationContext(), NotificationService.class);
+        getApplicationContext().startService(notificationService);*/
+        scheduleNotifications();
         setContentView(R.layout.activity_main);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         final ViewPager viewPager = findViewById(R.id.view_pager);
@@ -69,11 +72,11 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         DataHolder holder = new DataHolder();
         // add some sample data to the holder
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2019, 10, 19, 0, 0, 0);
+        calendar.set(2019, 11, 15, 0, 0, 0);
         Date date = calendar.getTime();
-        calendar.set(2019, 11, 26, 5, 0, 0);
+        calendar.set(2019, 11, 23, 0, 0, 0);
         Date date2 = calendar.getTime();
-        calendar.set(2019, 11, 26, 6, 0, 0);
+        calendar.set(2019, 11, 27, 6, 0, 0);
         Date date3 = calendar.getTime();
         // sample data for thyroid measurements
         ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 3, 1 ,3);
@@ -152,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onClick(View view)
             {
-                sendOnChannel(view);
+                //sendOnChannel(view);
                 if(viewPager.getCurrentItem() == 0)
                 {
                     openThyroidDialog();
@@ -212,35 +215,16 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         }
     }
 
-    private void createNotificationChannel()
+
+    public void scheduleNotifications()
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Benachrichtigungen",
-                    NotificationManager.IMPORTANCE_LOW
-            );
-            channel.setDescription("Es werden Benachrichtigungen zu aktuellen Therapievorgängen gesendet");
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            Objects.requireNonNull(manager).createNotificationChannel(channel);
-        }
-    }
-
-    public void sendOnChannel(View v)
-    {
-        //String title = editTextTitle.getText().toString();
-        //String message = editTextMessage.getText().toString();
-
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("Therapievorgang")
-                .setContentText("Wie hat sich das Symptom \"Zittern\" entwickelt?")
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .build();
-
-        notificationManagerCompat.notify(1, notification);
+        Intent intent = new Intent(getApplicationContext(), NotificationTrigger.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, NotificationTrigger.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long firstMillis = System.currentTimeMillis();
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
+                30*1000, pIntent);
     }
 
     @Override
