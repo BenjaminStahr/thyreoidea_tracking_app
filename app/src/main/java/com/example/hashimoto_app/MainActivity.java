@@ -1,5 +1,9 @@
 package com.example.hashimoto_app;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import com.example.hashimoto_app.backend.DataHolder;
 import com.example.hashimoto_app.backend.FileManager;
@@ -15,6 +19,9 @@ import com.example.hashimoto_app.ui.main.SymptomDialog;
 import com.example.hashimoto_app.ui.main.ThyroidDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -25,21 +32,31 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
         AddSupplementDialog.AddSupplementDialogListener
 {
+    // central data management of the applications data
     private static DataHolder dataHolder;
+    // holds the different fragments
     SectionsPagerAdapter sectionsPagerAdapter;
+    // lets user change the shown time period
     private Spinner periodSpinner;
+    // dialogs of which the main activity needs the reference, because they can init some action
     SymptomDialog symptomDialog;
     IntakeDialog intakeDialog;
+    // the channel id of the notification channel
+    public static final String CHANNEL_ID = "pushChannelID";
+    private NotificationManagerCompat notificationManagerCompat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        createNotificationChannel();
+        notificationManagerCompat = NotificationManagerCompat.from(this);
 
         setContentView(R.layout.activity_main);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -135,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onClick(View view)
             {
+                sendOnChannel(view);
                 if(viewPager.getCurrentItem() == 0)
                 {
                     openThyroidDialog();
@@ -178,11 +196,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         addSupplementDialog.show(getSupportFragmentManager(), "add supplement dialog");
     }
 
-    public static DataHolder getDataHolder()
-    {
-        return dataHolder;
-    }
-
     public void updateDataAccordingToSelectedTimePeriod()
     {
         if(periodSpinner.getSelectedItemPosition() == 0)
@@ -198,6 +211,38 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
         }
     }
+
+    private void createNotificationChannel()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Benachrichtigungen",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            channel.setDescription("Es werden Benachrichtigungen zu aktuellen Therapievorgängen gesendet");
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            Objects.requireNonNull(manager).createNotificationChannel(channel);
+        }
+    }
+
+    public void sendOnChannel(View v)
+    {
+        //String title = editTextTitle.getText().toString();
+        //String message = editTextMessage.getText().toString();
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("Therapievorgang")
+                .setContentText("Wie hat sich das Symptom \"Zittern\" entwickelt?")
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+
+        notificationManagerCompat.notify(1, notification);
+    }
+
     @Override
     public void applyThyroidTexts(String registeredValue, String substance, String unit)
     {
@@ -264,6 +309,9 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         updateDataAccordingToSelectedTimePeriod();
         FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
     }
-
+    public static DataHolder getDataHolder()
+    {
+        return dataHolder;
+    }
 
 }
