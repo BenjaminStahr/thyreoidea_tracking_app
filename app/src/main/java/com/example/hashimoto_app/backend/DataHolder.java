@@ -1,6 +1,9 @@
 package com.example.hashimoto_app.backend;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class DataHolder
 {
@@ -42,6 +45,31 @@ public class DataHolder
             }
         }
         return "mg";
+    }
+
+    public String getSymptomNotUpdatedForOneDay()
+    {
+        ArrayList<String> possibleSymptoms = new ArrayList<>();
+        for(int i = 0; i < symptomData.size(); i++)
+        {
+            Date lastEntry = symptomData.get(i).getMeasurements().get(symptomData.get(i).getMeasurements().size()-1).getDate();
+            long diff = new Date().getTime() - lastEntry.getTime();
+            long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            if(days > 1)
+            {
+                possibleSymptoms.add(symptomData.get(i).getSymptomName());
+            }
+        }
+        if (possibleSymptoms.size() != 0)
+        {
+            Random rand = new Random(System.currentTimeMillis());
+            int returnIndex =rand.nextInt(possibleSymptoms.size());
+            return possibleSymptoms.get(returnIndex);
+        }
+        else
+        {
+            return null;
+        }
     }
     public void addSymptom(String symptomName)
     {

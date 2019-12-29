@@ -1,14 +1,9 @@
 package com.example.hashimoto_app;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import com.example.hashimoto_app.backend.DataHolder;
 import com.example.hashimoto_app.backend.FileManager;
@@ -25,8 +20,6 @@ import com.example.hashimoto_app.ui.main.ThyroidDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -37,7 +30,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
@@ -60,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         super.onCreate(savedInstanceState);
         /*Intent notificationService = new Intent(getApplicationContext(), NotificationService.class);
         getApplicationContext().startService(notificationService);*/
-        scheduleNotifications();
         setContentView(R.layout.activity_main);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         final ViewPager viewPager = findViewById(R.id.view_pager);
@@ -135,9 +126,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
 
         String json = new Gson().toJson(holder);
         FileManager.saveFile("test", json, getApplicationContext());
-        String testString = FileManager.getFileAsString("test", getApplicationContext());
 
-        dataHolder = new Gson().fromJson(testString, DataHolder.class);
+
+        dataHolder = new Gson().fromJson(FileManager.getFileAsString("test", getApplicationContext()), DataHolder.class);
+        scheduleNotifications();
 
         periodSpinner = findViewById(R.id.period_spinner);
         periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -214,17 +206,24 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
         }
     }
-
-
     public void scheduleNotifications()
     {
-        Intent intent = new Intent(getApplicationContext(), NotificationTrigger.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, NotificationTrigger.REQUEST_CODE,
+        /*Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, NotificationReceiver.REQUEST_CODE,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         long firstMillis = System.currentTimeMillis();
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
-                30*1000, pIntent);
+                30*1000, pIntent);*/
+        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
+        long firstMillis = System.currentTimeMillis();
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null)
+        {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,firstMillis,  AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        }
+        //alarmManager.setExact(AlarmManager.RTC_WAKEUP,firstMillis + 10000, pendingIntent);
     }
 
     @Override
@@ -297,5 +296,4 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     {
         return dataHolder;
     }
-
 }

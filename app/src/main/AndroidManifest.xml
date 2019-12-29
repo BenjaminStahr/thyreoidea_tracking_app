@@ -20,11 +20,13 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".NotificationTrigger"
+            android:name=".NotificationReceiver"
             android:process=":remote" >
         </receiver>
         <service
             android:name=".NotificationService"
+            android:process=":remote"
+            android:enabled="true"
             android:exported="false" />
     </application>
 
