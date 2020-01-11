@@ -39,6 +39,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
@@ -74,7 +75,13 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         }
         catch (Exception ex)
         {
-            dataHolder = new DataHolder(USER_ID);
+            Random rand = new Random(System.currentTimeMillis());
+            int id = rand.nextInt();
+            if(id < 0)
+            {
+                id *= -1;
+            }
+            dataHolder = new DataHolder(id);
             sendFirstTimeDataToServer(getUserDataAsJson());
             // add some sample data to the holder
             Calendar calendar = Calendar.getInstance();
@@ -173,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             }
         });
         scheduleNotifications();
-        //updateServerData(getUserDataAsJson());
         sendSymptomDataToServer(getUserDataAsJson());
     }
     public static void sendSymptomDataToServer(final String symptomData)

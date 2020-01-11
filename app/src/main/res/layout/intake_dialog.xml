@@ -16,9 +16,7 @@
             android:id="@+id/intake_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_horizontal"
-            android:gravity="center_horizontal|center_vertical"
-            android:textAlignment="viewStart"
+            android:textAlignment="textStart"
             android:theme="@style/Spinner" />
 
         <ImageView
