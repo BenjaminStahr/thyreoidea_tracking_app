@@ -10,9 +10,11 @@ public class DataHolder
     private ArrayList<ThyroidElement> thyroidData;
     private ArrayList<SymptomElement> symptomData;
     private ArrayList<IntakeElement> intakeData;
+    private final int USER_ID;
 
-    public DataHolder()
+    public DataHolder(int USER_ID)
     {
+        this.USER_ID = USER_ID;
         thyroidData = new ArrayList<>();
         symptomData = new ArrayList<>();
         intakeData = new ArrayList<>();
@@ -82,7 +84,6 @@ public class DataHolder
         intakeData.add(element);
     }
 
-
     public ArrayList<ThyroidElement> getThyroidData()
     {
         return thyroidData;
@@ -95,4 +96,5 @@ public class DataHolder
     {
         return intakeData;
     }
+    public int getUSER_ID(){return USER_ID;}
 }

@@ -4,7 +4,13 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.hashimoto_app.backend.DataHolder;
 import com.example.hashimoto_app.backend.FileManager;
 import com.example.hashimoto_app.backend.IntakeElement;
@@ -22,14 +28,29 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import com.example.hashimoto_app.ui.main.SectionsPagerAdapter;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
@@ -44,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     // dialogs of which the main activity needs the reference, because they can init some action
     SymptomDialog symptomDialog;
     IntakeDialog intakeDialog;
+    final int USER_ID = 8;
 
 
     @Override
@@ -60,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        DataHolder holder = new DataHolder();
+        DataHolder holder = new DataHolder(USER_ID);
         // add some sample data to the holder
         Calendar calendar = Calendar.getInstance();
         calendar.set(2019, 11, 15, 0, 0, 0);
@@ -125,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         holder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements2));
 
         String json = new Gson().toJson(holder);
+        //System.out.println(json);
         FileManager.saveFile("test", json, getApplicationContext());
 
 
@@ -162,6 +185,67 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 }
             }
         });
+        sendSymptomDataToServer();
+    }
+    public static void sendSymptomDataToServer()
+    {
+
+        new AsyncTask<Void, Void, String>()
+        {
+            @Override
+            protected String doInBackground(Void... voids)
+            {
+                return getServerResponse();
+            }
+        }.execute();
+    }
+    public static String getServerResponse()
+    {
+        String query_url = "http://192.168.178.20:3000/data";
+        try {
+            URL url = new URL(query_url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestMethod("POST");
+            OutputStream os = conn.getOutputStream();
+            String s = getUserDataAsJson();
+            os.write(getUserDataAsJson().getBytes());
+            os.close();
+            // read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            String result = in.toString();
+            System.out.println(result);
+            System.out.println("result after Reading JSON Response");
+            JSONObject myResponse = new JSONObject(result);
+            System.out.println("jsonrpc- "+myResponse.getString("jsonrpc"));
+            System.out.println("id- "+myResponse.getInt("id"));
+            System.out.println("result- "+myResponse.getString("result"));
+            in.close();
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "hnnn";
+
+    }
+
+    public static String getUserDataAsJson()
+    {
+        final JsonObject sendData = new JsonObject();
+        String idJson = new Gson().toJson(dataHolder.getUSER_ID());
+        String symptomJson = new Gson().toJson(dataHolder.getSymptomData());
+        //JsonObject data = new JsonObject();
+        sendData.add("id", new Gson().fromJson(idJson, JsonPrimitive.class));
+        sendData.add("symptomData", new Gson().fromJson(symptomJson, JsonArray.class));
+        //JsonArray dataAsArray = new JsonArray();
+        //dataAsArray.add(data);
+        //sendData.add("data", dataAsArray);
+        //System.out.println(sendData);
+        return sendData.toString();
+
     }
     public void openThyroidDialog()
     {
@@ -208,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     }
     public void scheduleNotifications()
     {
+        //TODO is just working at the beginning after installing the programm
         /*Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
         final PendingIntent pIntent = PendingIntent.getBroadcast(this, NotificationReceiver.REQUEST_CODE,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
