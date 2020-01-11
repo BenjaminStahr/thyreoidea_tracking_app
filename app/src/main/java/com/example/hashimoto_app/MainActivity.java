@@ -6,11 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.example.hashimoto_app.backend.DataHolder;
 import com.example.hashimoto_app.backend.FileManager;
 import com.example.hashimoto_app.backend.IntakeElement;
@@ -28,8 +23,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -38,9 +31,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
-import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -49,8 +39,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
@@ -65,15 +53,13 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     // dialogs of which the main activity needs the reference, because they can init some action
     SymptomDialog symptomDialog;
     IntakeDialog intakeDialog;
-    final int USER_ID = 8;
+    final int USER_ID = 13;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        /*Intent notificationService = new Intent(getApplicationContext(), NotificationService.class);
-        getApplicationContext().startService(notificationService);*/
         setContentView(R.layout.activity_main);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         final ViewPager viewPager = findViewById(R.id.view_pager);
@@ -82,78 +68,79 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        DataHolder holder = new DataHolder(USER_ID);
-        // add some sample data to the holder
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2019, 11, 15, 0, 0, 0);
-        Date date = calendar.getTime();
-        calendar.set(2019, 11, 23, 0, 0, 0);
-        Date date2 = calendar.getTime();
-        calendar.set(2019, 11, 27, 6, 0, 0);
-        Date date3 = calendar.getTime();
-        // sample data for thyroid measurements
-        ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 3, 1 ,3);
-        ThyroidMeasurement thyroidMeasurement2 = new ThyroidMeasurement(date2, 4, 1 ,3);
-        ThyroidMeasurement thyroidMeasurement5 = new ThyroidMeasurement(date3, 2, 1 ,3);
-        ArrayList<ThyroidMeasurement> thyroidMeasurements1 = new ArrayList<>();
-        thyroidMeasurements1.add(thyroidMeasurement1);
-        thyroidMeasurements1.add(thyroidMeasurement2);
-        thyroidMeasurements1.add(thyroidMeasurement5);
-        ArrayList<ThyroidMeasurement> thyroidMeasurements2 = new ArrayList<>();
-        ThyroidMeasurement thyroidMeasurement3 = new ThyroidMeasurement(date,1.6f, 1 ,3);
-        ThyroidMeasurement thyroidMeasurement4 = new ThyroidMeasurement(date2, 1.4f, 1 ,3);
-        thyroidMeasurements2.add(thyroidMeasurement3);
-        thyroidMeasurements2.add(thyroidMeasurement4);
-        holder.getThyroidData().add(new ThyroidElement("TSH", "µU/ml", thyroidMeasurements1));
-        holder.getThyroidData().add(new ThyroidElement("fT3", "pg/ml", thyroidMeasurements2));
-        holder.getThyroidData().add(new ThyroidElement("fT4", "ng/dl", thyroidMeasurements1));
+        try
+        {
+            dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
+        }
+        catch (Exception ex)
+        {
+            dataHolder = new DataHolder(USER_ID);
+            sendFirstTimeDataToServer(getUserDataAsJson());
+            // add some sample data to the holder
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(2019, 11, 15, 0, 0, 0);
+            Date date = calendar.getTime();
+            calendar.set(2019, 11, 23, 0, 0, 0);
+            Date date2 = calendar.getTime();
+            calendar.set(2019, 11, 27, 6, 0, 0);
+            Date date3 = calendar.getTime();
+            // sample data for thyroid measurements
+            ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 3, 1, 3);
+            ThyroidMeasurement thyroidMeasurement2 = new ThyroidMeasurement(date2, 4, 1, 3);
+            ThyroidMeasurement thyroidMeasurement5 = new ThyroidMeasurement(date3, 2, 1, 3);
+            ArrayList<ThyroidMeasurement> thyroidMeasurements1 = new ArrayList<>();
+            thyroidMeasurements1.add(thyroidMeasurement1);
+            thyroidMeasurements1.add(thyroidMeasurement2);
+            thyroidMeasurements1.add(thyroidMeasurement5);
+            ArrayList<ThyroidMeasurement> thyroidMeasurements2 = new ArrayList<>();
+            ThyroidMeasurement thyroidMeasurement3 = new ThyroidMeasurement(date, 1.6f, 1, 3);
+            ThyroidMeasurement thyroidMeasurement4 = new ThyroidMeasurement(date2, 1.4f, 1, 3);
+            thyroidMeasurements2.add(thyroidMeasurement3);
+            thyroidMeasurements2.add(thyroidMeasurement4);
+            dataHolder.getThyroidData().add(new ThyroidElement("TSH", "µU/ml", thyroidMeasurements1));
+            dataHolder.getThyroidData().add(new ThyroidElement("fT3", "pg/ml", thyroidMeasurements2));
+            dataHolder.getThyroidData().add(new ThyroidElement("fT4", "ng/dl", thyroidMeasurements1));
 
-        // sample data for symptoms
-        Measurement symptomMeasurement1 = new Measurement(date, 2);
-        Measurement symptomMeasurement2 = new Measurement(date2, 3);
-        Measurement symptomMeasurement3 = new Measurement(date3, 3);
-        Measurement symptomMeasurement4 = new Measurement(date, 5);
-        Measurement symptomMeasurement5 = new Measurement(date2, 7);
-        Measurement symptomMeasurement6 = new Measurement(date3, 1);
-        ArrayList<Measurement> symptomMeasurements1 = new ArrayList<>();
-        symptomMeasurements1.add(symptomMeasurement1);
-        symptomMeasurements1.add(symptomMeasurement2);
-        symptomMeasurements1.add(symptomMeasurement3);
-        ArrayList<Measurement> symptomMeasurements2 = new ArrayList<>();
-        symptomMeasurements2.add(symptomMeasurement4);
-        symptomMeasurements2.add(symptomMeasurement5);
-        symptomMeasurements2.add(symptomMeasurement6);
-        holder.getSymptomData().add(new SymptomElement("Unruhe", symptomMeasurements1));
-        holder.getSymptomData().add(new SymptomElement("Zittern", symptomMeasurements2));
-        holder.getSymptomData().add(new SymptomElement("erhöhter Herzschlag", symptomMeasurements2));
-        holder.getSymptomData().add(new SymptomElement("Unwohlsein", symptomMeasurements1));
+            // sample data for symptoms
+            Measurement symptomMeasurement1 = new Measurement(date, 2);
+            Measurement symptomMeasurement2 = new Measurement(date2, 3);
+            Measurement symptomMeasurement3 = new Measurement(date3, 3);
+            Measurement symptomMeasurement4 = new Measurement(date, 5);
+            Measurement symptomMeasurement5 = new Measurement(date2, 7);
+            Measurement symptomMeasurement6 = new Measurement(date3, 1);
+            ArrayList<Measurement> symptomMeasurements1 = new ArrayList<>();
+            symptomMeasurements1.add(symptomMeasurement1);
+            symptomMeasurements1.add(symptomMeasurement2);
+            symptomMeasurements1.add(symptomMeasurement3);
+            ArrayList<Measurement> symptomMeasurements2 = new ArrayList<>();
+            symptomMeasurements2.add(symptomMeasurement4);
+            symptomMeasurements2.add(symptomMeasurement5);
+            symptomMeasurements2.add(symptomMeasurement6);
+            dataHolder.getSymptomData().add(new SymptomElement("Unruhe", symptomMeasurements1));
+            dataHolder.getSymptomData().add(new SymptomElement("Zittern", symptomMeasurements2));
+            dataHolder.getSymptomData().add(new SymptomElement("erhöhter Herzschlag", symptomMeasurements2));
+            dataHolder.getSymptomData().add(new SymptomElement("Unwohlsein", symptomMeasurements1));
 
-        Measurement intakeMeasurement1 = new Measurement(date, 6);
-        Measurement intakeMeasurement2 = new Measurement(date2, 3);
-        Measurement intakeMeasurement3 = new Measurement(date3, 7);
-        Measurement intakeMeasurement4 = new Measurement(date, 1);
-        Measurement intakeMeasurement5 = new Measurement(date2, 2);
-        Measurement intakeMeasurement6 = new Measurement(date3, 10);
+            Measurement intakeMeasurement1 = new Measurement(date, 6);
+            Measurement intakeMeasurement2 = new Measurement(date2, 3);
+            Measurement intakeMeasurement3 = new Measurement(date3, 7);
+            Measurement intakeMeasurement4 = new Measurement(date, 1);
+            Measurement intakeMeasurement5 = new Measurement(date2, 2);
+            Measurement intakeMeasurement6 = new Measurement(date3, 10);
 
-        ArrayList<Measurement> intakeMeasurements1 = new ArrayList<>();
-        intakeMeasurements1.add(intakeMeasurement1);
-        intakeMeasurements1.add(intakeMeasurement2);
-        ArrayList<Measurement> intakeMeasurements2 = new ArrayList<>();
-        intakeMeasurements2.add(intakeMeasurement4);
-        intakeMeasurements2.add(intakeMeasurement5);
-        intakeMeasurements2.add(intakeMeasurement6);
-        holder.getIntakeData().add(new IntakeElement("Magnesium", "g", intakeMeasurements2));
-        holder.getIntakeData().add(new IntakeElement("Selen", "mg", intakeMeasurements1));
-        holder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements2));
-
-        String json = new Gson().toJson(holder);
-        //System.out.println(json);
-        FileManager.saveFile("test", json, getApplicationContext());
-
-
-        dataHolder = new Gson().fromJson(FileManager.getFileAsString("test", getApplicationContext()), DataHolder.class);
-        scheduleNotifications();
-
+            ArrayList<Measurement> intakeMeasurements1 = new ArrayList<>();
+            intakeMeasurements1.add(intakeMeasurement1);
+            intakeMeasurements1.add(intakeMeasurement2);
+            ArrayList<Measurement> intakeMeasurements2 = new ArrayList<>();
+            intakeMeasurements2.add(intakeMeasurement4);
+            intakeMeasurements2.add(intakeMeasurement5);
+            intakeMeasurements2.add(intakeMeasurement6);
+            dataHolder.getIntakeData().add(new IntakeElement("Magnesium", "g", intakeMeasurements2));
+            dataHolder.getIntakeData().add(new IntakeElement("Selen", "mg", intakeMeasurements1));
+            dataHolder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements2));
+            FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+        }
+        //dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
         periodSpinner = findViewById(R.id.period_spinner);
         periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -185,9 +172,11 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 }
             }
         });
-        sendSymptomDataToServer();
+        scheduleNotifications();
+        //updateServerData(getUserDataAsJson());
+        sendSymptomDataToServer(getUserDataAsJson());
     }
-    public static void sendSymptomDataToServer()
+    public static void sendSymptomDataToServer(final String symptomData)
     {
 
         new AsyncTask<Void, Void, String>()
@@ -195,11 +184,22 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             protected String doInBackground(Void... voids)
             {
-                return getServerResponse();
+                return updateServerData(symptomData);
             }
         }.execute();
     }
-    public static String getServerResponse()
+    public static void sendFirstTimeDataToServer(final String symptomData)
+    {
+        new AsyncTask<Void, Void, String>()
+        {
+            @Override
+            protected String doInBackground(Void... voids)
+            {
+                return initServerData(symptomData);
+            }
+        }.execute();
+    }
+    public static String initServerData(String symptomData)
     {
         String query_url = "http://192.168.178.20:3000/data";
         try {
@@ -211,25 +211,51 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             conn.setDoInput(true);
             conn.setRequestMethod("POST");
             OutputStream os = conn.getOutputStream();
-            String s = getUserDataAsJson();
-            os.write(getUserDataAsJson().getBytes());
+            //String s = getUserDataAsJson();
+            os.write(symptomData.getBytes());
             os.close();
-            // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
             String result = in.toString();
-            System.out.println(result);
-            System.out.println("result after Reading JSON Response");
-            JSONObject myResponse = new JSONObject(result);
-            System.out.println("jsonrpc- "+myResponse.getString("jsonrpc"));
-            System.out.println("id- "+myResponse.getInt("id"));
-            System.out.println("result- "+myResponse.getString("result"));
+            //JSONObject myResponse = new JSONObject(result);
             in.close();
             conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
+            return result;
         }
-        return "hnnn";
-
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "unsuccessful initialization of connection to server";
+        }
+    }
+    public static String updateServerData(String symptomData)
+    {
+        String query_url = "http://192.168.178.20:3000/data/";
+        query_url += new Gson().toJson(dataHolder.getUSER_ID());
+        try
+        {
+            URL url = new URL(query_url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestMethod("PUT");
+            OutputStream os = conn.getOutputStream();
+            //String s = getUserDataAsJson();
+            os.write(symptomData.getBytes());
+            os.close();
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            String result = in.toString();
+            //JSONObject myResponse = new JSONObject(result);
+            in.close();
+            conn.disconnect();
+            return result;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "unsuccessful initialization of connection to server";
+        }
     }
 
     public static String getUserDataAsJson()
@@ -333,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             dataHolder.getThyroidData().add(thyroidElement);
         }
         updateDataAccordingToSelectedTimePeriod();
-        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
+        FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
     @Override
     public void applySymptomTexts(int registeredValue, String symptom)
@@ -347,21 +373,21 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             }
         }
         updateDataAccordingToSelectedTimePeriod();
-        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
+        FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
     @Override
     public void refreshSymptomList()
     {
         symptomDialog.setSpinnerItems();
         updateDataAccordingToSelectedTimePeriod();
-        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
+        FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
     @Override
     public void refreshSupplementList()
     {
         intakeDialog.setSpinnerItems();
         updateDataAccordingToSelectedTimePeriod();
-        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
+        FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
     @Override
     public void applyRegisteredIntake(String registeredValue, String substance)
@@ -375,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             }
         }
         updateDataAccordingToSelectedTimePeriod();
-        FileManager.saveFile("test", new Gson().toJson(dataHolder), getApplicationContext());
+        FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
     public static DataHolder getDataHolder()
     {
