@@ -23,6 +23,9 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -40,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 id *= -1;
             }
             dataHolder = new DataHolder(id);
+            // register user in the server
             sendFirstTimeDataToServer(getUserDataAsJson());
             // add some sample data to the holder
             Calendar calendar = Calendar.getInstance();
@@ -179,10 +184,23 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 }
             }
         });
-        scheduleNotifications();
-        sendSymptomDataToServer(getUserDataAsJson());
+        //scheduleNotifications();
+        PeriodicWorkRequest notificationRequest =
+                new PeriodicWorkRequest.Builder(NotificationWorker.class, 15, TimeUnit.MINUTES)
+                        .build();
+
+        WorkManager.getInstance(getApplicationContext())
+                .enqueue(notificationRequest);
+
+        PeriodicWorkRequest networkRequest =
+                new PeriodicWorkRequest.Builder(NetworkWorker.class, 15, TimeUnit.MINUTES)
+                        .build();
+
+        WorkManager.getInstance(getApplicationContext())
+                .enqueue(networkRequest);
+        //sendSymptomDataToServer(getUserDataAsJson());
     }
-    public static void sendSymptomDataToServer(final String symptomData)
+    /*public static void sendSymptomDataToServer(final String symptomData)
     {
 
         new AsyncTask<Void, Void, String>()
@@ -193,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 return updateServerData(symptomData);
             }
         }.execute();
-    }
+    }*/
     public static void sendFirstTimeDataToServer(final String symptomData)
     {
         new AsyncTask<Void, Void, String>()
@@ -233,51 +251,16 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             return "unsuccessful initialization of connection to server";
         }
     }
-    public static String updateServerData(String symptomData)
-    {
-        String query_url = "http://192.168.178.20:3000/data/";
-        query_url += new Gson().toJson(dataHolder.getUSER_ID());
-        try
-        {
-            URL url = new URL(query_url);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(5000);
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setRequestMethod("PUT");
-            OutputStream os = conn.getOutputStream();
-            //String s = getUserDataAsJson();
-            os.write(symptomData.getBytes());
-            os.close();
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            String result = in.toString();
-            //JSONObject myResponse = new JSONObject(result);
-            in.close();
-            conn.disconnect();
-            return result;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return "unsuccessful initialization of connection to server";
-        }
-    }
+
 
     public static String getUserDataAsJson()
     {
         final JsonObject sendData = new JsonObject();
         String idJson = new Gson().toJson(dataHolder.getUSER_ID());
         String symptomJson = new Gson().toJson(dataHolder.getSymptomData());
-        //JsonObject data = new JsonObject();
         sendData.add("id", new Gson().fromJson(idJson, JsonPrimitive.class));
         sendData.add("symptomData", new Gson().fromJson(symptomJson, JsonArray.class));
-        //JsonArray dataAsArray = new JsonArray();
-        //dataAsArray.add(data);
-        //sendData.add("data", dataAsArray);
-        //System.out.println(sendData);
         return sendData.toString();
-
     }
     public void openThyroidDialog()
     {

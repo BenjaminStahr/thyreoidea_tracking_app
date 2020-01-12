@@ -54,12 +54,15 @@ public class DataHolder
         ArrayList<String> possibleSymptoms = new ArrayList<>();
         for(int i = 0; i < symptomData.size(); i++)
         {
-            Date lastEntry = symptomData.get(i).getMeasurements().get(symptomData.get(i).getMeasurements().size()-1).getDate();
-            long diff = new Date().getTime() - lastEntry.getTime();
-            long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-            if(days > 1)
+            if(symptomData.get(i).getMeasurements().size() != 0)
             {
-                possibleSymptoms.add(symptomData.get(i).getSymptomName());
+                Date lastEntry = symptomData.get(i).getMeasurements().get(symptomData.get(i).getMeasurements().size()-1).getDate();
+                long diff = new Date().getTime() - lastEntry.getTime();
+                long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                if(days > 1)
+                {
+                    possibleSymptoms.add(symptomData.get(i).getSymptomName());
+                }
             }
         }
         if (possibleSymptoms.size() != 0)
