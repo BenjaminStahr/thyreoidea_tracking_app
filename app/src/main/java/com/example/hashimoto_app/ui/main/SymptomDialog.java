@@ -58,7 +58,7 @@ public class SymptomDialog extends AppCompatDialogFragment
                     public void onClick(DialogInterface dialog, int which)
                     {
                         int registeredValue = Integer.valueOf(numberPickerData[numberPicker.getValue()-1]);
-                        System.out.println(registeredValue);
+                        //System.out.println(registeredValue);
                         String symptom = dialogSpinner.getSelectedItem().toString();
                         listener.applySymptomTexts(registeredValue, symptom);
                     }
