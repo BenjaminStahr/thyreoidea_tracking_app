@@ -23,6 +23,7 @@ import com.example.hashimoto_app.R;
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class ThyroidDialog extends AppCompatDialogFragment implements DatePickerDialog.OnDateSetListener
 {
@@ -31,6 +32,7 @@ public class ThyroidDialog extends AppCompatDialogFragment implements DatePicker
     private EditText registeredValueEditText;
     private ThyroidDialogListener listener;
     private  TextView pickedDate;
+    private Date selectedDate;
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -55,10 +57,14 @@ public class ThyroidDialog extends AppCompatDialogFragment implements DatePicker
                 {
                     if(!registeredValueEditText.getText().toString().equals(""))
                     {
-                        String registeredValue = registeredValueEditText.getText().toString();
-                        String substance = dialogSpinner.getSelectedItem().toString();
-                        String unit = unitTextView.getText().toString();
-                        listener.applyThyroidTexts(registeredValue, substance, unit);
+                        if(selectedDate != null)
+                        {
+                            String registeredValue = registeredValueEditText.getText().toString();
+                            String substance = dialogSpinner.getSelectedItem().toString();
+                            String unit = unitTextView.getText().toString();
+                            listener.applyThyroidTexts(registeredValue, substance, unit, selectedDate);
+                        }
+
                     }
                 }
             });
@@ -125,10 +131,13 @@ public class ThyroidDialog extends AppCompatDialogFragment implements DatePicker
     {
         int monthReal = month + 1;
         pickedDate.setText(dayOfMonth + "." + monthReal + "." + year);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, dayOfMonth, 0, 0, 0);
+        selectedDate = calendar.getTime();
     }
 
     public interface ThyroidDialogListener
     {
-        void applyThyroidTexts(String registeredValue, String substance, String unit);
+        void applyThyroidTexts(String registeredValue, String substance, String unit, Date selectedDate);
     }
 }

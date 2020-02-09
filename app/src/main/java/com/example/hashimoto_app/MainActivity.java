@@ -341,17 +341,43 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     }*/
 
     @Override
-    public void applyThyroidTexts(String registeredValue, String substance, String unit)
+    public void applyThyroidTexts(String registeredValue, String substance, String unit, Date selectedDate)
     {
         boolean alreadyRegistered = false;
-        ThyroidMeasurement thyroidMeasurement = new ThyroidMeasurement(new Date(), Float.valueOf(registeredValue), 0 ,0);
+        boolean registeredInserted = false;
+        ThyroidMeasurement thyroidMeasurement = new ThyroidMeasurement(selectedDate, Float.valueOf(registeredValue), 0 ,0);
         for(int i = 0; i < dataHolder.getThyroidData().size(); i++)
         {
+            // right substance
             if(dataHolder.getThyroidData().get(i).getNameOfSubstance().equals(substance))
             {
                 alreadyRegistered = true;
-                // bounds are irrelevant at the moment
-                dataHolder.getThyroidData().get(i).getMeasurements().add(thyroidMeasurement);
+                for(int j = 0; j < dataHolder.getThyroidData().get(i).getMeasurements().size(); j++)
+                {
+                    if(dataHolder.getThyroidData().get(i).getMeasurements().get(j).getDate().getTime() > selectedDate.getTime())
+                    {
+                        if(j != 0)
+                        {
+                            // the case that its newer than the oldest entry but older than the newest entry
+                            dataHolder.getThyroidData().get(i).getMeasurements().add(j, thyroidMeasurement);
+                            registeredInserted = true;
+                            break;
+                        }
+                        else
+                        {
+                            // the case when its older than the oldest entry
+                            dataHolder.getThyroidData().get(i).getMeasurements().add(0, thyroidMeasurement);
+                            registeredInserted = true;
+                            break;
+                        }
+                    }
+                }
+                // the case when its newer than the newest entry
+                if(!registeredInserted)
+                {
+                    dataHolder.getThyroidData().get(i).getMeasurements().add(thyroidMeasurement);
+                }
+
             }
         }
         if(!alreadyRegistered)
