@@ -13,7 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,11 +31,9 @@ import java.util.List;
 public class SymptomDialog extends AppCompatDialogFragment
 {
     private Spinner dialogSpinner;
-    private NumberPicker numberPicker;
-    private String[] numberPickerData = {"10", "9", "8", "7", "6", "5", "4", "3", "2", "1"};
-    private EditText registeredValueEditText;
     private SymptomDialogListener listener;
     private MainActivity mainActivity;
+    private int intensity = 1;
 
     public SymptomDialog(MainActivity mainActivity)
     {
@@ -58,30 +59,56 @@ public class SymptomDialog extends AppCompatDialogFragment
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        int registeredValue = Integer.valueOf(numberPickerData[numberPicker.getValue()-1]);
-                        //System.out.println(registeredValue);
                         String symptom = dialogSpinner.getSelectedItem().toString();
-                        listener.applySymptomTexts(registeredValue, symptom);
+                        listener.applySymptomTexts(intensity, symptom);
                     }
                 });
-        /*numberPicker = view.findViewById(R.id.numberPicker);
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(numberPickerData.length);
-        numberPicker.setDisplayedValues(numberPickerData);
-        numberPicker.setValue(10);*/
-        dialogSpinner = view.findViewById(R.id.symptom_spinner);
-        //dialogSpinner.setBackground(getContext().getResources().getDrawable(R.drawable.bg_spinner_dropdown));
-        setSpinnerItems();
-        dialogSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
 
+        final TextView intensityIndicatorText = (TextView) view.findViewById(R.id.intensity_text);
+        RadioGroup rGroup = (RadioGroup)view.findViewById(R.id.intensity_radio_group);
+        final RadioButton rb_0 = (RadioButton)view.findViewById(R.id.intensity_radio_btn_0);
+        final RadioButton rb_1 = (RadioButton)view.findViewById(R.id.intensity_radio_btn_1);
+        final RadioButton rb_2 = (RadioButton)view.findViewById(R.id.intensity_radio_btn_2);
+        final RadioButton rb_3 = (RadioButton)view.findViewById(R.id.intensity_radio_btn_3);
+        final RadioButton rb_4 = (RadioButton)view.findViewById(R.id.intensity_radio_btn_4);
+        rGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId)
+            {
+                // This will get the radiobutton that has changed in its check state
+                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+                // This puts the value (true/false) into the variable
+                boolean isChecked = checkedRadioButton.isChecked();
+                if (rb_0.isChecked())
+                {
+                    intensityIndicatorText.setText("sehr schwach(1)");
+                    intensity = 1;
+                }
+                else if (rb_1.isChecked())
+                {
+                    intensityIndicatorText.setText("schwach(2)");
+                    intensity = 2;
+                }
+                else if (rb_2.isChecked())
+                {
+                    intensityIndicatorText.setText("mäßig(3)");
+                    intensity = 3;
+                }
+                else if (rb_3.isChecked())
+                {
+                    intensityIndicatorText.setText("stark(4)");
+                    intensity = 4;
+                }
+                else if (rb_4.isChecked())
+                {
+                    intensityIndicatorText.setText("sehr stark(5)");
+                    intensity = 5;
+                }
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
         });
+        dialogSpinner = view.findViewById(R.id.symptom_spinner);
+        setSpinnerItems();
+
         Button addSymptomButton = view.findViewById(R.id.add_symptom_button);
         addSymptomButton.setOnClickListener(new View.OnClickListener()
         {

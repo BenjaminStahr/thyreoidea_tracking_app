@@ -47,7 +47,7 @@
             android:text="Intensität :" />
 
         <RadioGroup
-            android:id="@+id/radio_group"
+            android:id="@+id/intensity_radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -65,17 +65,17 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"/>
             <RadioButton
+                android:id="@+id/intensity_radio_btn_2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+            <RadioButton
                 android:id="@+id/intensity_radio_btn_3"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"/>
             <RadioButton
                 android:id="@+id/intensity_radio_btn_4"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"/>
-            <RadioButton
-                android:id="@+id/intensity_radio_btn_5"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"/>
