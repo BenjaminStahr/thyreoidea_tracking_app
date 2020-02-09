@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 
 import android.widget.ImageView;
@@ -63,11 +64,11 @@ public class SymptomDialog extends AppCompatDialogFragment
                         listener.applySymptomTexts(registeredValue, symptom);
                     }
                 });
-        numberPicker = view.findViewById(R.id.numberPicker);
+        /*numberPicker = view.findViewById(R.id.numberPicker);
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(numberPickerData.length);
         numberPicker.setDisplayedValues(numberPickerData);
-        numberPicker.setValue(10);
+        numberPicker.setValue(10);*/
         dialogSpinner = view.findViewById(R.id.symptom_spinner);
         //dialogSpinner.setBackground(getContext().getResources().getDrawable(R.drawable.bg_spinner_dropdown));
         setSpinnerItems();
@@ -81,8 +82,8 @@ public class SymptomDialog extends AppCompatDialogFragment
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
-        ImageView addSymptomImageView = view.findViewById(R.id.add_symptom_image);
-        addSymptomImageView.setOnClickListener(new View.OnClickListener()
+        Button addSymptomButton = view.findViewById(R.id.add_symptom_button);
+        addSymptomButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)

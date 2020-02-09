@@ -6,33 +6,32 @@
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:padding="16dp">
-    <LinearLayout
-        android:id="@+id/upperLayout"
+    <Spinner
+        android:id="@+id/symptom_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/symptom_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textAlignment="textStart"
-            android:theme="@style/Spinner"
-            android:background="@drawable/bg_spinner_dropdown"/>
+        android:textAlignment="textStart"
+        android:theme="@style/Spinner"
+        android:background="@drawable/bg_spinner_dropdown"/>
         <!--android.support.v7.widget.AppCompatSpinner
             android:id="@+id/symptom_spinner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textAlignment="textStart"
             android:background="@drawable/spinner_background" /-->
-        <ImageView
+        <!--ImageView
             android:id="@+id/add_symptom_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:srcCompat="@android:drawable/ic_input_add" /-->
 
-    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_symptom_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Symptom hinzufügen" />
 
     <LinearLayout
         android:id="@+id/lowerLayout"
@@ -44,18 +43,52 @@
             android:id="@+id/intensityLabelSymptom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Intensität :" />
 
-        <com.shawnlin.numberpicker.NumberPicker
-            android:id="@+id/numberPicker"
-            android:layout_width="wrap_content"
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:np_fadingEdgeEnabled="false"
-            app:np_max="10"
-            app:np_min="0"
-            app:np_order="descending"
-            app:np_orientation="horizontal"
-            app:np_wrapSelectorWheel="true" />
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/intensity_radio_btn_0"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/intensity_radio_btn_1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/intensity_radio_btn_3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/intensity_radio_btn_4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/intensity_radio_btn_5"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/intensity_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:text="sehr schwach(1)"
+            android:textAlignment="center" />
     </LinearLayout>
 </LinearLayout>
