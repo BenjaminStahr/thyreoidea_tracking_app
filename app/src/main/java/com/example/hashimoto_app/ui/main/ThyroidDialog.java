@@ -1,6 +1,7 @@
 package com.example.hashimoto_app.ui.main;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -17,13 +20,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.hashimoto_app.R;
 
-public class ThyroidDialog extends AppCompatDialogFragment
+import org.w3c.dom.Text;
+
+import java.util.Calendar;
+
+public class ThyroidDialog extends AppCompatDialogFragment implements DatePickerDialog.OnDateSetListener
 {
     private Spinner dialogSpinner;
     private TextView unitTextView;
     private EditText registeredValueEditText;
     private ThyroidDialogListener listener;
-
+    private  TextView pickedDate;
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -32,7 +39,7 @@ public class ThyroidDialog extends AppCompatDialogFragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view  = inflater.inflate(R.layout.thyroid_dialog, null);
         builder.setView(view)
-            .setTitle("Neuer Eintrag")
+            .setTitle("Schilddrüsenwert eintragen")
             .setNegativeButton("abbrechen", new DialogInterface.OnClickListener()
             {
                 @Override
@@ -69,8 +76,33 @@ public class ThyroidDialog extends AppCompatDialogFragment
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+        Button pickDateButton = (Button) view.findViewById(R.id.pickDateBtn);
+        pickDateButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                openDatePickerDialog();
+            }
+        });
+        pickedDate = (TextView) view.findViewById(R.id.pickedDateTextField);
 
         return builder.create();
+    }
+
+    private void openDatePickerDialog()
+    {
+        if(getActivity() != null)
+        {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getActivity(),
+                    this,
+                    Calendar.getInstance().get(Calendar.YEAR),
+                    Calendar.getInstance().get(Calendar.MONTH),
+                    Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.show();
+        }
+
     }
 
     @Override
@@ -86,6 +118,13 @@ public class ThyroidDialog extends AppCompatDialogFragment
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
+    {
+        int monthReal = month + 1;
+        pickedDate.setText(dayOfMonth + "." + monthReal + "." + year);
     }
 
     public interface ThyroidDialogListener

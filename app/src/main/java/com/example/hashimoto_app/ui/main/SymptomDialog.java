@@ -48,7 +48,7 @@ public class SymptomDialog extends AppCompatDialogFragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view  = inflater.inflate(R.layout.symptom_dialog, null);
         builder.setView(view)
-                .setTitle("Neuer Eintrag")
+                .setTitle("Symptom protokollieren")
                 .setNegativeButton("abbrechen", new DialogInterface.OnClickListener()
                 {
                     @Override
@@ -107,6 +107,7 @@ public class SymptomDialog extends AppCompatDialogFragment
             }
         });
         dialogSpinner = view.findViewById(R.id.symptom_spinner);
+
         setSpinnerItems();
 
         Button addSymptomButton = view.findViewById(R.id.add_symptom_button);
@@ -139,7 +140,7 @@ public class SymptomDialog extends AppCompatDialogFragment
     {
         final List<String> list = MainActivity.getDataHolder().getSymptoms();
         ArrayAdapter<String> adp1 = new ArrayAdapter<>(mainActivity.getApplicationContext(),
-                android.R.layout.simple_list_item_1, list);
+                android.R.layout.simple_spinner_item, list);
         adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dialogSpinner.setAdapter(adp1);
     }

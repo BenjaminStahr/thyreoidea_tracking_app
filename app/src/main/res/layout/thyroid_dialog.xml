@@ -6,15 +6,47 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+
     <Spinner
         android:id="@+id/thyroid_spinner"
-        android:layout_width="262dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_spinner_dropdown"
         android:entries="@array/thyroidValues"
         android:gravity="center_horizontal|center_vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:textAlignment="gravity"
         android:theme="@style/Spinner" />
 
+    <Button
+        android:id="@+id/pickDateBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="Datum auswählen" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Messung am : " />
+
+        <TextView
+            android:id="@+id/pickedDateTextField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
