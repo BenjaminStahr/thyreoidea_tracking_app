@@ -1,0 +1,19 @@
+<!--This is a custom spinner background, because so the spinner can have its own background with
+ a border, so that its much more easy for the user to recognize that he is dealing with a spinner-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/colorWhite" />
+                    <stroke android:width="2px" android:color="@color/colorDarkGrey" />
+                    <corners android:radius="5dp" />
+                </shape>
+            </item>
+            <item android:drawable="@drawable/ic_arrow_drop_down_black_24dp"
+                android:gravity="center_vertical|right">
+            </item>
+        </layer-list>
+    </item>
+
+</selector>

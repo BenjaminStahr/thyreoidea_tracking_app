@@ -17,7 +17,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textAlignment="textStart"
-            android:theme="@style/Spinner" />
+            android:theme="@style/Spinner"
+            android:background="@drawable/bg_spinner_dropdown"/>
+        <!--android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/symptom_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAlignment="textStart"
+            android:background="@drawable/spinner_background" /-->
         <ImageView
             android:id="@+id/add_symptom_image"
             android:layout_width="wrap_content"

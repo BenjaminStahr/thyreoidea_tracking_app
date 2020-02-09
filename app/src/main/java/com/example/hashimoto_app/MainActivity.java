@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             Date date = calendar.getTime();
             calendar.set(2020, 0, 13, 0, 0, 0);
             Date date2 = calendar.getTime();
-            calendar.set(2020, 0, 16, 6, 0, 0);
+            calendar.set(2020, 0, 14, 6, 0, 0);
             Date date3 = calendar.getTime();
             // sample data for thyroid measurements
             ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 3, 1, 3);

@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="main_color">#036FF4</color>
     <color name="spinner_color">#03BCF4</color>
+    <color name="colorDarkGrey">#424A4D</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

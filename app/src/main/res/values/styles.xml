@@ -21,4 +21,8 @@
     <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/main_color</item>
     </style>
+    <style name="Widget.App.Spinner" parent="@style/Widget.AppCompat.Spinner">
+        <item name="overlapAnchor">true</item>
+        <item name="android:background">@drawable/bg_spinner_dropdown</item>
+    </style>
 </resources>

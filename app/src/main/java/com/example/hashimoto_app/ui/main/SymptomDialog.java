@@ -69,6 +69,7 @@ public class SymptomDialog extends AppCompatDialogFragment
         numberPicker.setDisplayedValues(numberPickerData);
         numberPicker.setValue(10);
         dialogSpinner = view.findViewById(R.id.symptom_spinner);
+        //dialogSpinner.setBackground(getContext().getResources().getDrawable(R.drawable.bg_spinner_dropdown));
         setSpinnerItems();
         dialogSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
