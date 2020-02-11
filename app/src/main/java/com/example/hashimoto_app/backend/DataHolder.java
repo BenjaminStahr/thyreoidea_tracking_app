@@ -123,6 +123,23 @@ public class DataHolder
             }
         }
     }
+    public void deleteIntakeDataPoint(String substance, double moment)
+    {
+        for (int i = 0; i < intakeData.size(); i++)
+        {
+            if(intakeData.get(i).getNameOfSubstance().equals(substance))
+            {
+                for (int j = 0; j < intakeData.get(i).getMeasurements().size(); j++)
+                {
+                    if(intakeData.get(i).getMeasurements().get(j).getDate().getTime() == moment)
+                    {
+                        intakeData.get(i).getMeasurements().remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     public DataPoint[] getThyroidDataPointsForSubstance(String substance)
     {
@@ -154,6 +171,26 @@ public class DataHolder
             {
                 result = new DataPoint[symptomData.get(i).getMeasurements().size()];
                 ArrayList<Measurement> elements = symptomData.get(i).getMeasurements();
+                for(int j = 0; j < elements.size(); j++)
+                {
+                    double x = elements.get(j).getDate().getTime();
+                    double y = elements.get(j).getAmount();
+                    result[j] = new DataPoint(x, y);
+                }
+                return result;
+            }
+        }
+        return null;
+    }
+    public DataPoint[] getIntakeDataPointsForSubstance(String substance)
+    {
+        DataPoint[] result;
+        for (int i = 0; i < intakeData.size(); i++)
+        {
+            if(intakeData.get(i).getNameOfSubstance().equals(substance))
+            {
+                result = new DataPoint[intakeData.get(i).getMeasurements().size()];
+                ArrayList<Measurement> elements = intakeData.get(i).getMeasurements();
                 for(int j = 0; j < elements.size(); j++)
                 {
                     double x = elements.get(j).getDate().getTime();

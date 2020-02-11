@@ -11,6 +11,7 @@ import com.example.hashimoto_app.backend.ThyroidElement;
 import com.example.hashimoto_app.backend.ThyroidMeasurement;
 import com.example.hashimoto_app.ui.main.AddSupplementDialog;
 import com.example.hashimoto_app.ui.main.AddSymptomDialog;
+import com.example.hashimoto_app.ui.main.DeleteIntakeDataPointDialog;
 import com.example.hashimoto_app.ui.main.DeleteSymptomDataPointDialog;
 import com.example.hashimoto_app.ui.main.DeleteThyroidDataPointDialog;
 import com.example.hashimoto_app.ui.main.IntakeDialog;
@@ -50,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
         AddSupplementDialog.AddSupplementDialogListener, DeleteThyroidDataPointDialog.DeleteThyroidDataPointDialogListener,
-        DeleteSymptomDataPointDialog.DeleteSymptomDataPointDialogListener
+        DeleteSymptomDataPointDialog.DeleteSymptomDataPointDialogListener, DeleteIntakeDataPointDialog.DeleteIntakeDataPointDialogListener
 {
     // central data management of the applications data
     private static DataHolder dataHolder;
@@ -425,6 +426,14 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     {
         LineGraphSeries lineGraphSeries = ((LineGraphSeries<DataPoint>)series);
         lineGraphSeries.resetData(getDataHolder().getDataPointsForSymptom(symptom));
+        FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+    }
+
+    @Override
+    public void refreshIntakeGraph(Series series, double dataPoint, String substance)
+    {
+        LineGraphSeries lineGraphSeries = ((LineGraphSeries<DataPoint>)series);
+        lineGraphSeries.resetData(getDataHolder().getIntakeDataPointsForSubstance(substance));
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
 }

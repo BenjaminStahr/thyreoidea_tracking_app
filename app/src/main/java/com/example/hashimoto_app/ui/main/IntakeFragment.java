@@ -14,7 +14,10 @@ import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.PlotAdapter;
 import com.example.hashimoto_app.R;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,11 +57,22 @@ public class IntakeFragment extends Fragment
             ListView intakeListView = (ListView) getView().findViewById(R.id.intakeListView);
             ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
             String[] units = new String[MainActivity.getDataHolder().getIntakeData().size()];
-            String[] namesOfSubstances = new String[MainActivity.getDataHolder().getIntakeData().size()];
+            final String[] namesOfSubstances = new String[MainActivity.getDataHolder().getIntakeData().size()];
 
             for (int i = 0; i < MainActivity.getDataHolder().getIntakeData().size(); i++)
             {
                 LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                final int iForListener = i;
+                series.setOnDataPointTapListener(new OnDataPointTapListener()
+                {
+                    @Override
+                    public void onTap(Series series, DataPointInterface dataPoint)
+                    {
+                        DeleteIntakeDataPointDialog deleteDatapointIntakeDialog = new DeleteIntakeDataPointDialog(
+                                namesOfSubstances[iForListener], dataPoint.getX(), series);
+                        deleteDatapointIntakeDialog.show(getActivity().getSupportFragmentManager(), "delete intake datapoint dialog");
+                    }
+                });
                 series.setDrawDataPoints(true);
                 units[i] = MainActivity.getDataHolder().getIntakeData().get(i).getUnit();
                 namesOfSubstances[i] = MainActivity.getDataHolder().getIntakeData().get(i).getNameOfSubstance();
