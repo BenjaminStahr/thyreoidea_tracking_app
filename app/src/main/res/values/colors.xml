@@ -5,5 +5,7 @@
     <color name="main_color">#036FF4</color>
     <color name="spinner_color">#03BCF4</color>
     <color name="colorDarkGrey">#424A4D</color>
+    <color name="colorBlack">#4E546B</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorLightGrey">#DADADA</color>
 </resources>

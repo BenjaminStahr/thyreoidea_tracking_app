@@ -7,25 +7,32 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <LinearLayout
+    <Spinner
+        android:id="@+id/intake_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center_horizontal|center_vertical"
+        android:textAlignment="gravity"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:theme="@style/Spinner"
+        android:background="@drawable/bg_spinner_dropdown"/>
+    <Button
+        android:id="@+id/add_symptom_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Substanz hinzufügen" />
+    <!--ImageView
+        android:id="@+id/add_intake_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        app:srcCompat="@android:drawable/ic_input_add" /-->
 
-        <Spinner
-            android:id="@+id/intake_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="textStart"
-            android:theme="@style/Spinner" />
-
-        <ImageView
-            android:id="@+id/add_intake_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@android:drawable/ic_input_add" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Menge : " />
 
     <LinearLayout
         android:layout_width="match_parent"

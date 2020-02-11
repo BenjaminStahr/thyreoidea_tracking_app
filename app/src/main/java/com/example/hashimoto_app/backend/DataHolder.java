@@ -1,5 +1,9 @@
 package com.example.hashimoto_app.backend;
 
+import android.provider.ContactsContract;
+
+import com.jjoe64.graphview.series.DataPoint;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -85,6 +89,43 @@ public class DataHolder
     {
         IntakeElement element = new IntakeElement(supplementName, unit, new ArrayList<Measurement>());
         intakeData.add(element);
+    }
+    public void deleteThyroidDataPoint(String substance, double moment)
+    {
+        for (int i = 0; i < thyroidData.size(); i++)
+        {
+            if(thyroidData.get(i).getNameOfSubstance().equals(substance))
+            {
+                for (int j = 0; j < thyroidData.get(i).getMeasurements().size(); j++)
+                {
+                    if(thyroidData.get(i).getMeasurements().get(j).getDate().getTime() == moment)
+                    {
+                        thyroidData.get(i).getMeasurements().remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    public DataPoint[] getThyroidDataPointsForSubstance(String substance)
+    {
+        DataPoint[] result;
+        for (int i = 0; i < thyroidData.size(); i++)
+        {
+            if(thyroidData.get(i).getNameOfSubstance().equals(substance))
+            {
+                result = new DataPoint[thyroidData.get(i).getMeasurements().size()];
+                ArrayList<ThyroidMeasurement> elements = thyroidData.get(i).getMeasurements();
+                for(int j = 0; j < elements.size(); j++)
+                {
+                    double x = elements.get(j).getDate().getTime();
+                    double y = elements.get(j).getAmount();
+                    result[j] = new DataPoint(x, y);
+                }
+                return result;
+            }
+        }
+        return null;
     }
 
     public ArrayList<ThyroidElement> getThyroidData()

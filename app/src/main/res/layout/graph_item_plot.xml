@@ -1,36 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    android:orientation="vertical"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp">
 
-    <TextView
-        android:id="@+id/substanceLabel"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="TSH" />
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/unitLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:text="ng/dl" />
+        <TextView
+            android:id="@+id/unitLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ng/dl"
+            android:textAlignment="center" />
+    </RelativeLayout>
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
         android:layout_width="wrap_content"
         android:layout_height="163dp"
         android:layout_gravity="center"
+        android:background="#00FFFFFF"
         android:paddingLeft="0dp"
         android:paddingRight="4dp" />
 
-    <TextView
-        android:id="@+id/textView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:paddingRight="5dp"
-        android:text="Tage" />
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Tage" />
+
+        <TextView
+            android:id="@+id/substanceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="false"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="0"
+            android:gravity="bottom"
+            android:paddingBottom="16dp"
+            android:text="TSH"
+            android:textSize="18sp" />
+    </RelativeLayout>
+    <View style="@style/Divider"/>
 </LinearLayout>

@@ -1,12 +1,10 @@
 package com.example.hashimoto_app;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,10 +18,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-
-/*
-This is a Customadapter for showing one Graph in the thyroid list view
- */
 public class PlotAdapter extends ArrayAdapter<String>
 {
     private ArrayList<LineGraphSeries> data;
@@ -32,6 +26,18 @@ public class PlotAdapter extends ArrayAdapter<String>
     private String[] nameOfSubstance;
     private Context context;
     private String period;
+    private boolean isSymptomView = false;
+
+    public PlotAdapter(Context context, ArrayList<LineGraphSeries> data, String[] unit, String[] nameOfSubstance, String period, boolean isSymptomView)
+    {
+        super(context, R.layout.graph_item_plot);
+        this.data = data;
+        this.context = context;
+        this.unit = unit;
+        this.nameOfSubstance = nameOfSubstance;
+        this.period = period;
+        this.isSymptomView = isSymptomView;
+    }
 
     public PlotAdapter(Context context, ArrayList<LineGraphSeries> data, String[] unit, String[] nameOfSubstance, String period)
     {
@@ -62,6 +68,14 @@ public class PlotAdapter extends ArrayAdapter<String>
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.graph_item_plot, parent, false);
             viewHolder.graphView = (GraphView) convertView.findViewById(R.id.graph);
+            viewHolder.graphView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    System.out.println("clicked Graph");
+                }
+            });
             viewHolder.nameOfSubstanceView = (TextView) convertView.findViewById(R.id.substanceLabel);
             viewHolder.unitView = (TextView) convertView.findViewById(R.id.unitLabel);
             viewHolder.graphView.getGridLabelRenderer().setLabelFormatter((new DefaultLabelFormatter()
@@ -97,10 +111,18 @@ public class PlotAdapter extends ArrayAdapter<String>
             // for making float values completely visible in the y-axis
             viewHolder.graphView.getGridLabelRenderer().setPadding(40);
             viewHolder.graphView.getGridLabelRenderer().setHumanRounding(false, true);
+            // regarding symptoms all views are scaled 1 to 5 on the y-axis
+            if (isSymptomView)
+            {
+               viewHolder.graphView.getViewport().setYAxisBoundsManual(true);
+               viewHolder.graphView.getViewport().setMaxY(5);
+                viewHolder.graphView.getViewport().setMinY(1);
+            }
             viewHolder.graphView.getViewport().setXAxisBoundsManual(true);
             viewHolder.graphView.getViewport().setMaxX(new Date().getTime());
             Calendar cal = Calendar.getInstance();
             cal.setTime(new Date());
+            // getting the right lower border for the graph
             if(period.equals(context.getString(R.string.period_week)))
             {
                 cal.add(Calendar.DATE, -7);
@@ -128,22 +150,6 @@ public class PlotAdapter extends ArrayAdapter<String>
         viewHolder.unitView.setText(unit[position]);
         return convertView;
     }
-    /*public void setData(ArrayList<LineGraphSeries> data)
-    {
-        this.data = data;
-    }
-    public void setUnit(String[] unit)
-    {
-        this.unit = unit;
-    }
-    public void setNameOfSubstance(String[] nameOfSubstance)
-    {
-        this.nameOfSubstance = nameOfSubstance;
-    }
-    public void setPeriod(String period)
-    {
-        this.period = period;
-    }*/
     static class ViewHolder
     {
         GraphView graphView;

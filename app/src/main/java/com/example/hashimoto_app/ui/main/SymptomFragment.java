@@ -103,7 +103,7 @@ public class SymptomFragment extends Fragment
                 }
                 differentViews.add(series);
             }
-            PlotAdapter adapter = new PlotAdapter(context, differentViews, units, namesOfSymptoms, period);
+            PlotAdapter adapter = new PlotAdapter(context, differentViews, units, namesOfSymptoms, period, true);
             if (symptomListView != null)
             {
                 symptomListView.setAdapter(adapter);

@@ -1,9 +1,5 @@
 package com.example.hashimoto_app;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import com.example.hashimoto_app.backend.DataHolder;
@@ -15,6 +11,7 @@ import com.example.hashimoto_app.backend.ThyroidElement;
 import com.example.hashimoto_app.backend.ThyroidMeasurement;
 import com.example.hashimoto_app.ui.main.AddSupplementDialog;
 import com.example.hashimoto_app.ui.main.AddSymptomDialog;
+import com.example.hashimoto_app.ui.main.DeleteThyroidDataPointDialog;
 import com.example.hashimoto_app.ui.main.IntakeDialog;
 import com.example.hashimoto_app.ui.main.SymptomDialog;
 import com.example.hashimoto_app.ui.main.ThyroidDialog;
@@ -34,6 +31,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.Series;
+
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -47,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
-        AddSupplementDialog.AddSupplementDialogListener
+        AddSupplementDialog.AddSupplementDialogListener, DeleteThyroidDataPointDialog.DeleteThyroidDataPointDialogListener
 {
     // central data management of the applications data
     private static DataHolder dataHolder;
@@ -168,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             dataHolder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements3));
             FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
         }
-        //dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
         periodSpinner = findViewById(R.id.period_spinner);
         periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onClick(View view)
             {
-                //sendOnChannel(view);
                 if(viewPager.getCurrentItem() == 0)
                 {
                     openThyroidDialog();
@@ -200,9 +199,8 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 }
             }
         });
-        //scheduleNotifications();
         PeriodicWorkRequest notificationRequest =
-                new PeriodicWorkRequest.Builder(NotificationWorker.class, 15, TimeUnit.MINUTES)
+                new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS)
                         .build();
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(notificationRequest);
@@ -212,20 +210,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                         .build();
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(networkRequest);
-        //sendSymptomDataToServer(getUserDataAsJson());
     }
-    /*public static void sendSymptomDataToServer(final String symptomData)
-    {
-
-        new AsyncTask<Void, Void, String>()
-        {
-            @Override
-            protected String doInBackground(Void... voids)
-            {
-                return updateServerData(symptomData);
-            }
-        }.execute();
-    }*/
     public static void sendFirstTimeDataToServer(final String symptomData)
     {
         new AsyncTask<Void, Void, String>()
@@ -267,7 +252,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         }
     }
 
-
     public static String getUserDataAsJson()
     {
         final JsonObject sendData = new JsonObject();
@@ -304,6 +288,11 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         AddSupplementDialog addSupplementDialog = new AddSupplementDialog();
         addSupplementDialog.show(getSupportFragmentManager(), "add supplement dialog");
     }
+    public void openDeleteThyroidDataPointDialog(String substanceName, double dataPoint, Series series)
+    {
+        DeleteThyroidDataPointDialog deleteDatapointThyroidDialog = new DeleteThyroidDataPointDialog(substanceName, dataPoint, series);
+        deleteDatapointThyroidDialog.show(getSupportFragmentManager(), "delete thyroid datapoint dialog");
+    }
 
     public void updateDataAccordingToSelectedTimePeriod()
     {
@@ -320,25 +309,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
         }
     }
-    /*public void scheduleNotifications()
-    {
-        /*Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, NotificationReceiver.REQUEST_CODE,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long firstMillis = System.currentTimeMillis();
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
-                30*1000, pIntent);
-        Intent intent = new Intent(getApplicationContext(), NotificationService.class);
-        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
-        long firstMillis = System.currentTimeMillis();
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        if (alarmManager != null)
-        {
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,firstMillis,  AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
-        }
-        //alarmManager.setExact(AlarmManager.RTC_WAKEUP,firstMillis + 10000, pendingIntent);
-    }*/
 
     @Override
     public void applyThyroidTexts(String registeredValue, String substance, String unit, Date selectedDate)
@@ -435,5 +405,28 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     public static DataHolder getDataHolder()
     {
         return dataHolder;
+    }
+
+    /*
+    This method overwrites the interface from the DeleteThyroidDataPointDialog and processes its data
+     */
+    @Override
+    public void refreshThyroidGraph(Series series, double dataPoint, String substance)
+    {
+        LineGraphSeries lineGraphSeries = ((LineGraphSeries<DataPoint>)series);
+        lineGraphSeries.resetData(getDataHolder().getThyroidDataPointsForSubstance(substance));
+    }
+    private DataPoint[] generateData() {
+        int count = 30;
+        DataPoint[] values = new DataPoint[count];
+        Random mRand = new Random();
+        for (int i=0; i<count; i++) {
+            double x = i;
+            double f = mRand.nextDouble()*0.15+0.3;
+            double y = Math.sin(i*f+2) + mRand.nextDouble()*0.3;
+            DataPoint v = new DataPoint(x, y);
+            values[i] = v;
+        }
+        return values;
     }
 }

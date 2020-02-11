@@ -48,7 +48,7 @@ public class SymptomDialog extends AppCompatDialogFragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view  = inflater.inflate(R.layout.symptom_dialog, null);
         builder.setView(view)
-                .setTitle("Symptom protokollieren")
+                .setTitle("Symptom eintragen")
                 .setNegativeButton("abbrechen", new DialogInterface.OnClickListener()
                 {
                     @Override

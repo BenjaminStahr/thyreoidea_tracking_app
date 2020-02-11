@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -44,14 +45,11 @@ public class IntakeDialog extends AppCompatDialogFragment
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view  = inflater.inflate(R.layout.intake_dialog, null);
         builder.setView(view)
-                .setTitle("Neuer Eintrag")
+                .setTitle("Einnahme eintragen")
                 .setNegativeButton("abbrechen", new DialogInterface.OnClickListener()
                 {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-
-                    }
+                    public void onClick(DialogInterface dialog, int which) { }
                 })
                 .setPositiveButton("eintragen", new DialogInterface.OnClickListener()
                 {
@@ -81,8 +79,8 @@ public class IntakeDialog extends AppCompatDialogFragment
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
-        ImageView addSupplementImageView = view.findViewById(R.id.add_intake_image);
-        addSupplementImageView.setOnClickListener(new View.OnClickListener()
+        Button addSubstanceButton = view.findViewById(R.id.add_symptom_button);
+        addSubstanceButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -90,6 +88,15 @@ public class IntakeDialog extends AppCompatDialogFragment
                 mainActivity.openAddSupplementDialog();
             }
         });
+        /*ImageView addSupplementImageView = view.findViewById(R.id.add_intake_image);
+        addSupplementImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mainActivity.openAddSupplementDialog();
+            }
+        });*/
         return builder.create();
     }
 
@@ -112,7 +119,7 @@ public class IntakeDialog extends AppCompatDialogFragment
     {
         final List<String> list = MainActivity.getDataHolder().getSupplements();
         ArrayAdapter<String> adp1 = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_list_item_1, list);
+                android.R.layout.simple_spinner_item, list);
         adp1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dialogSpinner.setAdapter(adp1);
     }

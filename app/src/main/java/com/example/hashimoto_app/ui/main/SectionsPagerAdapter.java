@@ -6,6 +6,8 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to

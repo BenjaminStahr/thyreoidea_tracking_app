@@ -16,8 +16,12 @@ import androidx.fragment.app.Fragment;
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.PlotAdapter;
 import com.example.hashimoto_app.R;
+import com.example.hashimoto_app.backend.ThyroidElement;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,12 +29,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class ThyroidFragment extends Fragment
 {
     private final Context context;
-    //private PlotAdapter adapter;
     String period;
     PlotAdapter adapter;
 
@@ -52,18 +56,8 @@ public class ThyroidFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        //period = getString(R.string.period_week);
-        this.period = period;
-        if (getView() != null)
-        {
-            ListView thyroidListView = (ListView) getView().findViewById(R.id.thyroidListView);
-            Object[] data = generateAdapterData();
-            adapter = new PlotAdapter(context, (ArrayList<LineGraphSeries>)data[0],(String[]) data[1],(String[]) data[2], period);
-            if (thyroidListView != null)
-            {
-                thyroidListView.setAdapter(adapter);
-            }
-        }
+        period = getString(R.string.period_week);
+        setAdapterData(period);
     }
 
     public void setAdapterData(String period)
@@ -71,14 +65,8 @@ public class ThyroidFragment extends Fragment
         this.period = period;
         if (getView() != null)
         {
-            //adapter.clear();
-            //adapter.notifyDataSetChanged();
             ListView thyroidListView = (ListView) getView().findViewById(R.id.thyroidListView);
             Object[] data = generateAdapterData();
-            //adapter.setData((ArrayList<LineGraphSeries>)data[0]);
-            //adapter.setUnit((String[]) data[1]);
-            //adapter.setNameOfSubstance((String[]) data[2]);
-            //adapter.setPeriod(period);
             adapter = new PlotAdapter(context, (ArrayList<LineGraphSeries>)data[0], (String[]) data[1], (String[]) data[2], period);
             if (thyroidListView != null)
             {
@@ -93,11 +81,27 @@ public class ThyroidFragment extends Fragment
     {
         ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
         String[] units = new String[MainActivity.getDataHolder().getThyroidData().size()];
-        String[] namesOfSubstances = new String[MainActivity.getDataHolder().getThyroidData().size()];
+        final String[] namesOfSubstances = new String[MainActivity.getDataHolder().getThyroidData().size()];
 
         for (int i = 0; i < MainActivity.getDataHolder().getThyroidData().size(); i++)
         {
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+            final int iForListener = i;
+            series.setOnDataPointTapListener(new OnDataPointTapListener()
+            {
+                @Override
+                public void onTap(Series series, DataPointInterface dataPoint)
+                {
+                    //mainActivity.openDeleteThyroidDataPointDialog(namesOfSubstances[iForListener], dataPoint.getX(), series);
+                        //System.out.println(dataPoint.getX()+namesOfSubstances[iForListener]);
+
+                        //((LineGraphSeries<DataPoint>)series).resetData(generateData());
+                    DeleteThyroidDataPointDialog deleteDatapointThyroidDialog = new DeleteThyroidDataPointDialog(
+                            namesOfSubstances[iForListener], dataPoint.getX(), series);
+                    deleteDatapointThyroidDialog.show(getActivity().getSupportFragmentManager(), "delete thyroid datapoint dialog");
+                    //deleteDatapointThyroidDialog.show(ThyroidFragment.this.getChildFragmentManager(), "dialog_fragment");
+                }
+            });
             series.setDrawDataPoints(true);
             units[i] = MainActivity.getDataHolder().getThyroidData().get(i).getUnit();
             namesOfSubstances[i] = MainActivity.getDataHolder().getThyroidData().get(i).getNameOfSubstance();
@@ -139,5 +143,6 @@ public class ThyroidFragment extends Fragment
         }
         return new Object[]{differentViews, units,namesOfSubstances};
     }
+
 }
 

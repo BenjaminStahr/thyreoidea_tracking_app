@@ -26,10 +26,19 @@
         android:layout_weight="1"
         android:text="Supplement wird dosiert in :" />
 
-    <Spinner
+    <!--Spinner
         android:id="@+id/supplement_unit_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:entries="@array/supplementUnits" />
+        android:entries="@array/supplementUnits" /-->
+    <Spinner
+        android:id="@+id/supplement_unit_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center_vertical"
+        android:textAlignment="gravity"
+        android:theme="@style/Spinner"
+        android:background="@drawable/bg_spinner_dropdown"
+        android:entries="@array/supplementUnits"/>
 </LinearLayout>
