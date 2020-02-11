@@ -1,7 +1,5 @@
 package com.example.hashimoto_app.backend;
 
-import android.provider.ContactsContract;
-
 import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
@@ -107,6 +105,25 @@ public class DataHolder
             }
         }
     }
+
+    public void deleteSymptomDataPoint(String symptom, double moment)
+    {
+        for (int i = 0; i < symptomData.size(); i++)
+        {
+            if(symptomData.get(i).getSymptomName().equals(symptom))
+            {
+                for (int j = 0; j < symptomData.get(i).getMeasurements().size(); j++)
+                {
+                    if(symptomData.get(i).getMeasurements().get(j).getDate().getTime() == moment)
+                    {
+                        symptomData.get(i).getMeasurements().remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public DataPoint[] getThyroidDataPointsForSubstance(String substance)
     {
         DataPoint[] result;
@@ -116,6 +133,27 @@ public class DataHolder
             {
                 result = new DataPoint[thyroidData.get(i).getMeasurements().size()];
                 ArrayList<ThyroidMeasurement> elements = thyroidData.get(i).getMeasurements();
+                for(int j = 0; j < elements.size(); j++)
+                {
+                    double x = elements.get(j).getDate().getTime();
+                    double y = elements.get(j).getAmount();
+                    result[j] = new DataPoint(x, y);
+                }
+                return result;
+            }
+        }
+        return null;
+    }
+
+    public DataPoint[] getDataPointsForSymptom(String symptom)
+    {
+        DataPoint[] result;
+        for (int i = 0; i < symptomData.size(); i++)
+        {
+            if(symptomData.get(i).getSymptomName().equals(symptom))
+            {
+                result = new DataPoint[symptomData.get(i).getMeasurements().size()];
+                ArrayList<Measurement> elements = symptomData.get(i).getMeasurements();
                 for(int j = 0; j < elements.size(); j++)
                 {
                     double x = elements.get(j).getDate().getTime();

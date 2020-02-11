@@ -14,7 +14,10 @@ import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.PlotAdapter;
 import com.example.hashimoto_app.R;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,7 +27,8 @@ import java.util.concurrent.TimeUnit;
 public class SymptomFragment extends Fragment
 {
     private final Context context;
-    String period;
+    private String period;
+
     public SymptomFragment(Context context)
     {
         this.context = context;
@@ -32,8 +36,7 @@ public class SymptomFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.symptom_fragment,
@@ -57,13 +60,23 @@ public class SymptomFragment extends Fragment
             {
                 units[i] = "Intensität";
             }
-            String[] namesOfSymptoms = new String[MainActivity.getDataHolder().getSymptomData().size()];
+            final String[] namesOfSymptoms = new String[MainActivity.getDataHolder().getSymptomData().size()];
 
             for (int i = 0; i < MainActivity.getDataHolder().getSymptomData().size(); i++)
             {
                 LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                final int iForListener = i;
+                series.setOnDataPointTapListener(new OnDataPointTapListener()
+                {
+                    @Override
+                    public void onTap(Series series, DataPointInterface dataPoint)
+                    {
+                        DeleteSymptomDataPointDialog deleteDatapointSymptomDialog = new DeleteSymptomDataPointDialog(
+                                namesOfSymptoms[iForListener], dataPoint.getX(), series);
+                        deleteDatapointSymptomDialog.show(getActivity().getSupportFragmentManager(), "delete symptom datapoint dialog");
+                    }
+                });
                 series.setDrawDataPoints(true);
-                //units[i] = MainActivity.getDataHolder().getSymptomData().get(i).getUnit();
                 namesOfSymptoms[i] = MainActivity.getDataHolder().getSymptomData().get(i).getSymptomName();
                 if(MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements() != null)
                 {

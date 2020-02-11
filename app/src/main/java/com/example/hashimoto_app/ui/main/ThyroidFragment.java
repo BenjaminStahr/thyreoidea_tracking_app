@@ -92,14 +92,9 @@ public class ThyroidFragment extends Fragment
                 @Override
                 public void onTap(Series series, DataPointInterface dataPoint)
                 {
-                    //mainActivity.openDeleteThyroidDataPointDialog(namesOfSubstances[iForListener], dataPoint.getX(), series);
-                        //System.out.println(dataPoint.getX()+namesOfSubstances[iForListener]);
-
-                        //((LineGraphSeries<DataPoint>)series).resetData(generateData());
                     DeleteThyroidDataPointDialog deleteDatapointThyroidDialog = new DeleteThyroidDataPointDialog(
                             namesOfSubstances[iForListener], dataPoint.getX(), series);
                     deleteDatapointThyroidDialog.show(getActivity().getSupportFragmentManager(), "delete thyroid datapoint dialog");
-                    //deleteDatapointThyroidDialog.show(ThyroidFragment.this.getChildFragmentManager(), "dialog_fragment");
                 }
             });
             series.setDrawDataPoints(true);

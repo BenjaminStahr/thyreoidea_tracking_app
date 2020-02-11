@@ -11,6 +11,7 @@ import com.example.hashimoto_app.backend.ThyroidElement;
 import com.example.hashimoto_app.backend.ThyroidMeasurement;
 import com.example.hashimoto_app.ui.main.AddSupplementDialog;
 import com.example.hashimoto_app.ui.main.AddSymptomDialog;
+import com.example.hashimoto_app.ui.main.DeleteSymptomDataPointDialog;
 import com.example.hashimoto_app.ui.main.DeleteThyroidDataPointDialog;
 import com.example.hashimoto_app.ui.main.IntakeDialog;
 import com.example.hashimoto_app.ui.main.SymptomDialog;
@@ -48,7 +49,8 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
-        AddSupplementDialog.AddSupplementDialogListener, DeleteThyroidDataPointDialog.DeleteThyroidDataPointDialogListener
+        AddSupplementDialog.AddSupplementDialogListener, DeleteThyroidDataPointDialog.DeleteThyroidDataPointDialogListener,
+        DeleteSymptomDataPointDialog.DeleteSymptomDataPointDialogListener
 {
     // central data management of the applications data
     private static DataHolder dataHolder;
@@ -415,18 +417,14 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     {
         LineGraphSeries lineGraphSeries = ((LineGraphSeries<DataPoint>)series);
         lineGraphSeries.resetData(getDataHolder().getThyroidDataPointsForSubstance(substance));
+        FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
-    private DataPoint[] generateData() {
-        int count = 30;
-        DataPoint[] values = new DataPoint[count];
-        Random mRand = new Random();
-        for (int i=0; i<count; i++) {
-            double x = i;
-            double f = mRand.nextDouble()*0.15+0.3;
-            double y = Math.sin(i*f+2) + mRand.nextDouble()*0.3;
-            DataPoint v = new DataPoint(x, y);
-            values[i] = v;
-        }
-        return values;
+
+    @Override
+    public void refreshSymptomGraph(Series series, double dataPoint, String symptom)
+    {
+        LineGraphSeries lineGraphSeries = ((LineGraphSeries<DataPoint>)series);
+        lineGraphSeries.resetData(getDataHolder().getDataPointsForSymptom(symptom));
+        FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
 }
