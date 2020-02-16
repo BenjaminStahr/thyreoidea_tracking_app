@@ -29,6 +29,8 @@ import androidx.work.WorkManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import com.example.hashimoto_app.ui.main.SectionsPagerAdapter;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -81,12 +83,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         {
             dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
         }
-        catch (Exception ex)
-        {
+        catch (Exception ex) {
             Random rand = new Random(System.currentTimeMillis());
             int id = rand.nextInt();
-            if(id < 0)
-            {
+            if (id < 0) {
                 id *= -1;
             }
             dataHolder = new DataHolder(id);
@@ -174,6 +174,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             dataHolder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements3));
             FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
         }
+        TextView titleView = findViewById(R.id.title);
+        titleView.setText("ID : " + dataHolder.getUSER_ID());
+
+
         periodSpinner = findViewById(R.id.period_spinner);
         periodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
