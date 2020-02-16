@@ -1,5 +1,6 @@
 package com.example.hashimoto_app;
 
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import com.example.hashimoto_app.backend.DataHolder;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         final ViewPager viewPager = findViewById(R.id.view_pager);
@@ -214,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(networkRequest);
     }
+
     public static void sendFirstTimeDataToServer(final String symptomData)
     {
         new AsyncTask<Void, Void, String>()
