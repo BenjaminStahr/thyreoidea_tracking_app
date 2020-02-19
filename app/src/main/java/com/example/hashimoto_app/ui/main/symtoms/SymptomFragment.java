@@ -1,4 +1,4 @@
-package com.example.hashimoto_app.ui.main;
+package com.example.hashimoto_app.ui.main.symtoms;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.PlotAdapter;
 import com.example.hashimoto_app.R;
+import com.example.hashimoto_app.ui.main.symtoms.DeleteSymptomDataPointDialog;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;

@@ -1,4 +1,4 @@
-package com.example.hashimoto_app.ui.main;
+package com.example.hashimoto_app.ui.main.intake;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

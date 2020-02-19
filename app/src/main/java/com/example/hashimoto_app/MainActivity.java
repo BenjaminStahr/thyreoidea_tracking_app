@@ -1,6 +1,7 @@
 package com.example.hashimoto_app;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import com.example.hashimoto_app.backend.DataHolder;
@@ -10,19 +11,20 @@ import com.example.hashimoto_app.backend.Measurement;
 import com.example.hashimoto_app.backend.SymptomElement;
 import com.example.hashimoto_app.backend.ThyroidElement;
 import com.example.hashimoto_app.backend.ThyroidMeasurement;
-import com.example.hashimoto_app.ui.main.AddSupplementDialog;
-import com.example.hashimoto_app.ui.main.AddSymptomDialog;
-import com.example.hashimoto_app.ui.main.DeleteIntakeDataPointDialog;
-import com.example.hashimoto_app.ui.main.DeleteSymptomDataPointDialog;
-import com.example.hashimoto_app.ui.main.DeleteThyroidDataPointDialog;
-import com.example.hashimoto_app.ui.main.IntakeDialog;
-import com.example.hashimoto_app.ui.main.SymptomDialog;
-import com.example.hashimoto_app.ui.main.ThyroidDialog;
+import com.example.hashimoto_app.ui.main.intake.AddSupplementDialog;
+import com.example.hashimoto_app.ui.main.symtoms.AddSymptomDialog;
+import com.example.hashimoto_app.ui.main.intake.DeleteIntakeDataPointDialog;
+import com.example.hashimoto_app.ui.main.symtoms.DeleteSymptomDataPointDialog;
+import com.example.hashimoto_app.ui.main.thyroid.DeleteThyroidDataPointDialog;
+import com.example.hashimoto_app.ui.main.intake.IntakeDialog;
+import com.example.hashimoto_app.ui.main.symtoms.SymptomDialog;
+import com.example.hashimoto_app.ui.main.thyroid.ThyroidDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
 
         try
         {
@@ -185,6 +187,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 updateDataAccordingToSelectedTimePeriod();
+                /*OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(NetworkWorker.class)
+                        .build();
+                WorkManager.getInstance(getApplicationContext())
+                        .enqueue(work);*/
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
@@ -208,6 +214,28 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 }
             }
         });
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+            @Override
+            public void onPageSelected(int position)
+            {
+                if(position == 0)
+                {
+                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.thyroidBlue)));
+                }
+                else if (position == 1)
+                {
+                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.symptomRed)));
+                }
+                else
+                {
+                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.intakeYellow)));
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) { }
+        });
         PeriodicWorkRequest notificationRequest =
                 new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS)
                         .build();
@@ -219,6 +247,8 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                         .build();
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(networkRequest);
+
+
     }
 
     public static void sendFirstTimeDataToServer(final String symptomData)
@@ -234,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     }
     public static String initServerData(String symptomData)
     {
-        String query_url = "http://192.168.178.20:3000/data";
+        String query_url = "http://srvgvm33.offis.uni-oldenburg.de:8080/1/thyreodata";
         try {
             URL url = new URL(query_url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -252,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             //JSONObject myResponse = new JSONObject(result);
             in.close();
             conn.disconnect();
-
             return result;
         }
         catch (Exception e)
@@ -297,11 +326,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     {
         AddSupplementDialog addSupplementDialog = new AddSupplementDialog();
         addSupplementDialog.show(getSupportFragmentManager(), "add supplement dialog");
-    }
-    public void openDeleteThyroidDataPointDialog(String substanceName, double dataPoint, Series series)
-    {
-        DeleteThyroidDataPointDialog deleteDatapointThyroidDialog = new DeleteThyroidDataPointDialog(substanceName, dataPoint, series);
-        deleteDatapointThyroidDialog.show(getSupportFragmentManager(), "delete thyroid datapoint dialog");
     }
 
     public void updateDataAccordingToSelectedTimePeriod()

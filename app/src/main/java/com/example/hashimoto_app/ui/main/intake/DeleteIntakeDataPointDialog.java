@@ -1,4 +1,4 @@
-package com.example.hashimoto_app.ui.main;
+package com.example.hashimoto_app.ui.main.intake;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,14 +16,14 @@ import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
 import com.jjoe64.graphview.series.Series;
 
-public class DeleteThyroidDataPointDialog extends AppCompatDialogFragment
+public class DeleteIntakeDataPointDialog extends AppCompatDialogFragment
 {
-    private DeleteThyroidDataPointDialogListener listener;
+    private DeleteIntakeDataPointDialog.DeleteIntakeDataPointDialogListener listener;
     private String substance;
     private double dateOfDataPoint;
     private Series series;
 
-    public DeleteThyroidDataPointDialog(String substance, double dateOfDataPoint, Series series)
+    public DeleteIntakeDataPointDialog(String substance, double dateOfDataPoint, Series series)
     {
         this.substance = substance;
         this.dateOfDataPoint = dateOfDataPoint;
@@ -48,8 +48,8 @@ public class DeleteThyroidDataPointDialog extends AppCompatDialogFragment
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        MainActivity.getDataHolder().deleteThyroidDataPoint(substance, dateOfDataPoint);
-                        listener.refreshThyroidGraph(series, dateOfDataPoint, substance);
+                        MainActivity.getDataHolder().deleteIntakeDataPoint(substance, dateOfDataPoint);
+                        listener.refreshIntakeGraph(series, dateOfDataPoint, substance);
                     }
                 });
         return builder.create();
@@ -60,15 +60,15 @@ public class DeleteThyroidDataPointDialog extends AppCompatDialogFragment
         super.onAttach(context);
         try
         {
-            listener = (DeleteThyroidDataPointDialogListener) context;
+            listener = (DeleteIntakeDataPointDialog.DeleteIntakeDataPointDialogListener) context;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
     }
-    public interface DeleteThyroidDataPointDialogListener
+    public interface DeleteIntakeDataPointDialogListener
     {
-        void refreshThyroidGraph(Series series, double dataPoint, String substance);
+        void refreshIntakeGraph(Series series, double dataPoint, String substance);
     }
 }

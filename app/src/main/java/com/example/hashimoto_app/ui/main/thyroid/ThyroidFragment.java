@@ -1,13 +1,10 @@
-package com.example.hashimoto_app.ui.main;
+package com.example.hashimoto_app.ui.main.thyroid;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -16,27 +13,23 @@ import androidx.fragment.app.Fragment;
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.PlotAdapter;
 import com.example.hashimoto_app.R;
-import com.example.hashimoto_app.backend.ThyroidElement;
+import com.example.hashimoto_app.ui.main.thyroid.DeleteThyroidDataPointDialog;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.OnDataPointTapListener;
 import com.jjoe64.graphview.series.Series;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class ThyroidFragment extends Fragment
 {
     private final Context context;
-    String period;
-    PlotAdapter adapter;
+    private String period;
+    private PlotAdapter adapter;
 
     public ThyroidFragment(Context context)
     {
@@ -65,7 +58,7 @@ public class ThyroidFragment extends Fragment
         this.period = period;
         if (getView() != null)
         {
-            ListView thyroidListView = (ListView) getView().findViewById(R.id.thyroidListView);
+            ListView thyroidListView = getView().findViewById(R.id.thyroidListView);
             Object[] data = generateAdapterData();
             adapter = new PlotAdapter(context, (ArrayList<LineGraphSeries>)data[0], (String[]) data[1], (String[]) data[2], period);
             if (thyroidListView != null)
@@ -74,6 +67,7 @@ public class ThyroidFragment extends Fragment
             }
             adapter.notifyDataSetChanged();
         }
+
     }
 
     // a converter which converts data from the underlying data structure to the data, which gets shown in the view

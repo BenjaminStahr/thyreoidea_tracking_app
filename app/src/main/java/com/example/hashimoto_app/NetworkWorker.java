@@ -36,7 +36,7 @@ public class NetworkWorker extends Worker
 
     public String updateServerData()
     {
-        String query_url = "http://192.168.178.20:3000/data/";
+        String query_url = "http://srvgvm33.offis.uni-oldenburg.de:8080/1/thyreodata/";
         query_url += new Gson().toJson(new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class)
                 .getUSER_ID());
         try

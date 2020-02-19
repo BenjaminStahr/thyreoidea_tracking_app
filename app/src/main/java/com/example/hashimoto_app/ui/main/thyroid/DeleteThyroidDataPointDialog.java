@@ -1,4 +1,4 @@
-package com.example.hashimoto_app.ui.main;
+package com.example.hashimoto_app.ui.main.thyroid;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,45 +7,51 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
-public class AddSymptomDialog extends AppCompatDialogFragment
-{
-    private AddSymptomDialogListener listener;
-    private EditText symptomEditText;
+import com.jjoe64.graphview.series.Series;
 
+public class DeleteThyroidDataPointDialog extends AppCompatDialogFragment
+{
+    private DeleteThyroidDataPointDialogListener listener;
+    private String substance;
+    private double dateOfDataPoint;
+    private Series series;
+
+    public DeleteThyroidDataPointDialog(String substance, double dateOfDataPoint, Series series)
+    {
+        this.substance = substance;
+        this.dateOfDataPoint = dateOfDataPoint;
+        this.series = series;
+    }
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view  = inflater.inflate(R.layout.additional_symptom_dialog, null);
+        View view  = inflater.inflate(R.layout.delete_datapoint_dialog, null);
         builder.setView(view)
-                .setTitle("Symptom hinzufügen")
+                .setTitle("Eintragung löschen")
                 .setNegativeButton("abbrechen", new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which) { }
                 })
-                .setPositiveButton("Eintragen", new DialogInterface.OnClickListener()
+                .setPositiveButton("löschen", new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        if(!symptomEditText.getText().toString().equals(""))
-                        {
-                            MainActivity.getDataHolder().addSymptom(symptomEditText.getText().toString());
-                            listener.refreshSymptomList();
-                        }
+                        MainActivity.getDataHolder().deleteThyroidDataPoint(substance, dateOfDataPoint);
+                        listener.refreshThyroidGraph(series, dateOfDataPoint, substance);
                     }
                 });
-        symptomEditText = view.findViewById(R.id.symptom_name_edit_text);
         return builder.create();
     }
     @Override
@@ -54,15 +60,15 @@ public class AddSymptomDialog extends AppCompatDialogFragment
         super.onAttach(context);
         try
         {
-            listener = (AddSymptomDialogListener) context;
+            listener = (DeleteThyroidDataPointDialogListener) context;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
     }
-    public interface AddSymptomDialogListener
+    public interface DeleteThyroidDataPointDialogListener
     {
-        void refreshSymptomList();
+        void refreshThyroidGraph(Series series, double dataPoint, String substance);
     }
 }

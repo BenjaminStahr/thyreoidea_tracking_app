@@ -6,14 +6,19 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
+import com.example.hashimoto_app.backend.ThyroidElement;
+import com.example.hashimoto_app.ui.main.intake.IntakeFragment;
+import com.example.hashimoto_app.ui.main.symtoms.SymptomFragment;
+import com.example.hashimoto_app.ui.main.thyroid.ThyroidFragment;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter
 {
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
@@ -35,9 +40,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     public Fragment getItem(int position)
     {
         // getItem is called to instantiate the fragment for the given page.
-        if(position == 0) {
-
+        if(position == 0)
+        {
+            //thyroidFragment = new ThyroidFragment(mContext);
             return  thyroidFragment;
+            //return Fragment.instantiate(mContext, ThyroidFragment.class.getName(), null);
+
         }
         else if(position == 1)
         {
@@ -47,6 +55,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         {
             return intakeFragment;
         }
+
     }
 
     @Nullable
@@ -55,6 +64,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     {
         return mContext.getResources().getString(TAB_TITLES[position]);
     }
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
 
     @Override
     public int getCount()
@@ -67,5 +81,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         thyroidFragment.setAdapterData(period);
         symptomFragment.setAdapterData(period);
         intakeFragment.setAdapterData(period);
+
     }
 }
