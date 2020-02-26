@@ -42,6 +42,8 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -236,19 +238,39 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onPageScrollStateChanged(int state) { }
         });
+        // Here we like to get the delay till 6 o'Clock, the time the user should record his symptoms
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        Date targetDate;
+        long delay;
+        if(calendar.get(Calendar.HOUR_OF_DAY) < 18)
+        {
+            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+                    18, 0, 0);
+            targetDate = calendar.getTime();
+            delay = targetDate.getTime() - currentDate.getTime();
+        }
+        else
+        {
+            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH) +1,
+                    18, 0, 0);
+            targetDate = calendar.getTime();
+            delay = targetDate.getTime() - currentDate.getTime();
+        }
+
         PeriodicWorkRequest notificationRequest =
                 new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS)
+                        .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                         .build();
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(notificationRequest);
 
         PeriodicWorkRequest networkRequest =
-                new PeriodicWorkRequest.Builder(NetworkWorker.class, 15, TimeUnit.MINUTES)
+                new PeriodicWorkRequest.Builder(NetworkWorker.class, 1, TimeUnit.DAYS)
                         .build();
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(networkRequest);
-
-
     }
 
     public static void sendFirstTimeDataToServer(final String symptomData)
@@ -265,7 +287,8 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     public static String initServerData(String symptomData)
     {
         String query_url = "http://srvgvm33.offis.uni-oldenburg.de:8080/1/thyreodata";
-        try {
+        try
+        {
             URL url = new URL(query_url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(5000);
@@ -274,12 +297,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             conn.setDoInput(true);
             conn.setRequestMethod("POST");
             OutputStream os = conn.getOutputStream();
-            //String s = getUserDataAsJson();
             os.write(symptomData.getBytes());
             os.close();
             InputStream in = new BufferedInputStream(conn.getInputStream());
             String result = in.toString();
-            //JSONObject myResponse = new JSONObject(result);
             in.close();
             conn.disconnect();
             return result;

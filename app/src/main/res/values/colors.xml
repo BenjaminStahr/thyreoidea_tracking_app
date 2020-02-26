@@ -8,4 +8,7 @@
     <color name="colorBlack">#4E546B</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorLightGrey">#DADADA</color>
+    <color name="thyroidBlue">#3400FF</color>
+    <color name="symptomRed">#D2003F</color>
+    <color name="intakeYellow">#C800C8</color>
 </resources>
