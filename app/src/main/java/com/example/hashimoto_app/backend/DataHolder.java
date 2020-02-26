@@ -3,6 +3,7 @@ package com.example.hashimoto_app.backend;
 import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -78,6 +79,22 @@ public class DataHolder
             return null;
         }
     }
+    public Date getLastUpdateDateOfSymptom(String symptom)
+    {
+        // last date is initialized in the past so that a new entry can get made if there is none
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, 0, 0, 0, 0, 0);
+        Date lastUpdate = calendar.getTime();
+        for (int i = 0; i < symptomData.size(); i++)
+        {
+            if (symptomData.get(i).getSymptomName().equals(symptom))
+            {
+                lastUpdate = symptomData.get(i).getMeasurements().get(symptomData.get(i).getMeasurements().size()-1).getDate();
+            }
+        }
+        return lastUpdate;
+    }
+
     public void addSymptom(String symptomName)
     {
         SymptomElement element = new SymptomElement(symptomName, new ArrayList<Measurement>());

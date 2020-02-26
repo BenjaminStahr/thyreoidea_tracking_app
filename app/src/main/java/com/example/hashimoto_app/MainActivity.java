@@ -89,10 +89,12 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         {
             dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             Random rand = new Random(System.currentTimeMillis());
             int id = rand.nextInt();
-            if (id < 0) {
+            if (id < 0)
+            {
                 id *= -1;
             }
             dataHolder = new DataHolder(id);
@@ -213,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
                     // user can make entries between 6 and 11 o'Clock pm
-                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 18 && calendar.get(Calendar.HOUR_OF_DAY) <= 22)
+                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 18)
                     {
                         openSymptomDialog();
                     }
@@ -222,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                         alertDialogBuilder.setTitle("Hinweis");
                         alertDialogBuilder
-                                .setMessage("Sie können keine Symptome vor 18 und nach 23 Uhr eintragen")
+                                .setMessage("Sie können keine Symptome vor 18 Uhr eintragen")
                                 .setCancelable(false)
                                 .setPositiveButton("Okay",new DialogInterface.OnClickListener()
                                 {

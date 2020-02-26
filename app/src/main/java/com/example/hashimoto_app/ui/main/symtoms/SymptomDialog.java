@@ -24,9 +24,12 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
+import com.example.hashimoto_app.backend.DataHolder;
 import com.shawnlin.numberpicker.NumberPicker;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class SymptomDialog extends AppCompatDialogFragment
 {
@@ -60,7 +63,30 @@ public class SymptomDialog extends AppCompatDialogFragment
                     public void onClick(DialogInterface dialog, int which)
                     {
                         String symptom = dialogSpinner.getSelectedItem().toString();
-                        listener.applySymptomTexts(intensity, symptom);
+                        Date lastUpdate = MainActivity.getDataHolder().getLastUpdateDateOfSymptom(symptom);
+                        long diff = new Date().getTime() - lastUpdate.getTime();
+                        long hours = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
+                        if(hours >= 12)
+                        {
+                            listener.applySymptomTexts(intensity, symptom);
+                        }
+                        else
+                        {
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                            alertDialogBuilder.setTitle("Hinweis");
+                            alertDialogBuilder
+                                    .setMessage("Sie haben dieses Symptom heute schon protokolliert")
+                                    .setCancelable(false)
+                                    .setPositiveButton("Okay",new DialogInterface.OnClickListener()
+                                    {
+                                        public void onClick(DialogInterface dialog,int id)
+                                        {
+                                            dialog.cancel();
+                                        }
+                                    });
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+                            alertDialog.show();
+                        }
                     }
                 });
 
