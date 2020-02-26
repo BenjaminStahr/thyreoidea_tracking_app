@@ -1,5 +1,7 @@
 package com.example.hashimoto_app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.os.AsyncTask;
@@ -208,7 +210,30 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 }
                 else if(viewPager.getCurrentItem() == 1)
                 {
-                    openSymptomDialog();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+                    // user can make entries between 6 and 11 o'Clock pm
+                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 18 && calendar.get(Calendar.HOUR_OF_DAY) <= 22)
+                    {
+                        openSymptomDialog();
+                    }
+                    else
+                    {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                        alertDialogBuilder.setTitle("Hinweis");
+                        alertDialogBuilder
+                                .setMessage("Sie können keine Symptome vor 18 und nach 23 Uhr eintragen")
+                                .setCancelable(false)
+                                .setPositiveButton("Okay",new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog,int id)
+                                    {
+                                        dialog.cancel();
+                                    }
+                                });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
                 }
                 else
                 {
