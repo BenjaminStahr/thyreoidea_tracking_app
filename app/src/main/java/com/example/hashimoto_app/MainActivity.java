@@ -2,6 +2,7 @@ package com.example.hashimoto_app;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.os.AsyncTask;
@@ -26,7 +27,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     // dialogs of which the main activity needs the reference, because they can init some action
     SymptomDialog symptomDialog;
     IntakeDialog intakeDialog;
+    public static String actualPeriod = "Woche";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -193,6 +194,8 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 updateDataAccordingToSelectedTimePeriod();
+
+                //viewPager.getAdapter().notifyDataSetChanged();
                 /*OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(NetworkWorker.class)
                         .build();
                 WorkManager.getInstance(getApplicationContext())
@@ -381,15 +384,19 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         if(periodSpinner.getSelectedItemPosition() == 0)
         {
             sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_week));
+            actualPeriod = getString(R.string.period_week);
         }
         else if (periodSpinner.getSelectedItemPosition() == 1)
         {
             sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_month));
+            actualPeriod = getString(R.string.period_month);
         }
         else
         {
             sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
+            actualPeriod = getString(R.string.period_year);
         }
+        //sectionsPagerAdapter.updateThyroidFragment(this);
     }
 
     @Override

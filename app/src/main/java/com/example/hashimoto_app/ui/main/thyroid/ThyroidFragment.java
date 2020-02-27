@@ -49,10 +49,16 @@ public class ThyroidFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        period = getString(R.string.period_week);
+
+        period = MainActivity.actualPeriod;
         setAdapterData(period);
     }
 
+    public static ThyroidFragment newInstance(Context context)
+    {
+        ThyroidFragment myFragment = new ThyroidFragment(context);
+        return myFragment;
+    }
     public void setAdapterData(String period)
     {
         this.period = period;
@@ -132,6 +138,5 @@ public class ThyroidFragment extends Fragment
         }
         return new Object[]{differentViews, units,namesOfSubstances};
     }
-
 }
 

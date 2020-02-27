@@ -7,12 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -24,8 +20,6 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
-import com.example.hashimoto_app.backend.DataHolder;
-import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.Date;
 import java.util.List;
