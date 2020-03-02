@@ -1,6 +1,7 @@
 package com.example.hashimoto_app;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -34,12 +35,44 @@ public class NetworkWorker extends Worker
         return Result.success();
     }
 
-    public String updateServerData()
+    public static void updateServerData()
     {
-        String query_url = "http://srvgvm33.offis.uni-oldenburg.de:8080/1/thyreodata/";
-        query_url += new Gson().toJson(new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class)
-                .getUSER_ID());
-        try
+        //String query_url = "http://srvgvm33.offis.uni-oldenburg.de:8080/1/thyreodata";
+        /*query_url += new Gson().toJson(new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class)
+                .getUSER_ID());*/
+        new AsyncTask<Void, Void, String>()
+        {
+            @Override
+            protected String doInBackground(Void... voids)
+            {
+                //return initServerData(symptomData);
+                String query_url = "http://srvgvm33.offis.uni-oldenburg.de:8080/1/thyreodata";
+                try
+                {
+                    URL url = new URL(query_url);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(5000);
+                    conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+                    conn.setRequestMethod("POST");
+                    OutputStream os = conn.getOutputStream();
+                    os.write(getUserDataAsJson().getBytes());
+                    os.close();
+                    InputStream in = new BufferedInputStream(conn.getInputStream());
+                    String result = in.toString();
+                    in.close();
+                    conn.disconnect();
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    return "unsuccessful update to server";
+                }
+            }
+        }.execute();
+        /*try
         {
             URL url = new URL(query_url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -63,14 +96,14 @@ public class NetworkWorker extends Worker
         {
             e.printStackTrace();
             return "unsuccessful initialization of connection to server";
-        }
+        }*/
     }
-    public String getUserDataAsJson()
+    private static String getUserDataAsJson()
     {
-        DataHolder dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
+        //DataHolder dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
         JsonObject sendData = new JsonObject();
-        String idJson = new Gson().toJson(dataHolder.getUSER_ID());
-        String symptomJson = new Gson().toJson(dataHolder.getSymptomData());
+        String idJson = new Gson().toJson(MainActivity.getDataHolder().getUSER_ID());
+        String symptomJson = new Gson().toJson(MainActivity.getDataHolder().getSymptomData());
         sendData.add("id", new Gson().fromJson(idJson, JsonPrimitive.class));
         sendData.add("symptomData", new Gson().fromJson(symptomJson, JsonArray.class));
         return sendData.toString();
