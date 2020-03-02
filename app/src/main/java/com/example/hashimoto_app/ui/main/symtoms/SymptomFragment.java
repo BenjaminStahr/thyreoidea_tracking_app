@@ -56,66 +56,65 @@ public class SymptomFragment extends Fragment
         {
             ListView symptomListView = (ListView) getView().findViewById(R.id.symptomListView);
             ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
-            String[] units = new String[MainActivity.getDataHolder().getSymptomData().size()];
+            String[] units = new String[MainActivity.getDataHolder().getSymptomsWithDataPointsSize()];
             for (int i = 0; i < units.length; i++)
             {
                 units[i] = "Intensität";
             }
-            final String[] namesOfSymptoms = new String[MainActivity.getDataHolder().getSymptomData().size()];
-
+            final String[] namesOfSymptoms = new String[MainActivity.getDataHolder().getSymptomsWithDataPointsSize()];
+            int symptomIndex = 0;
             for (int i = 0; i < MainActivity.getDataHolder().getSymptomData().size(); i++)
             {
-                LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-                final int iForListener = i;
-                series.setOnDataPointTapListener(new OnDataPointTapListener()
+                if (MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size() != 0)
                 {
-                    @Override
-                    public void onTap(Series series, DataPointInterface dataPoint)
+                    LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                    final int iForListener = symptomIndex;
+                    series.setOnDataPointTapListener(new OnDataPointTapListener()
                     {
-                        DeleteSymptomDataPointDialog deleteDatapointSymptomDialog = new DeleteSymptomDataPointDialog(
-                                namesOfSymptoms[iForListener], dataPoint.getX(), series);
-                        deleteDatapointSymptomDialog.show(getActivity().getSupportFragmentManager(), "delete symptom datapoint dialog");
-                    }
-                });
-                series.setDrawDataPoints(true);
-                namesOfSymptoms[i] = MainActivity.getDataHolder().getSymptomData().get(i).getSymptomName();
-                if(MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements() != null)
-                {
-                    for (int j = 0; j < MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(); j++)
+                        @Override
+                        public void onTap(Series series, DataPointInterface dataPoint)
+                        {
+                            DeleteSymptomDataPointDialog deleteDatapointSymptomDialog = new DeleteSymptomDataPointDialog(
+                                    namesOfSymptoms[iForListener], dataPoint.getX(), series);
+                            deleteDatapointSymptomDialog.show(getActivity().getSupportFragmentManager(), "delete symptom datapoint dialog");
+                        }
+                    });
+                    series.setDrawDataPoints(true);
+                    namesOfSymptoms[symptomIndex] = MainActivity.getDataHolder().getSymptomData().get(i).getSymptomName();
+                    if(MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements() != null)
                     {
-                        Date date = MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().get(j).getDate();
-                        float amount = MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().get(j).getAmount();
-                        DataPoint point = new DataPoint(date.getTime(), (double) amount);
-                        //Date dateToday = new Date();
-                        Calendar calendar = Calendar.getInstance();
-                        //calendar.set(calendar.YEAR, calendar.MONTH, calendar.DATE, 0, 0, 0);
-                        Date dateToday = calendar.getTime();
-                        long diff = dateToday.getTime() - date.getTime();
-                        long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                        if (period.equals(getString(R.string.period_week)))
+                        for (int j = 0; j < MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(); j++)
                         {
-                            if (period.equals(getString(R.string.period_week)) && days <= 7)
-                            {
-                                series.appendData(point, true, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
-                                        false);
-                            }
-                        }
-                        else if (period.equals(getString(R.string.period_month)) && days <= 30)
-                        {
-                            series.appendData(point, false, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
-                                    false);
-                        }
-                        else
-                        {
-                            if (period.equals(getString(R.string.period_year)) && days <= 365)
-                            {
+                            Date date = MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().get(j).getDate();
+                            float amount = MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().get(j).getAmount();
+                            DataPoint point = new DataPoint(date.getTime(), (double) amount);
+                            //Date dateToday = new Date();
+                            Calendar calendar = Calendar.getInstance();
+                            //calendar.set(calendar.YEAR, calendar.MONTH, calendar.DATE, 0, 0, 0);
+                            Date dateToday = calendar.getTime();
+                            long diff = dateToday.getTime() - date.getTime();
+                            long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                            if (period.equals(getString(R.string.period_week))) {
+                                if (period.equals(getString(R.string.period_week)) && days <= 7) {
+                                    series.appendData(point, true, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
+                                            false);
+                                }
+                            } else if (period.equals(getString(R.string.period_month)) && days <= 30) {
                                 series.appendData(point, false, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
                                         false);
+                            } else {
+                                if (period.equals(getString(R.string.period_year)) && days <= 365) {
+                                    series.appendData(point, false, MainActivity.getDataHolder().getSymptomData().get(i).getMeasurements().size(),
+                                            false);
+                                }
                             }
                         }
                     }
+                    differentViews.add(series);
+                    symptomIndex++;
                 }
-                differentViews.add(series);
+
+
             }
             PlotAdapter adapter = new PlotAdapter(context, differentViews, units, namesOfSymptoms, period, true);
             if (symptomListView != null)

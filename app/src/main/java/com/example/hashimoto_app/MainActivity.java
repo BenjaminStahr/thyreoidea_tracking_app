@@ -89,6 +89,13 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         try
         {
             dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
+            for (int i = 0; i < dataHolder.getSymptomData().size(); i++)
+            {
+                if (dataHolder.getSymptomData().get(i).getMeasurements() == null)
+                {
+                    dataHolder.getSymptomData().get(i).setMeasurements(new ArrayList<Measurement>());
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -135,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             Measurement symptomMeasurement2 = new Measurement(date2, 3);
             Measurement symptomMeasurement3 = new Measurement(date3, 3);
             Measurement symptomMeasurement4 = new Measurement(date, 5);
-            Measurement symptomMeasurement5 = new Measurement(date2, 7);
+            Measurement symptomMeasurement5 = new Measurement(date2, 3);
             Measurement symptomMeasurement6 = new Measurement(date3, 1);
             ArrayList<Measurement> symptomMeasurements1 = new ArrayList<>();
             symptomMeasurements1.add(symptomMeasurement1);
@@ -154,11 +161,24 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             symptomMeasurements4.add(symptomMeasurement2);
             symptomMeasurements4.add(symptomMeasurement3);
 
-            dataHolder.getSymptomData().add(new SymptomElement("Unruhe", symptomMeasurements1));
-            dataHolder.getSymptomData().add(new SymptomElement("Zittern", symptomMeasurements2));
-            dataHolder.getSymptomData().add(new SymptomElement("erhöhter Herzschlag", symptomMeasurements3));
-            dataHolder.getSymptomData().add(new SymptomElement("Unwohlsein", symptomMeasurements4));
-
+            dataHolder.getSymptomData().add(new SymptomElement("Depression", symptomMeasurements1));
+            dataHolder.getSymptomData().add(new SymptomElement("Erschöpfung", symptomMeasurements2));
+            dataHolder.getSymptomData().add(new SymptomElement("Gelenkschmerzen", symptomMeasurements3));
+            dataHolder.getSymptomData().add(new SymptomElement("Haarausfall", symptomMeasurements4));
+            dataHolder.getSymptomData().add(new SymptomElement("Heiserkeit", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Kälteempfindlichkeit", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Kopfschmerzen", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Kurzatmigkeit", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Muskelkrämpfe", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("schuppige Haut", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Schwächegefühl", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("sprödes/trockenes Haar", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Taubheitsgefühl", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("trockene Haut", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("unregelmäßige Menstruation", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("verringertes Schwitzen", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Verstopfung", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("zu starke Menstruation", new ArrayList<Measurement>()));
             Measurement intakeMeasurement1 = new Measurement(date, 6);
             Measurement intakeMeasurement2 = new Measurement(date2, 3);
             Measurement intakeMeasurement3 = new Measurement(date3, 7);
@@ -182,6 +202,32 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             dataHolder.getIntakeData().add(new IntakeElement("Selen", "mg", intakeMeasurements1));
             dataHolder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements3));
             FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+
+            // Here we like to get the delay till 6 o'Clock, the time the user should record his symptoms
+            Date currentDate = new Date();
+            calendar.setTime(currentDate);
+            Date targetDate;
+            long delay;
+            if(calendar.get(Calendar.HOUR_OF_DAY) < 17)
+            {
+                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
+                        17, 0, 0);
+                targetDate = calendar.getTime();
+                delay = targetDate.getTime() - currentDate.getTime();
+            }
+            else
+            {
+                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH) +1,
+                        17, 0, 0);
+                targetDate = calendar.getTime();
+                delay = targetDate.getTime() - currentDate.getTime();
+            }
+            PeriodicWorkRequest notificationRequest =
+                    new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS)
+                            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                            .build();
+            WorkManager.getInstance(getApplicationContext())
+                    .enqueue(notificationRequest);
         }
         TextView titleView = findViewById(R.id.title);
         titleView.setText("ID : " + dataHolder.getUSER_ID());
@@ -218,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
                     // user can make entries between 6 and 11 o'Clock pm
-                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 18)
+                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 10)
                     {
                         openSymptomDialog();
                     }
@@ -227,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                         alertDialogBuilder.setTitle("Hinweis");
                         alertDialogBuilder
-                                .setMessage("Sie können keine Symptome vor 18 Uhr eintragen")
+                                .setMessage("Sie können keine Symptome vor 17 Uhr eintragen")
                                 .setCancelable(false)
                                 .setPositiveButton("Okay",new DialogInterface.OnClickListener()
                                 {
@@ -268,33 +314,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onPageScrollStateChanged(int state) { }
         });
-        // Here we like to get the delay till 6 o'Clock, the time the user should record his symptoms
-        Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        Date targetDate;
-        long delay;
-        if(calendar.get(Calendar.HOUR_OF_DAY) < 18)
-        {
-            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH),
-                    18, 0, 0);
-            targetDate = calendar.getTime();
-            delay = targetDate.getTime() - currentDate.getTime();
-        }
-        else
-        {
-            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH) +1,
-                    18, 0, 0);
-            targetDate = calendar.getTime();
-            delay = targetDate.getTime() - currentDate.getTime();
-        }
-
-        PeriodicWorkRequest notificationRequest =
-                new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS)
-                        .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-                        .build();
-        WorkManager.getInstance(getApplicationContext())
-                .enqueue(notificationRequest);
 
         PeriodicWorkRequest networkRequest =
                 new PeriodicWorkRequest.Builder(NetworkWorker.class, 1, TimeUnit.DAYS)

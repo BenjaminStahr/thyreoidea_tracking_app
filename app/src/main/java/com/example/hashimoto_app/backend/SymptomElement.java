@@ -21,4 +21,5 @@ public class SymptomElement
     {
         return measurements;
     }
+    public void setMeasurements(ArrayList<Measurement> list){this.measurements = list;}
 }

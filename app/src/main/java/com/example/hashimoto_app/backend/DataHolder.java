@@ -79,6 +79,19 @@ public class DataHolder
             return null;
         }
     }
+    public int getSymptomsWithDataPointsSize()
+    {
+        int counter = 0;
+        for(int i = 0; i < symptomData.size(); i++)
+        {
+            if (symptomData.get(i).getMeasurements().size() != 0)
+            {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
     public Date getLastUpdateDateOfSymptom(String symptom)
     {
         // last date is initialized in the past so that a new entry can get made if there is none
@@ -89,7 +102,10 @@ public class DataHolder
         {
             if (symptomData.get(i).getSymptomName().equals(symptom))
             {
-                lastUpdate = symptomData.get(i).getMeasurements().get(symptomData.get(i).getMeasurements().size()-1).getDate();
+                if (symptomData.get(i).getMeasurements().size() != 0)
+                {
+                    lastUpdate = symptomData.get(i).getMeasurements().get(symptomData.get(i).getMeasurements().size() - 1).getDate();
+                }
             }
         }
         return lastUpdate;
