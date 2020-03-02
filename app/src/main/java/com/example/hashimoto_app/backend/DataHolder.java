@@ -91,6 +91,30 @@ public class DataHolder
         }
         return counter;
     }
+    public int getThyroidWithDataPointsSize()
+    {
+        int counter = 0;
+        for(int i = 0; i < thyroidData.size(); i++)
+        {
+            if (thyroidData.get(i).getMeasurements().size() != 0)
+            {
+                counter++;
+            }
+        }
+        return counter;
+    }
+    public int getIntakeWithDataPointsSize()
+    {
+        int counter = 0;
+        for(int i = 0; i < intakeData.size(); i++)
+        {
+            if (intakeData.get(i).getMeasurements().size() != 0)
+            {
+                counter++;
+            }
+        }
+        return counter;
+    }
 
     public Date getLastUpdateDateOfSymptom(String symptom)
     {

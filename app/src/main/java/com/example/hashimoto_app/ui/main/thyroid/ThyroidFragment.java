@@ -80,61 +80,65 @@ public class ThyroidFragment extends Fragment
     public Object[] generateAdapterData()
     {
         ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
-        String[] units = new String[MainActivity.getDataHolder().getThyroidData().size()];
-        final String[] namesOfSubstances = new String[MainActivity.getDataHolder().getThyroidData().size()];
-
+        String[] units = new String[MainActivity.getDataHolder().getThyroidWithDataPointsSize()];
+        final String[] namesOfSubstances = new String[MainActivity.getDataHolder().getThyroidWithDataPointsSize()];
+        int thyroidCounter = 0;
         for (int i = 0; i < MainActivity.getDataHolder().getThyroidData().size(); i++)
         {
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-            final int iForListener = i;
-            series.setOnDataPointTapListener(new OnDataPointTapListener()
+            if (MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size() != 0)
             {
-                @Override
-                public void onTap(Series series, DataPointInterface dataPoint)
+                LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                final int iForListener = thyroidCounter;
+                series.setOnDataPointTapListener(new OnDataPointTapListener()
                 {
-                    DeleteThyroidDataPointDialog deleteDatapointThyroidDialog = new DeleteThyroidDataPointDialog(
-                            namesOfSubstances[iForListener], dataPoint.getX(), series);
-                    deleteDatapointThyroidDialog.show(getActivity().getSupportFragmentManager(), "delete thyroid datapoint dialog");
-                }
-            });
-            series.setDrawDataPoints(true);
-            units[i] = MainActivity.getDataHolder().getThyroidData().get(i).getUnit();
-            namesOfSubstances[i] = MainActivity.getDataHolder().getThyroidData().get(i).getNameOfSubstance();
-            for (int j = 0; j < MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(); j++)
-            {
-                Date date = MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().get(j).getDate();
-                float amount = MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().get(j).getAmount();
-                DataPoint point = new DataPoint(date.getTime(), (double) amount);
-                Calendar calendar = Calendar.getInstance();
-                Date dateToday = calendar.getTime();
-                long diff = dateToday.getTime() - date.getTime();
-                long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                if (period.equals(getString(R.string.period_week)))
-                {
-                    if (period.equals(getString(R.string.period_week)) && days <= 7)
+                    @Override
+                    public void onTap(Series series, DataPointInterface dataPoint)
                     {
-                        series.appendData(point, true, MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(),
-                                false);
+                        DeleteThyroidDataPointDialog deleteDatapointThyroidDialog = new DeleteThyroidDataPointDialog(
+                                namesOfSubstances[iForListener], dataPoint.getX(), series);
+                        deleteDatapointThyroidDialog.show(getActivity().getSupportFragmentManager(), "delete thyroid datapoint dialog");
+                    }
+                });
+                series.setDrawDataPoints(true);
+                units[thyroidCounter] = MainActivity.getDataHolder().getThyroidData().get(i).getUnit();
+                namesOfSubstances[thyroidCounter] = MainActivity.getDataHolder().getThyroidData().get(i).getNameOfSubstance();
+                for (int j = 0; j < MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(); j++)
+                {
+                    Date date = MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().get(j).getDate();
+                    float amount = MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().get(j).getAmount();
+                    DataPoint point = new DataPoint(date.getTime(), (double) amount);
+                    Calendar calendar = Calendar.getInstance();
+                    Date dateToday = calendar.getTime();
+                    long diff = dateToday.getTime() - date.getTime();
+                    long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                    if (period.equals(getString(R.string.period_week)))
+                    {
+                        if (period.equals(getString(R.string.period_week)) && days <= 7)
+                        {
+                            series.appendData(point, true, MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(),
+                                    false);
+                        }
+                    }
+                    else if (period.equals(getString(R.string.period_month))) {
+                        if (period.equals(getString(R.string.period_month)) && days <= 30)
+                        {
+                            series.appendData(point, false, MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(),
+                                    false);
+                        }
+                    }
+                    else
+                        {
+                        if (period.equals(getString(R.string.period_year)) && days <= 365)
+                        {
+                            series.appendData(point, false, MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(),
+                                    false);
+                        }
                     }
                 }
-                else if (period.equals(getString(R.string.period_month)))
-                {
-                    if (period.equals(getString(R.string.period_month)) && days <= 30)
-                    {
-                        series.appendData(point, false, MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(),
-                                false);
-                    }
-                }
-                else
-                {
-                    if (period.equals(getString(R.string.period_year)) && days <= 365)
-                    {
-                        series.appendData(point, false, MainActivity.getDataHolder().getThyroidData().get(i).getMeasurements().size(),
-                                false);
-                    }
-                }
+                differentViews.add(series);
+                thyroidCounter++;
             }
-            differentViews.add(series);
+
         }
         return new Object[]{differentViews, units,namesOfSubstances};
     }

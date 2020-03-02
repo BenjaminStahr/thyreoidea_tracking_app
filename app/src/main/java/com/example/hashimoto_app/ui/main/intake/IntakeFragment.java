@@ -57,58 +57,51 @@ public class IntakeFragment extends Fragment
         {
             ListView intakeListView = (ListView) getView().findViewById(R.id.intakeListView);
             ArrayList<LineGraphSeries> differentViews = new ArrayList<>();
-            String[] units = new String[MainActivity.getDataHolder().getIntakeData().size()];
-            final String[] namesOfSubstances = new String[MainActivity.getDataHolder().getIntakeData().size()];
-
+            String[] units = new String[MainActivity.getDataHolder().getIntakeWithDataPointsSize()];
+            final String[] namesOfSubstances = new String[MainActivity.getDataHolder().getIntakeWithDataPointsSize()];
+            int intakeCounter = 0;
             for (int i = 0; i < MainActivity.getDataHolder().getIntakeData().size(); i++)
             {
-                LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-                final int iForListener = i;
-                series.setOnDataPointTapListener(new OnDataPointTapListener()
-                {
-                    @Override
-                    public void onTap(Series series, DataPointInterface dataPoint)
-                    {
-                        DeleteIntakeDataPointDialog deleteDatapointIntakeDialog = new DeleteIntakeDataPointDialog(
-                                namesOfSubstances[iForListener], dataPoint.getX(), series);
-                        deleteDatapointIntakeDialog.show(getActivity().getSupportFragmentManager(), "delete intake datapoint dialog");
-                    }
-                });
-                series.setDrawDataPoints(true);
-                units[i] = MainActivity.getDataHolder().getIntakeData().get(i).getUnit();
-                namesOfSubstances[i] = MainActivity.getDataHolder().getIntakeData().get(i).getNameOfSubstance();
-                for (int j = 0; j < MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(); j++)
-                {
-                    Date date = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getDate();
-                    float amount = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getAmount();
-                    DataPoint point = new DataPoint(date.getTime(), (double) amount);
-                    Calendar calendar = Calendar.getInstance();
-                    Date dateToday = calendar.getTime();
-                    long diff = dateToday.getTime() - date.getTime();
-                    long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-                    if (period.equals(getString(R.string.period_week)))
-                    {
-                        if (days <= 7)
-                        {
-                            series.appendData(point, true, MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(),
-                                    false);
+                if (MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size() != 0) {
+                    LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                    final int iForListener = i;
+                    series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                        @Override
+                        public void onTap(Series series, DataPointInterface dataPoint) {
+                            DeleteIntakeDataPointDialog deleteDatapointIntakeDialog = new DeleteIntakeDataPointDialog(
+                                    namesOfSubstances[iForListener], dataPoint.getX(), series);
+                            deleteDatapointIntakeDialog.show(getActivity().getSupportFragmentManager(), "delete intake datapoint dialog");
                         }
-                    }
-                    else if (period.equals(getString(R.string.period_month)) && days <= 30)
-                    {
-                        series.appendData(point, false, MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(),
-                                false);
-                    }
-                    else
-                    {
-                        if (period.equals(getString(R.string.period_year)) && days <= 365)
-                        {
+                    });
+                    series.setDrawDataPoints(true);
+                    units[i] = MainActivity.getDataHolder().getIntakeData().get(i).getUnit();
+                    namesOfSubstances[i] = MainActivity.getDataHolder().getIntakeData().get(i).getNameOfSubstance();
+                    for (int j = 0; j < MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(); j++) {
+                        Date date = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getDate();
+                        float amount = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getAmount();
+                        DataPoint point = new DataPoint(date.getTime(), (double) amount);
+                        Calendar calendar = Calendar.getInstance();
+                        Date dateToday = calendar.getTime();
+                        long diff = dateToday.getTime() - date.getTime();
+                        long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+                        if (period.equals(getString(R.string.period_week))) {
+                            if (days <= 7) {
+                                series.appendData(point, true, MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(),
+                                        false);
+                            }
+                        } else if (period.equals(getString(R.string.period_month)) && days <= 30) {
                             series.appendData(point, false, MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(),
                                     false);
+                        } else {
+                            if (period.equals(getString(R.string.period_year)) && days <= 365) {
+                                series.appendData(point, false, MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(),
+                                        false);
+                            }
                         }
                     }
+                    intakeCounter++;
+                    differentViews.add(series);
                 }
-                differentViews.add(series);
             }
             PlotAdapter adapter = new PlotAdapter(context, differentViews, units, namesOfSubstances, period);
             if (intakeListView != null)
