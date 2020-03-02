@@ -15,10 +15,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class NetworkWorker extends Worker
 {
@@ -59,9 +64,16 @@ public class NetworkWorker extends Worker
                     OutputStream os = conn.getOutputStream();
                     os.write(getUserDataAsJson().getBytes());
                     os.close();
-                    InputStream in = new BufferedInputStream(conn.getInputStream());
-                    String result = in.toString();
-                    in.close();
+                    BufferedReader br = null;
+                    if (conn.getResponseCode() == 201) {
+                        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        String strCurrentLine;
+                        while ((strCurrentLine = br.readLine()) != null) {
+                            System.out.println(strCurrentLine);
+                        }
+                    }
+                    String result = "";
+                    System.out.println("Ergebnis des Sendens : "+result+ " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     conn.disconnect();
                     return result;
                 }
