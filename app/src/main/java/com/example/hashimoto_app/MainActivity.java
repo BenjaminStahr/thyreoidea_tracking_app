@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             // add some sample data to the holder
             Calendar calendar = Calendar.getInstance();
             calendar.set(2020, 0, 9, 0, 0, 0);
-            Date date = calendar.getTime();
+            /*Date date = calendar.getTime();
             calendar.set(2020, 0, 13, 0, 0, 0);
             Date date2 = calendar.getTime();
             calendar.set(2020, 0, 14, 6, 0, 0);
@@ -159,12 +159,12 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             ArrayList<Measurement> symptomMeasurements4 = new ArrayList<>();
             symptomMeasurements4.add(symptomMeasurement1);
             symptomMeasurements4.add(symptomMeasurement2);
-            symptomMeasurements4.add(symptomMeasurement3);
+            symptomMeasurements4.add(symptomMeasurement3);*/
 
-            dataHolder.getSymptomData().add(new SymptomElement("Depression", symptomMeasurements1));
-            dataHolder.getSymptomData().add(new SymptomElement("Erschöpfung", symptomMeasurements2));
-            dataHolder.getSymptomData().add(new SymptomElement("Gelenkschmerzen", symptomMeasurements3));
-            dataHolder.getSymptomData().add(new SymptomElement("Haarausfall", symptomMeasurements4));
+            dataHolder.getSymptomData().add(new SymptomElement("Depression", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Erschöpfung", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Gelenkschmerzen", new ArrayList<Measurement>()));
+            dataHolder.getSymptomData().add(new SymptomElement("Haarausfall", new ArrayList<Measurement>()));
             dataHolder.getSymptomData().add(new SymptomElement("Heiserkeit", new ArrayList<Measurement>()));
             dataHolder.getSymptomData().add(new SymptomElement("Kälteempfindlichkeit", new ArrayList<Measurement>()));
             dataHolder.getSymptomData().add(new SymptomElement("Kopfschmerzen", new ArrayList<Measurement>()));
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             dataHolder.getSymptomData().add(new SymptomElement("verringertes Schwitzen", new ArrayList<Measurement>()));
             dataHolder.getSymptomData().add(new SymptomElement("Verstopfung", new ArrayList<Measurement>()));
             dataHolder.getSymptomData().add(new SymptomElement("zu starke Menstruation", new ArrayList<Measurement>()));
-            Measurement intakeMeasurement1 = new Measurement(date, 6);
+            /*Measurement intakeMeasurement1 = new Measurement(date, 6);
             Measurement intakeMeasurement2 = new Measurement(date2, 3);
             Measurement intakeMeasurement3 = new Measurement(date3, 7);
             Measurement intakeMeasurement4 = new Measurement(date, 1);
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             intakeMeasurements3.add(intakeMeasurement3);
             dataHolder.getIntakeData().add(new IntakeElement("Magnesium", "g", intakeMeasurements2));
             dataHolder.getIntakeData().add(new IntakeElement("Selen", "mg", intakeMeasurements1));
-            dataHolder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements3));
+            dataHolder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements3));*/
             FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
 
             // Here we like to get the delay till 6 o'Clock, the time the user should record his symptoms
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
                     // user can make entries between 6 and 11 o'Clock pm
-                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 10)
+                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 17)
                     {
                         openSymptomDialog();
                     }
@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         });
 
         PeriodicWorkRequest networkRequest =
-                new PeriodicWorkRequest.Builder(NetworkWorker.class, 24, TimeUnit.HOURS)
+                new PeriodicWorkRequest.Builder(NetworkWorker.class, 1, TimeUnit.HOURS)
                         .build();
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(networkRequest);
