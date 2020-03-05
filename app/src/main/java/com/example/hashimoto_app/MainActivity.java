@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         final FloatingActionButton fab = findViewById(R.id.fab);
-
+        viewPager.setCurrentItem(1);
         try
         {
             dataHolder = new Gson().fromJson(FileManager.getFileAsString("userData", getApplicationContext()), DataHolder.class);
