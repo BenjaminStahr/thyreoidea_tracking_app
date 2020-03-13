@@ -56,7 +56,7 @@ public class IntakeDialog extends AppCompatDialogFragment
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        if(!registeredValueEditText.getText().toString().equals(""))
+                        if(!registeredValueEditText.getText().toString().equals("") && dialogSpinner.getSelectedItem() != null)
                         {
                             String registeredValue = registeredValueEditText.getText().toString();
                             String substance = dialogSpinner.getSelectedItem().toString();

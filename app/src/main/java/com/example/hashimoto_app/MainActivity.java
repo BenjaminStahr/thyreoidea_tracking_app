@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         });
 
         PeriodicWorkRequest networkRequest =
-                new PeriodicWorkRequest.Builder(NetworkWorker.class, 1, TimeUnit.HOURS)
+                new PeriodicWorkRequest.Builder(NetworkWorker.class, 5, TimeUnit.HOURS)
                         .build();
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(networkRequest);
