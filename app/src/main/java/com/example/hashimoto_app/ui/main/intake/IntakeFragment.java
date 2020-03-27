@@ -11,9 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.hashimoto_app.MainActivity;
-import com.example.hashimoto_app.PlotAdapter;
+import com.example.hashimoto_app.ui.main.PlotAdapter;
 import com.example.hashimoto_app.R;
-import com.example.hashimoto_app.ui.main.intake.DeleteIntakeDataPointDialog;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;

@@ -111,55 +111,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             // add some sample data to the holder
             Calendar calendar = Calendar.getInstance();
             calendar.set(2020, 0, 9, 0, 0, 0);
-            /*Date date = calendar.getTime();
-            calendar.set(2020, 0, 13, 0, 0, 0);
-            Date date2 = calendar.getTime();
-            calendar.set(2020, 0, 14, 6, 0, 0);
-            Date date3 = calendar.getTime();
-            // sample data for thyroid measurements
-            ThyroidMeasurement thyroidMeasurement1 = new ThyroidMeasurement(date, 3, 1, 3);
-            ThyroidMeasurement thyroidMeasurement2 = new ThyroidMeasurement(date2, 4, 1, 3);
-            ThyroidMeasurement thyroidMeasurement5 = new ThyroidMeasurement(date3, 2, 1, 3);
-            ArrayList<ThyroidMeasurement> thyroidMeasurements1 = new ArrayList<>();
-            thyroidMeasurements1.add(thyroidMeasurement1);
-            thyroidMeasurements1.add(thyroidMeasurement2);
-            thyroidMeasurements1.add(thyroidMeasurement5);
-            ArrayList<ThyroidMeasurement> thyroidMeasurements2 = new ArrayList<>();
-            ThyroidMeasurement thyroidMeasurement3 = new ThyroidMeasurement(date, 1.6f, 1, 3);
-            ThyroidMeasurement thyroidMeasurement4 = new ThyroidMeasurement(date2, 1.4f, 1, 3);
-            thyroidMeasurements2.add(thyroidMeasurement3);
-            thyroidMeasurements2.add(thyroidMeasurement4);
-            ArrayList<ThyroidMeasurement> thyroidMeasurements3 = new ArrayList<>();
-            thyroidMeasurements3.add(thyroidMeasurement1);
-            thyroidMeasurements3.add(thyroidMeasurement2);
-            thyroidMeasurements3.add(thyroidMeasurement5);
-            dataHolder.getThyroidData().add(new ThyroidElement("TSH", "µU/ml", thyroidMeasurements1));
-            dataHolder.getThyroidData().add(new ThyroidElement("fT3", "pg/ml", thyroidMeasurements2));
-            dataHolder.getThyroidData().add(new ThyroidElement("fT4", "ng/dl", thyroidMeasurements3));
-
-            // sample data for symptoms
-            Measurement symptomMeasurement1 = new Measurement(date, 2);
-            Measurement symptomMeasurement2 = new Measurement(date2, 3);
-            Measurement symptomMeasurement3 = new Measurement(date3, 3);
-            Measurement symptomMeasurement4 = new Measurement(date, 5);
-            Measurement symptomMeasurement5 = new Measurement(date2, 3);
-            Measurement symptomMeasurement6 = new Measurement(date3, 1);
-            ArrayList<Measurement> symptomMeasurements1 = new ArrayList<>();
-            symptomMeasurements1.add(symptomMeasurement1);
-            symptomMeasurements1.add(symptomMeasurement2);
-            symptomMeasurements1.add(symptomMeasurement3);
-            ArrayList<Measurement> symptomMeasurements2 = new ArrayList<>();
-            symptomMeasurements2.add(symptomMeasurement4);
-            symptomMeasurements2.add(symptomMeasurement5);
-            symptomMeasurements2.add(symptomMeasurement6);
-            ArrayList<Measurement> symptomMeasurements3 = new ArrayList<>();
-            symptomMeasurements3.add(symptomMeasurement4);
-            symptomMeasurements3.add(symptomMeasurement5);
-            symptomMeasurements3.add(symptomMeasurement6);
-            ArrayList<Measurement> symptomMeasurements4 = new ArrayList<>();
-            symptomMeasurements4.add(symptomMeasurement1);
-            symptomMeasurements4.add(symptomMeasurement2);
-            symptomMeasurements4.add(symptomMeasurement3);*/
 
             dataHolder.getSymptomData().add(new SymptomElement("Depression", new ArrayList<Measurement>()));
             dataHolder.getSymptomData().add(new SymptomElement("Erschöpfung", new ArrayList<Measurement>()));
@@ -179,30 +130,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             dataHolder.getSymptomData().add(new SymptomElement("verringertes Schwitzen", new ArrayList<Measurement>()));
             dataHolder.getSymptomData().add(new SymptomElement("Verstopfung", new ArrayList<Measurement>()));
             dataHolder.getSymptomData().add(new SymptomElement("zu starke Menstruation", new ArrayList<Measurement>()));
-            /*Measurement intakeMeasurement1 = new Measurement(date, 6);
-            Measurement intakeMeasurement2 = new Measurement(date2, 3);
-            Measurement intakeMeasurement3 = new Measurement(date3, 7);
-            Measurement intakeMeasurement4 = new Measurement(date, 1);
-            Measurement intakeMeasurement5 = new Measurement(date2, 2);
-            Measurement intakeMeasurement6 = new Measurement(date3, 10);
-
-            ArrayList<Measurement> intakeMeasurements1 = new ArrayList<>();
-            intakeMeasurements1.add(intakeMeasurement1);
-            intakeMeasurements1.add(intakeMeasurement2);
-            intakeMeasurements1.add(intakeMeasurement3);
-            ArrayList<Measurement> intakeMeasurements2 = new ArrayList<>();
-            intakeMeasurements2.add(intakeMeasurement4);
-            intakeMeasurements2.add(intakeMeasurement5);
-            intakeMeasurements2.add(intakeMeasurement6);
-            ArrayList<Measurement> intakeMeasurements3 = new ArrayList<>();
-            intakeMeasurements3.add(intakeMeasurement1);
-            intakeMeasurements3.add(intakeMeasurement2);
-            intakeMeasurements3.add(intakeMeasurement3);
-            dataHolder.getIntakeData().add(new IntakeElement("Magnesium", "g", intakeMeasurements2));
-            dataHolder.getIntakeData().add(new IntakeElement("Selen", "mg", intakeMeasurements1));
-            dataHolder.getIntakeData().add(new IntakeElement("Vitamin D", "mg", intakeMeasurements3));*/
             FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
-
             // Here we like to get the delay till 6 o'Clock, the time the user should record his symptoms
             Date currentDate = new Date();
             calendar.setTime(currentDate);
@@ -240,12 +168,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 updateDataAccordingToSelectedTimePeriod();
-
-                //viewPager.getAdapter().notifyDataSetChanged();
-                /*OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(NetworkWorker.class)
-                        .build();
-                WorkManager.getInstance(getApplicationContext())
-                        .enqueue(work);*/
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }

@@ -23,7 +23,7 @@ import com.example.hashimoto_app.ui.main.thyroid.ThyroidFragment;
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends SmartFragmentStatePagerAdapter
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter
 {
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
