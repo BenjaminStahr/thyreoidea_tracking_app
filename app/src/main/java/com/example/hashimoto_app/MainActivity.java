@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
                     // user can make entries between 6 and 11 o'Clock pm
-                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 17)
+                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 1)
                     {
                         openSymptomDialog();
                     }

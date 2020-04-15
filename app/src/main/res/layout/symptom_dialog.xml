@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="sehr schwach(1)"
+            android:text="nicht spürbar(0)"
             android:textAlignment="center" />
     </LinearLayout>
 </LinearLayout>

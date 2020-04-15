@@ -30,7 +30,7 @@ public class SymptomDialog extends AppCompatDialogFragment
     private Spinner dialogSpinner;
     private SymptomDialogListener listener;
     private MainActivity mainActivity;
-    private int intensity = 1;
+    private int intensity = 0;
 
     public SymptomDialog(MainActivity mainActivity)
     {
@@ -101,28 +101,28 @@ public class SymptomDialog extends AppCompatDialogFragment
                 boolean isChecked = checkedRadioButton.isChecked();
                 if (rb_0.isChecked())
                 {
-                    intensityIndicatorText.setText("sehr schwach(1)");
-                    intensity = 1;
+                    intensityIndicatorText.setText("nicht spürbar(0)");
+                    intensity = 0;
                 }
                 else if (rb_1.isChecked())
                 {
-                    intensityIndicatorText.setText("schwach(2)");
-                    intensity = 2;
+                    intensityIndicatorText.setText("schwach(1)");
+                    intensity = 1;
                 }
                 else if (rb_2.isChecked())
                 {
-                    intensityIndicatorText.setText("mäßig(3)");
-                    intensity = 3;
+                    intensityIndicatorText.setText("mäßig(2)");
+                    intensity = 2;
                 }
                 else if (rb_3.isChecked())
                 {
-                    intensityIndicatorText.setText("stark(4)");
-                    intensity = 4;
+                    intensityIndicatorText.setText("stark(3)");
+                    intensity = 3;
                 }
                 else if (rb_4.isChecked())
                 {
-                    intensityIndicatorText.setText("sehr stark(5)");
-                    intensity = 5;
+                    intensityIndicatorText.setText("sehr stark(4)");
+                    intensity = 4;
                 }
             }
         });

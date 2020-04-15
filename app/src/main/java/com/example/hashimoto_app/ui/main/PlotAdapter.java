@@ -112,12 +112,12 @@ public class PlotAdapter extends ArrayAdapter<String>
             // for making float values completely visible in the y-axis
             viewHolder.graphView.getGridLabelRenderer().setPadding(40);
             viewHolder.graphView.getGridLabelRenderer().setHumanRounding(false, true);
-            // regarding symptoms all views are scaled 1 to 5 on the y-axis
+            // regarding symptoms all views are scaled 0 to 4 on the y-axis
             if (isSymptomView)
             {
                viewHolder.graphView.getViewport().setYAxisBoundsManual(true);
-               viewHolder.graphView.getViewport().setMaxY(5);
-                viewHolder.graphView.getViewport().setMinY(1);
+               viewHolder.graphView.getViewport().setMaxY(4);
+                viewHolder.graphView.getViewport().setMinY(0);
             }
             viewHolder.graphView.getViewport().setXAxisBoundsManual(true);
             viewHolder.graphView.getViewport().setMaxX(new Date().getTime());
