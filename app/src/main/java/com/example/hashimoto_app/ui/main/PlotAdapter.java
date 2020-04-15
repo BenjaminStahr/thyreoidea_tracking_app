@@ -101,7 +101,6 @@ public class PlotAdapter extends ArrayAdapter<String>
                             SimpleDateFormat sdf = new SimpleDateFormat("MMM");
                             return sdf.format(new Date((long) value));
                         }
-
                     }
                     else
                     {

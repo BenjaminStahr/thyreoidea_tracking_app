@@ -60,7 +60,6 @@ public class IntakeDialog extends AppCompatDialogFragment
                         {
                             String registeredValue = registeredValueEditText.getText().toString();
                             String substance = dialogSpinner.getSelectedItem().toString();
-                            //String unit = unitTextView.getText().toString();
                             listener.applyRegisteredIntake(registeredValue, substance);
                         }
                     }
