@@ -63,7 +63,7 @@ public class IntakeFragment extends Fragment
             {
                 if (MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size() != 0) {
                     LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-                    final int iForListener = i;
+                    final int iForListener = intakeCounter;
                     series.setOnDataPointTapListener(new OnDataPointTapListener() {
                         @Override
                         public void onTap(Series series, DataPointInterface dataPoint) {
@@ -73,8 +73,8 @@ public class IntakeFragment extends Fragment
                         }
                     });
                     series.setDrawDataPoints(true);
-                    units[i] = MainActivity.getDataHolder().getIntakeData().get(i).getUnit();
-                    namesOfSubstances[i] = MainActivity.getDataHolder().getIntakeData().get(i).getNameOfSubstance();
+                    units[intakeCounter] = MainActivity.getDataHolder().getIntakeData().get(i).getUnit();
+                    namesOfSubstances[intakeCounter] = MainActivity.getDataHolder().getIntakeData().get(i).getNameOfSubstance();
                     for (int j = 0; j < MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().size(); j++) {
                         Date date = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getDate();
                         float amount = MainActivity.getDataHolder().getIntakeData().get(i).getMeasurements().get(j).getAmount();
@@ -98,7 +98,7 @@ public class IntakeFragment extends Fragment
                             }
                         }
                     }
-                    intakeCounter++;
+                    intakeCounter = intakeCounter + 1;
                     differentViews.add(series);
                 }
             }
