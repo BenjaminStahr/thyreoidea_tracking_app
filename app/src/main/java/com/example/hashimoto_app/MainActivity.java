@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             dataHolder.getSymptomData().add(new SymptomElement("zu starke Menstruation", new ArrayList<Measurement>()));
 
             dataHolder.getIntakeData().add(new IntakeElement("L-Thyroxin", "µg", new ArrayList<Measurement>()));
+            dataHolder.getIntakeData().add(new IntakeElement("Selen", "µg", new ArrayList<Measurement>()));
 
             FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
             // Here we like to get the delay till 6 o'Clock, the time the user should record his symptoms
