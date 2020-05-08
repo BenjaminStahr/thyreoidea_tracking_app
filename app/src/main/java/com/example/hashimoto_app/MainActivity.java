@@ -213,11 +213,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                 if(position == 0)
                 {
                     fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.thyroidBlue)));
-                    OneTimeWorkRequest networkRequest =
-                            new OneTimeWorkRequest.Builder(NetworkWorker.class)
-                                    .build();
-                    WorkManager.getInstance(getApplicationContext())
-                            .enqueue(networkRequest);
                 }
                 else if (position == 1)
                 {
@@ -231,14 +226,24 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onPageScrollStateChanged(int state) { }
         });
-        WorkManager.getInstance(getApplicationContext()).cancelAllWorkByTag("network");
+        /*WorkManager.getInstance(getApplicationContext()).cancelAllWorkByTag("network");
         PeriodicWorkRequest networkRequest =
                 new PeriodicWorkRequest.Builder(NetworkWorker.class, 1, TimeUnit.HOURS)
                         .addTag("network")
                         .build();
         WorkManager.getInstance(getApplicationContext())
-                .enqueue(networkRequest);
+                .enqueue(networkRequest);*/
     }
+    public void updateDataOnServer()
+    {
+        OneTimeWorkRequest networkRequest =
+                new OneTimeWorkRequest.Builder(NetworkWorker.class)
+                        .build();
+        WorkManager.getInstance(getApplicationContext())
+                .enqueue(networkRequest);
+
+    }
+
     public void openThyroidDialog()
     {
         ThyroidDialog thyroidDialog = new ThyroidDialog();
@@ -335,6 +340,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         }
         updateDataAccordingToSelectedTimePeriod();
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+        updateDataOnServer();
     }
     @Override
     public void applySymptomTexts(int registeredValue, String symptom)
@@ -349,6 +355,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         }
         updateDataAccordingToSelectedTimePeriod();
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+        updateDataOnServer();
     }
     @Override
     public void refreshSymptomList()
@@ -377,6 +384,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         }
         updateDataAccordingToSelectedTimePeriod();
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+        updateDataOnServer();
     }
     public static DataHolder getDataHolder()
     {
@@ -392,6 +400,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         LineGraphSeries lineGraphSeries = ((LineGraphSeries<DataPoint>)series);
         lineGraphSeries.resetData(getDataHolder().getThyroidDataPointsForSubstance(substance));
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+        updateDataOnServer();
     }
 
     @Override
@@ -400,6 +409,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         LineGraphSeries lineGraphSeries = ((LineGraphSeries<DataPoint>)series);
         lineGraphSeries.resetData(getDataHolder().getDataPointsForSymptom(symptom));
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+        updateDataOnServer();
     }
 
     @Override
@@ -408,5 +418,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         LineGraphSeries lineGraphSeries = ((LineGraphSeries<DataPoint>)series);
         lineGraphSeries.resetData(getDataHolder().getIntakeDataPointsForSubstance(substance));
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
+        updateDataOnServer();
     }
 }
