@@ -1,8 +1,6 @@
 package com.example.hashimoto_app;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
@@ -11,24 +9,15 @@ import androidx.work.WorkerParameters;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.security.cert.PKIXParameters;
-import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -57,17 +46,10 @@ public class NetworkWorker extends Worker
             @Override
             protected String doInBackground(Void... voids)
             {
-                String query_url = "https://amt-app-studien.virt.uni-oldenburg.de:8443";
+                String query_url = "https://amt-app-studien.virt.uni-oldenburg.de:8443/1/thyreodata";
                 try
                 {
-                    // Load CAs from an InputStream
-                    // (could be from a resource or ByteArrayInputStream or ...)
                     CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                    // From https://www.washington.edu/itconnect/security/ca/load-der.crt
-                    /*InputStream caInput = getResources().openRawResource(
-                            getResources().getIdentifier("FILENAME_WITHOUT_EXTENSION",
-                                    "raw", getPackageName()));
-                    //Resources.getSystem().getAssets().open("certificate.der");*/
                     String caString = "-----BEGIN CERTIFICATE-----\n" +
                             "MIIFgjCCBGqgAwIBAgISBGjX+Dc23NluUCbjyVh1ZiM2MA0GCSqGSIb3DQEBCwUA\n" +
                             "MEoxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MSMwIQYDVQQD\n" +

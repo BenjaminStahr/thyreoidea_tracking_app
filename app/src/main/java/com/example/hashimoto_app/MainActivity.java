@@ -2,10 +2,8 @@ package com.example.hashimoto_app;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import com.example.hashimoto_app.backend.DataHolder;
 import com.example.hashimoto_app.backend.FileManager;
@@ -30,7 +28,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
 
 import android.view.View;
 import android.widget.AdapterView;
@@ -179,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
                     // user can make entries between 6 and 11 o'Clock pm
-                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 1)
+                    if(calendar.get(Calendar.HOUR_OF_DAY) >= 17)
                     {
                         openSymptomDialog();
                     }
@@ -234,9 +231,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onPageScrollStateChanged(int state) { }
         });
-
+        WorkManager.getInstance(getApplicationContext()).cancelAllWorkByTag("network");
         PeriodicWorkRequest networkRequest =
-                new PeriodicWorkRequest.Builder(NetworkWorker.class, 5, TimeUnit.HOURS)
+                new PeriodicWorkRequest.Builder(NetworkWorker.class, 1, TimeUnit.HOURS)
+                        .addTag("network")
                         .build();
         WorkManager.getInstance(getApplicationContext())
                 .enqueue(networkRequest);
@@ -286,7 +284,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             sectionsPagerAdapter.adjustDataToTimePeriod(getString(R.string.period_year));
             actualPeriod = getString(R.string.period_year);
         }
-        //sectionsPagerAdapter.updateThyroidFragment(this);
     }
 
     @Override

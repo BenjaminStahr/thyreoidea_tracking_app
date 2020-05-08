@@ -131,7 +131,6 @@ public class ThyroidFragment extends Fragment
                 differentViews.add(series);
                 thyroidCounter++;
             }
-
         }
         return new Object[]{differentViews, units,namesOfSubstances};
     }
