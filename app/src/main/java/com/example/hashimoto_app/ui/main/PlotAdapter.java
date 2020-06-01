@@ -58,91 +58,85 @@ public class PlotAdapter extends ArrayAdapter<String>
 
     @NonNull
     @Override
-    //TODO Here we use the view holder pattern
-    // actually we don't use it because the use produces errors when adding data
     public View getView(int position, View convertView, ViewGroup parent)
     {
         ViewHolder viewHolder = new ViewHolder();
-        //if (convertView == null)
+        LayoutInflater inflater = (LayoutInflater) context.
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = inflater.inflate(R.layout.graph_item_plot, parent, false);
+        viewHolder.graphView = (GraphView) convertView.findViewById(R.id.graph);
+        viewHolder.graphView.setOnClickListener(new View.OnClickListener()
         {
-            LayoutInflater inflater = (LayoutInflater) context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.graph_item_plot, parent, false);
-            viewHolder.graphView = (GraphView) convertView.findViewById(R.id.graph);
-            viewHolder.graphView.setOnClickListener(new View.OnClickListener()
+            @Override
+            public void onClick(View v)
             {
-                @Override
-                public void onClick(View v)
-                {
-                    System.out.println("clicked Graph");
-                }
-            });
-            viewHolder.nameOfSubstanceView = (TextView) convertView.findViewById(R.id.substanceLabel);
-            viewHolder.unitView = (TextView) convertView.findViewById(R.id.unitLabel);
-            viewHolder.graphView.getGridLabelRenderer().setLabelFormatter((new DefaultLabelFormatter()
+                System.out.println("clicked Graph");
+            }
+        });
+        viewHolder.nameOfSubstanceView = (TextView) convertView.findViewById(R.id.substanceLabel);
+        viewHolder.unitView = (TextView) convertView.findViewById(R.id.unitLabel);
+        viewHolder.graphView.getGridLabelRenderer().setLabelFormatter((new DefaultLabelFormatter()
+        {
+            @Override
+            public String formatLabel(double value, boolean isValueX)
             {
-                @Override
-                public String formatLabel(double value, boolean isValueX)
+                if(isValueX)
                 {
-                    if(isValueX)
+                    if(period.equals(context.getString(R.string.period_week)))
                     {
-                        if(period.equals(context.getString(R.string.period_week)))
-                        {
-                            SimpleDateFormat sdf = new SimpleDateFormat("EEE");
-                            return sdf.format(new Date((long) value));
-                        }
-                        else if (period.equals(context.getString(R.string.period_month)))
-                        {
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM");
-                            return sdf.format(new Date((long) value));
-                        }
-                        else
-                        {
-                            SimpleDateFormat sdf = new SimpleDateFormat("MMM");
-                            return sdf.format(new Date((long) value));
-                        }
+                        SimpleDateFormat sdf = new SimpleDateFormat("EEE");
+                        return sdf.format(new Date((long) value));
+                    }
+                    else if (period.equals(context.getString(R.string.period_month)))
+                    {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM");
+                        return sdf.format(new Date((long) value));
                     }
                     else
                     {
-                        return super.formatLabel(value, isValueX);
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMM");
+                        return sdf.format(new Date((long) value));
                     }
                 }
-            }));
-            // for making float values completely visible in the y-axis
-            viewHolder.graphView.getGridLabelRenderer().setPadding(40);
-            viewHolder.graphView.getGridLabelRenderer().setHumanRounding(false, true);
-            // regarding symptoms all views are scaled 0 to 4 on the y-axis
-            if (isSymptomView)
-            {
-               viewHolder.graphView.getViewport().setYAxisBoundsManual(true);
-               viewHolder.graphView.getViewport().setMaxY(4);
-                viewHolder.graphView.getViewport().setMinY(0);
+                else
+                {
+                    return super.formatLabel(value, isValueX);
+                }
             }
-            viewHolder.graphView.getViewport().setXAxisBoundsManual(true);
-            viewHolder.graphView.getViewport().setMaxX(new Date().getTime());
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
-            // getting the right lower border for the graph
-            if(period.equals(context.getString(R.string.period_week)))
-            {
-                cal.add(Calendar.DATE, -7);
-
-            }
-            else if(period.equals(context.getString(R.string.period_month)))
-            {
-                cal.add(Calendar.DATE, -30);
-            }
-            else
-            {
-                cal.add(Calendar.DATE, -365);
-            }
-            viewHolder.graphView.getViewport().setMinX(cal.getTime().getTime());
-            convertView.setTag(viewHolder);
-        }
-        //else
+        }));
+        // for making float values completely visible in the y-axis
+        viewHolder.graphView.getGridLabelRenderer().setPadding(40);
+        viewHolder.graphView.getGridLabelRenderer().setHumanRounding(false, true);
+        // regarding symptoms all views are scaled 0 to 4 on the y-axis
+        if (isSymptomView)
         {
-            viewHolder = (ViewHolder) convertView.getTag();
+           viewHolder.graphView.getViewport().setYAxisBoundsManual(true);
+           viewHolder.graphView.getViewport().setMaxY(4);
+            viewHolder.graphView.getViewport().setMinY(0);
         }
+        viewHolder.graphView.getViewport().setXAxisBoundsManual(true);
+        viewHolder.graphView.getViewport().setMaxX(new Date().getTime());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        // getting the right lower border for the graph
+        if(period.equals(context.getString(R.string.period_week)))
+        {
+            cal.add(Calendar.DATE, -7);
+
+        }
+        else if(period.equals(context.getString(R.string.period_month)))
+        {
+            cal.add(Calendar.DATE, -30);
+        }
+        else
+        {
+            cal.add(Calendar.DATE, -365);
+        }
+        viewHolder.graphView.getViewport().setMinX(cal.getTime().getTime());
+        convertView.setTag(viewHolder);
+
+        viewHolder = (ViewHolder) convertView.getTag();
+
 
 
         viewHolder.graphView.addSeries(data.get(position));

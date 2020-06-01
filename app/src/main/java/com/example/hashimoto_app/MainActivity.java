@@ -226,13 +226,6 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             @Override
             public void onPageScrollStateChanged(int state) { }
         });
-        /*WorkManager.getInstance(getApplicationContext()).cancelAllWorkByTag("network");
-        PeriodicWorkRequest networkRequest =
-                new PeriodicWorkRequest.Builder(NetworkWorker.class, 1, TimeUnit.HOURS)
-                        .addTag("network")
-                        .build();
-        WorkManager.getInstance(getApplicationContext())
-                .enqueue(networkRequest);*/
     }
     public void updateDataOnServer()
     {

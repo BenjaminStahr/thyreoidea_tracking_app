@@ -20,8 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.hashimoto_app.R;
 
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
 import java.util.Date;
 

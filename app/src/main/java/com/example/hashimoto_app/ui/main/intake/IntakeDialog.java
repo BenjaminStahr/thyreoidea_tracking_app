@@ -129,15 +129,6 @@ public class IntakeDialog extends AppCompatDialogFragment
                 mainActivity.openAddSupplementDialog();
             }
         });
-        /*ImageView addSupplementImageView = view.findViewById(R.id.add_intake_image);
-        addSupplementImageView.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                mainActivity.openAddSupplementDialog();
-            }
-        });*/
         return builder.create();
     }
 

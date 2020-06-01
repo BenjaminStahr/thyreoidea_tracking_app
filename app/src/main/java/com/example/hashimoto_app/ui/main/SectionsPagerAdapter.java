@@ -52,7 +52,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter
         {
             return intakeFragment;
         }
-
     }
 
     @Nullable
