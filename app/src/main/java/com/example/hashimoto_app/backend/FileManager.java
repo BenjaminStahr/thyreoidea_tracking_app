@@ -11,6 +11,12 @@ import java.nio.charset.StandardCharsets;
 
 public class FileManager
 {
+    /**
+     * This method saves a new version of the user data to the memory
+     * @param path
+     * @param content
+     * @param context
+     */
     public static void saveFile(String path, String content ,Context context)
     {
         try (FileOutputStream fos = context.openFileOutput(path, Context.MODE_PRIVATE))
@@ -27,6 +33,11 @@ public class FileManager
         }
     }
 
+    /**
+     * @param path
+     * @param context
+     * @return returns the user data from the memory as string
+     */
     public static String getFileAsString(String path, Context context)
     {
         FileInputStream fis = null;

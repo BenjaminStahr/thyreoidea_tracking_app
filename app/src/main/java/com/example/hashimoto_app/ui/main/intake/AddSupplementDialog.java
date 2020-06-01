@@ -17,12 +17,20 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
 
+/**
+ * This class represents a dialog, in which the user is able to add a new supplement to the inner data structure
+ */
 public class AddSupplementDialog extends AppCompatDialogFragment
 {
     private AddSupplementDialogListener listener;
     private EditText supplementEditText;
     private Spinner supplementUnitSpinner;
 
+    /**
+     *
+     * @param savedInstanceState
+     * @return returns a instance of this dialog, its a android way of initializing things
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -54,6 +62,9 @@ public class AddSupplementDialog extends AppCompatDialogFragment
         return builder.create();
     }
     @Override
+    /**
+     * This method attaches this dialog to the overall application context
+     */
     public void onAttach(@NonNull Context context)
     {
         super.onAttach(context);

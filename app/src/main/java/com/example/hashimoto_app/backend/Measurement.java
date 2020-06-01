@@ -2,6 +2,9 @@ package com.example.hashimoto_app.backend;
 
 import java.util.Date;
 
+/**
+ * This class represents a measurement for a symptom or a supplement
+ */
 public class Measurement
 {
     private Date date;

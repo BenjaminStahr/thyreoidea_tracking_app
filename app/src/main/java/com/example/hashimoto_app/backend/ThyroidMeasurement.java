@@ -1,10 +1,14 @@
 package com.example.hashimoto_app.backend;
 import java.util.Date;
 
+/**
+ * This class represents a measurement for a thyroid value
+ */
 public class ThyroidMeasurement
 {
     private Date date;
     private float amount;
+    // upperBound and lowerBound never get used, because the application cant record relative thyroid values, what would have been nice
     private float upperBound;
     private float lowerBound;
 

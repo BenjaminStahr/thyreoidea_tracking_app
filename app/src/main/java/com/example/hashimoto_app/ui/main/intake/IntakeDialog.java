@@ -23,6 +23,9 @@ import com.example.hashimoto_app.R;
 
 import java.util.List;
 
+/**
+ * This class implements the dialog for adding a new measurement for a supplement
+ */
 public class IntakeDialog extends AppCompatDialogFragment
 {
     private Spinner dialogSpinner;
@@ -36,6 +39,11 @@ public class IntakeDialog extends AppCompatDialogFragment
         this.mainActivity = mainActivity;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     * @return returns a instance of the dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -132,6 +140,10 @@ public class IntakeDialog extends AppCompatDialogFragment
         return builder.create();
     }
 
+    /**
+     *
+     * @return the plausibility of the entered value as bool
+     */
     private boolean checkAmountPlausible()
     {
         String unit = unitTextView.getText().toString();
@@ -152,6 +164,10 @@ public class IntakeDialog extends AppCompatDialogFragment
         return true;
     }
 
+    /**
+     * Attaches the dialog to the context
+     * @param context
+     */
     @Override
     public void onAttach(@NonNull Context context)
     {
@@ -167,6 +183,9 @@ public class IntakeDialog extends AppCompatDialogFragment
 
     }
 
+    /**
+     * refreshes the items of the spinner in the dialog in case user has added a new supplement
+     */
     public void setSpinnerItems()
     {
         final List<String> list = MainActivity.getDataHolder().getSupplements();

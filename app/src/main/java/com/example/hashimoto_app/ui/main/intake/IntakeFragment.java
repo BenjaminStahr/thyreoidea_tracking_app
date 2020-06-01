@@ -24,6 +24,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class gives an overview to the user as a page with some graphs for all supplements
+ */
 public class IntakeFragment extends Fragment
 {
     Context context;
@@ -35,6 +38,13 @@ public class IntakeFragment extends Fragment
         period = context.getString(R.string.period_week);
     }
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return returns a instance of the fragment
+     */
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState)
@@ -44,11 +54,21 @@ public class IntakeFragment extends Fragment
                 container, false);
     }
 
+    /**
+     * This method fills the fragment with data for the representations
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         setAdapterData(period);
     }
+
+    /**
+     * This method actually fills the fragment.
+     * @param period
+     */
     public void setAdapterData(String period)
     {
         this.period = period;

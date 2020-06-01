@@ -8,6 +8,10 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class holds the backend of the application. It offers the used data structure and all methods
+ * to manipulate this data structure
+ */
 public class DataHolder
 {
     private ArrayList<ThyroidElement> thyroidData;
@@ -15,6 +19,11 @@ public class DataHolder
     private ArrayList<IntakeElement> intakeData;
     private final long USER_ID;
 
+    /**
+     * the user id is a identifer for every user of the app
+     * @param USER_ID
+     *
+     */
     public DataHolder(long USER_ID)
     {
         this.USER_ID = USER_ID;
@@ -22,6 +31,10 @@ public class DataHolder
         symptomData = new ArrayList<>();
         intakeData = new ArrayList<>();
     }
+
+    /**
+     * @return returns a list with all saved symptoms of the Hashimoto-Thyreoiditis
+     */
     public ArrayList<String> getSymptoms()
     {
         ArrayList<String> symptoms = new ArrayList<>();
@@ -31,6 +44,11 @@ public class DataHolder
         }
         return symptoms;
     }
+
+    /**
+     *
+     * @return returns a list with all saved supplements
+     */
     public ArrayList<String> getSupplements()
     {
         ArrayList<String> supplements = new ArrayList<>();
@@ -40,6 +58,12 @@ public class DataHolder
         }
         return supplements;
     }
+
+    /**
+     *
+     * @param substance
+     * @return returns the unit of the specified supplement
+     */
     public String getUnitOfSupplement(String substance)
     {
         for (int i = 0; i < intakeData.size(); i++)
@@ -52,6 +76,10 @@ public class DataHolder
         return "mg";
     }
 
+    /**
+     *
+     * @return returns a random symptom, which was not updated for one day
+     */
     public String getSymptomNotUpdatedForOneDay()
     {
         ArrayList<String> possibleSymptoms = new ArrayList<>();
@@ -79,6 +107,11 @@ public class DataHolder
             return null;
         }
     }
+
+    /**
+     *
+     * @return returns the number of all symptoms, which have at least one entry
+     */
     public int getSymptomsWithDataPointsSize()
     {
         int counter = 0;
@@ -91,6 +124,11 @@ public class DataHolder
         }
         return counter;
     }
+
+    /**
+     *
+     * @return returns the number of thyroid values, which have at least one data point
+     */
     public int getThyroidWithDataPointsSize()
     {
         int counter = 0;
@@ -103,6 +141,11 @@ public class DataHolder
         }
         return counter;
     }
+
+    /**
+     *
+     * @return returns the number of supplements, which have at least one recorded data point
+     */
     public int getIntakeWithDataPointsSize()
     {
         int counter = 0;
@@ -116,6 +159,11 @@ public class DataHolder
         return counter;
     }
 
+    /**
+     *
+     * @param symptom
+     * @return returns the date where a specified symptom got updated the last time
+     */
     public Date getLastUpdateDateOfSymptom(String symptom)
     {
         // last date is initialized in the past so that a new entry can get made if there is none
@@ -135,16 +183,32 @@ public class DataHolder
         return lastUpdate;
     }
 
+    /**
+     * This method adds a symptom to the internal list of symptoms
+     * @param symptomName
+     */
     public void addSymptom(String symptomName)
     {
         SymptomElement element = new SymptomElement(symptomName, new ArrayList<Measurement>());
         symptomData.add(element);
     }
+
+    /**
+     * This method adds a symptom to the internal list of supplements
+     * @param supplementName
+     * @param unit
+     */
     public void addSupplement(String supplementName, String unit)
     {
         IntakeElement element = new IntakeElement(supplementName, unit, new ArrayList<Measurement>());
         intakeData.add(element);
     }
+
+    /**
+     * This method deletes a measurement for a specified thyroid value
+     * @param substance
+     * @param moment
+     */
     public void deleteThyroidDataPoint(String substance, double moment)
     {
         for (int i = 0; i < thyroidData.size(); i++)
@@ -163,6 +227,11 @@ public class DataHolder
         }
     }
 
+    /**
+     * This method deletes a data point of a specified symptom
+     * @param symptom
+     * @param moment
+     */
     public void deleteSymptomDataPoint(String symptom, double moment)
     {
         for (int i = 0; i < symptomData.size(); i++)
@@ -180,6 +249,12 @@ public class DataHolder
             }
         }
     }
+
+    /**
+     * This method deletes a data point for a specified supplement
+     * @param substance
+     * @param moment
+     */
     public void deleteIntakeDataPoint(String substance, double moment)
     {
         for (int i = 0; i < intakeData.size(); i++)
@@ -198,6 +273,10 @@ public class DataHolder
         }
     }
 
+    /**
+     * @param substance
+     * @return returns all measurements for a specified thyfoid value
+     */
     public DataPoint[] getThyroidDataPointsForSubstance(String substance)
     {
         DataPoint[] result;
@@ -219,6 +298,11 @@ public class DataHolder
         return null;
     }
 
+    /**
+     *
+     * @param symptom
+     * @return returns all data points for a specified symptom
+     */
     public DataPoint[] getDataPointsForSymptom(String symptom)
     {
         DataPoint[] result;
@@ -239,6 +323,12 @@ public class DataHolder
         }
         return null;
     }
+
+    /**
+     *
+     * @param substance
+     * @return returns all data points for a specified supplement
+     */
     public DataPoint[] getIntakeDataPointsForSubstance(String substance)
     {
         DataPoint[] result;

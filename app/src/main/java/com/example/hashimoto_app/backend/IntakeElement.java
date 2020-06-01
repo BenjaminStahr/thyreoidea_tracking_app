@@ -2,6 +2,9 @@ package com.example.hashimoto_app.backend;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a substance, which the user supplements
+ */
 public class IntakeElement
 {
     private String nameOfSubstance;

@@ -2,6 +2,9 @@ package com.example.hashimoto_app.backend;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a symptom
+ */
 public class SymptomElement
 {
     private String symptomName;

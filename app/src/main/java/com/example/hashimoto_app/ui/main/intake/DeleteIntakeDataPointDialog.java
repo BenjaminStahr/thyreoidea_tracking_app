@@ -16,6 +16,9 @@ import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
 import com.jjoe64.graphview.series.Series;
 
+/**
+ * This class implements the dialog for deleteing a data point for one supplement
+ */
 public class DeleteIntakeDataPointDialog extends AppCompatDialogFragment
 {
     private DeleteIntakeDataPointDialog.DeleteIntakeDataPointDialogListener listener;
@@ -29,6 +32,11 @@ public class DeleteIntakeDataPointDialog extends AppCompatDialogFragment
         this.dateOfDataPoint = dateOfDataPoint;
         this.series = series;
     }
+
+    /**
+     * @param savedInstanceState
+     * @return returns a instance of this dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -54,6 +62,11 @@ public class DeleteIntakeDataPointDialog extends AppCompatDialogFragment
                 });
         return builder.create();
     }
+
+    /**
+     * This method attaches the dialog to the application context
+     * @param context
+     */
     @Override
     public void onAttach(@NonNull Context context)
     {

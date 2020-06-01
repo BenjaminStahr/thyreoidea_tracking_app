@@ -2,6 +2,9 @@ package com.example.hashimoto_app.backend;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a thyroid value
+ */
 public class ThyroidElement
 {
     private String nameOfSubstance;
