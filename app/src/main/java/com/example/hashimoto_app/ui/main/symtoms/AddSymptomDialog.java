@@ -14,11 +14,20 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
+
+/**
+ *This class task is to generate a dialog add a symptom to the general list of symptoms
+ */
 public class AddSymptomDialog extends AppCompatDialogFragment
 {
     private AddSymptomDialogListener listener;
     private EditText symptomEditText;
 
+    /**
+     *
+     * @param savedInstanceState
+     * @return returns an instance of the dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -48,6 +57,11 @@ public class AddSymptomDialog extends AppCompatDialogFragment
         symptomEditText = view.findViewById(R.id.symptom_name_edit_text);
         return builder.create();
     }
+
+    /**
+     * This method attaches the dialog to the overall context
+     * @param context
+     */
     @Override
     public void onAttach(@NonNull Context context)
     {

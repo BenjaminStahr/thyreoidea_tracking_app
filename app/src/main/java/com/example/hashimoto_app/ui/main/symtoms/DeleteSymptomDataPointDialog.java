@@ -16,6 +16,9 @@ import com.example.hashimoto_app.MainActivity;
 import com.example.hashimoto_app.R;
 import com.jjoe64.graphview.series.Series;
 
+/**
+ * This dialogs task is it to manage the action of deleteing a data point for one symptom
+ */
 public class DeleteSymptomDataPointDialog extends AppCompatDialogFragment
 {
     private DeleteSymptomDataPointDialogListener listener;
@@ -29,6 +32,12 @@ public class DeleteSymptomDataPointDialog extends AppCompatDialogFragment
         this.dateOfDataPoint = dateOfDataPoint;
         this.series = series;
     }
+
+    /**
+     *
+     * @param savedInstanceState
+     * @return returns an instance of this dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -54,6 +63,11 @@ public class DeleteSymptomDataPointDialog extends AppCompatDialogFragment
                 });
         return builder.create();
     }
+
+    /**
+     * This method attaches this dialog to the overall context
+     * @param context
+     */
     @Override
     public void onAttach(@NonNull Context context)
     {

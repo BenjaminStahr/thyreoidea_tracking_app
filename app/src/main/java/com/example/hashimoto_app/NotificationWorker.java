@@ -20,6 +20,9 @@ import com.google.gson.Gson;
 
 import java.util.Objects;
 
+/**
+ * This class generates notifications for the user if he did not recorded symptoms within a time frame of 24 hours
+ */
 public class NotificationWorker extends Worker
 {
     // the channel id of the notification channel
@@ -33,6 +36,10 @@ public class NotificationWorker extends Worker
         notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
     }
 
+    /**
+     *
+     * @return returns if a notification got send
+     */
     @NonNull
     @Override
     public Result doWork()
@@ -41,6 +48,10 @@ public class NotificationWorker extends Worker
                 .getSymptomNotUpdatedForOneDay());
         return Result.success();
     }
+
+    /**
+     * This method generates a notification channel on which the app can send notifications to the user
+     */
     private void createNotificationChannel()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -56,6 +67,10 @@ public class NotificationWorker extends Worker
         }
     }
 
+    /**
+     * This method sends a notification on the generated notification channel
+     * @param symptom
+     */
     public void sendOnChannel(String symptom)
     {
         if(symptom != null)

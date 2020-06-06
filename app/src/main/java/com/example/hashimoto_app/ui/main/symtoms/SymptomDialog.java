@@ -25,6 +25,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class function is to generate a dialog in which a user can record one occurred symptom
+ */
 public class SymptomDialog extends AppCompatDialogFragment
 {
     private Spinner dialogSpinner;
@@ -37,6 +40,11 @@ public class SymptomDialog extends AppCompatDialogFragment
         this.mainActivity = mainActivity;
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     * @return returns an instance of this dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -142,6 +150,11 @@ public class SymptomDialog extends AppCompatDialogFragment
 
         return builder.create();
     }
+
+    /**
+     * This method attaches this dialog to the overall context.
+     * @param context
+     */
     @Override
     public void onAttach(@NonNull Context context)
     {
@@ -156,6 +169,9 @@ public class SymptomDialog extends AppCompatDialogFragment
         }
     }
 
+    /**
+     * This method updated the items in the spinner of this dialog if the user generated a new symptom
+     */
     public void setSpinnerItems()
     {
         final List<String> list = MainActivity.getDataHolder().getSymptoms();

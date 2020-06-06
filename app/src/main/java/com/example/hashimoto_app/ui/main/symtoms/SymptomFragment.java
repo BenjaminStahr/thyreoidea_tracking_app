@@ -24,6 +24,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class if for showing the generated graphs on the base of the underlying database for the symptoms
+ */
 public class SymptomFragment extends Fragment
 {
     private final Context context;
@@ -35,6 +38,13 @@ public class SymptomFragment extends Fragment
         period = context.getString(R.string.period_week);
     }
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return returns an instance of this fragment
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -43,11 +53,21 @@ public class SymptomFragment extends Fragment
                 container, false);
     }
 
+    /**
+     * This method fills this fragment with data, after it gets generated
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
         setAdapterData(period);
     }
+
+    /**
+     * This method sets the actual data
+     * @param period
+     */
     public void setAdapterData(String period)
     {
         this.period = period;
@@ -112,8 +132,6 @@ public class SymptomFragment extends Fragment
                     differentViews.add(series);
                     symptomIndex++;
                 }
-
-
             }
             PlotAdapter adapter = new PlotAdapter(context, differentViews, units, namesOfSymptoms, period, true);
             if (symptomListView != null)

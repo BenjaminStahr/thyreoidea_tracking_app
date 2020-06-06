@@ -24,6 +24,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
+/**
+ * This class is for sending the data inside of the app to the configured server
+ */
 public class NetworkWorker extends Worker
 {
     public NetworkWorker(@NonNull Context context, @NonNull WorkerParameters workerParams)
@@ -39,6 +42,9 @@ public class NetworkWorker extends Worker
         return Result.success();
     }
 
+    /**
+     * This method sends the actual data of the app to the server via POST
+     */
     public static void updateServerData()
     {
         new AsyncTask<Void, Void, String>()
@@ -141,6 +147,11 @@ public class NetworkWorker extends Worker
             }
         }.execute();
     }
+
+    /**
+     *
+     * @return returns all data of the app as json string
+     */
     private static String getUserDataAsJson()
     {
         JsonObject sendData = new JsonObject();

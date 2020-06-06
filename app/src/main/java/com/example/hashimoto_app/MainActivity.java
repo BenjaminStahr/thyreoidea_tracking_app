@@ -45,6 +45,9 @@ import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class is the controller of the app. It manages the inital stuff, when starting the app and processing the results of the dialogs.
+ */
 public class MainActivity extends AppCompatActivity implements ThyroidDialog.ThyroidDialogListener,
         SymptomDialog.SymptomDialogListener, AddSymptomDialog.AddSymptomDialogListener, IntakeDialog.IntakeDialogListener,
         AddSupplementDialog.AddSupplementDialogListener, DeleteThyroidDataPointDialog.DeleteThyroidDataPointDialogListener,
@@ -61,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
     IntakeDialog intakeDialog;
     public static String actualPeriod = "Woche";
 
+    /**
+     * This method generates the only activity of this app
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -227,6 +234,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
             public void onPageScrollStateChanged(int state) { }
         });
     }
+
+    /**
+     * This method updates the data of the user on the server side if the user recorded anything new
+     */
     public void updateDataOnServer()
     {
         OneTimeWorkRequest networkRequest =
@@ -237,34 +248,54 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
 
     }
 
+    /**
+     * This method opens the dialog for recording an occurred thyroid value
+     */
     public void openThyroidDialog()
     {
         ThyroidDialog thyroidDialog = new ThyroidDialog();
         thyroidDialog.show(getSupportFragmentManager(), "thyroid dialog");
     }
 
+    /**
+     * This method opens the dialog for recording an occurred symptom of Hashimoto-Thyreoiditis
+     */
     public void openSymptomDialog()
     {
         symptomDialog = new SymptomDialog(this);
         symptomDialog.show(getSupportFragmentManager(), "symptom dialog");
     }
 
+    /**
+     * This method opens a dialog for recording a consumed supplement
+     */
     public void openIntakeDialog()
     {
         intakeDialog = new IntakeDialog(this);
         intakeDialog.show(getSupportFragmentManager(), "intake dialog");
     }
+
+    /**
+     * This method opens the dialog for adding a new symptom to the underlying data structure
+     */
     public void openAddSymptomDialog()
     {
         AddSymptomDialog addSymptomDialog = new AddSymptomDialog();
         addSymptomDialog.show(getSupportFragmentManager(), "add symptom dialog");
     }
+
+    /**
+     * This method opens a dialog for adding a new supplement to the underlying data structure
+     */
     public void openAddSupplementDialog()
     {
         AddSupplementDialog addSupplementDialog = new AddSupplementDialog();
         addSupplementDialog.show(getSupportFragmentManager(), "add supplement dialog");
     }
 
+    /**
+     * This method updats the graphs of the fragments according to the selected time frame
+     */
     public void updateDataAccordingToSelectedTimePeriod()
     {
         if(periodSpinner.getSelectedItemPosition() == 0)
@@ -284,6 +315,13 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         }
     }
 
+    /**
+     * This method processes the result of a recorded thyroid value
+     * @param registeredValue
+     * @param substance
+     * @param unit
+     * @param selectedDate
+     */
     @Override
     public void applyThyroidTexts(String registeredValue, String substance, String unit, Date selectedDate)
     {
@@ -335,6 +373,12 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
         updateDataOnServer();
     }
+
+    /**
+     * This method processes the result of a recorded symptom value
+     * @param registeredValue
+     * @param symptom
+     */
     @Override
     public void applySymptomTexts(int registeredValue, String symptom)
     {
@@ -350,6 +394,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
         updateDataOnServer();
     }
+
+    /**
+     * This method processes a added symptom for the other parts of the app
+     */
     @Override
     public void refreshSymptomList()
     {
@@ -357,6 +405,10 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         updateDataAccordingToSelectedTimePeriod();
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
+
+    /**
+     * This method processes a added supplement for the other parts of the app
+     */
     @Override
     public void refreshSupplementList()
     {
@@ -364,6 +416,12 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         updateDataAccordingToSelectedTimePeriod();
         FileManager.saveFile("userData", new Gson().toJson(dataHolder), getApplicationContext());
     }
+
+    /**
+     * This method processes a recorded intake of a supplement
+     * @param registeredValue
+     * @param substance
+     */
     @Override
     public void applyRegisteredIntake(String registeredValue, String substance)
     {
@@ -384,8 +442,11 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         return dataHolder;
     }
 
-    /*
-    This method overwrites the interface from the DeleteThyroidDataPointDialog and processes its data
+    /**
+     * This method refreshes the data of a thyroid graph after deleting a data point
+     * @param series
+     * @param dataPoint
+     * @param substance
      */
     @Override
     public void refreshThyroidGraph(Series series, double dataPoint, String substance)
@@ -396,6 +457,12 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         updateDataOnServer();
     }
 
+    /**
+     * This method refreshes a symptom graph after deleting a data point on it
+     * @param series
+     * @param dataPoint
+     * @param symptom
+     */
     @Override
     public void refreshSymptomGraph(Series series, double dataPoint, String symptom)
     {
@@ -405,6 +472,12 @@ public class MainActivity extends AppCompatActivity implements ThyroidDialog.Thy
         updateDataOnServer();
     }
 
+    /**
+     * This method refreshes a graph for supplement after deleting a data point on it
+     * @param series
+     * @param dataPoint
+     * @param substance
+     */
     @Override
     public void refreshIntakeGraph(Series series, double dataPoint, String substance)
     {

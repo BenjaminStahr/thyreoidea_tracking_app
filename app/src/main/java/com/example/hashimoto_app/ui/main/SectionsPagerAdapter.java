@@ -15,7 +15,7 @@ import com.example.hashimoto_app.ui.main.thyroid.ThyroidFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
+ * one of the sections/tabs/pages. It organizes the different pages of the app
  */
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter
 {
@@ -36,6 +36,11 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter
         intakeFragment = new IntakeFragment(context);
     }
 
+    /**
+     *
+     * @param position
+     * @return returns the different items by index in this sectionspageradapter
+     */
     @Override
     public Fragment getItem(int position)
     {
@@ -54,22 +59,43 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter
         }
     }
 
+    /**
+     *
+     * @param position
+     * @return returns the name of a page
+     */
     @Nullable
     @Override
     public CharSequence getPageTitle(int position)
     {
         return mContext.getResources().getString(TAB_TITLES[position]);
     }
+
+    /**
+     *
+     * @param object
+     * @return gets the index of an fragment, but is not implemented
+     */
     @Override
-    public int getItemPosition(Object object) {
+    public int getItemPosition(Object object)
+    {
         return POSITION_NONE;
     }
 
+    /**
+     *
+     * @return returns the number of pages in this adapter, in our case three
+     */
     @Override
     public int getCount()
     {
         return 3;
     }
+
+    /**
+     * This method updates the fragments, if the user adjusted the time frame, he wants to see
+     * @param period
+     */
     public void adjustDataToTimePeriod(String period)
     {
         thyroidFragment.setAdapterData(period);

@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * This class generates a graph for every symptom, supplement of thyroid value on the base of stored data
+ */
 public class PlotAdapter extends ArrayAdapter<String>
 {
     private ArrayList<LineGraphSeries> data;
@@ -56,6 +59,13 @@ public class PlotAdapter extends ArrayAdapter<String>
         return data.size();
     }
 
+    /**
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return returns a graph of the specified data
+     */
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
@@ -144,6 +154,10 @@ public class PlotAdapter extends ArrayAdapter<String>
         viewHolder.unitView.setText(unit[position]);
         return convertView;
     }
+
+    /**
+     * This class stores the generated view
+     */
     static class ViewHolder
     {
         GraphView graphView;
