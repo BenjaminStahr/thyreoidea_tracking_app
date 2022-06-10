@@ -12,3 +12,10 @@ Internally a interface to send documented data to a server is integrated, becaus
 ## Technology
 
 The whole app is developed for the Android operating system and is implemented in Java. Data is stored as serialized JSON.
+
+## Architecture
+
+The organization of modules inside the app is following the MVC-Pattern.
+
+https://github.com/BenjaminStahr/hashimoto_app_2020/blob/fc1e46c163ddfa90220fec1954cc95af975048ca/hashimoto_app_architecture.png
+
