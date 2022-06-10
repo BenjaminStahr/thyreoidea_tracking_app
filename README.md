@@ -16,6 +16,7 @@ The whole app is developed for the Android operating system and is implemented i
 ## Architecture
 
 The organization of modules inside the app is following the MVC-Pattern.
-
-https://github.com/BenjaminStahr/hashimoto_app_2020/blob/fc1e46c163ddfa90220fec1954cc95af975048ca/hashimoto_app_architecture.png
-
+The app is organzized in one activity, which functions as the controller. This controller is implemented by an instance of the class MainActivity.
+The most classes are comprised in the view which consists of fragments and different dialogs for extending the internal data structure. The class DataHolder
+is instaniated once and includes all user data, which is serialized for storing.
+![Here a picture from the overall architecture should be shown](https://github.com/BenjaminStahr/hashimoto_app_2020/blob/images/hashimoto_app_architecture.png)
