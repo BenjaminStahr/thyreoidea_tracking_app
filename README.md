@@ -9,7 +9,9 @@ Android Studio: 3.6, newer versions are currently not compatible.
 Other dependencies should be loaded automatically.
 
 Android Gradle Plugin Version: 3.5.2
+
 Gradle Version: 5.4.1
+
 Java: 8
 
 ## Functionality
