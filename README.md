@@ -24,6 +24,8 @@ Thyreoidea Tracker follows the MVC (Model-View-Controller) architecture:
 - **View**: Fragments and dialogs make up the view, providing the UI for data interaction.
 - **Model**: `DataHolder` stores all user data, serialized to JSON for persistence.
 
+The following diagram provides an overview of how different classes are related to each part of the MVC architecture:
+
 ![App Architecture Diagram](https://github.com/BenjaminStahr/hashimoto_app_2020/blob/images/hashimoto_app_architecture.png)
 
 ## Clinical Validation
