@@ -7,7 +7,6 @@ Thyreoidea Tracker includes three main features:
 - **Medicine Intake Logging**: Track and log daily medication usage.
 - **Symptom Tracking**: Record symptoms over time for analysis.
 - **Supplement Tracking**: Log food supplements and their effects.
-## Technology
 
 ## Architecture
 
